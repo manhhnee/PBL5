@@ -1,0 +1,43 @@
+// Menu wrapper
+.menu-list {
+  width: 220px;
+
+  .menu-item {
+    margin-left: 0;
+  }
+}
+
+.menu-popper {
+  padding-bottom: 8px;
+}
+
+.menu-body {
+  overflow: auto;
+}
+
+// Menu items
+.menu-item {
+  width: 100%;
+  justify-content: flex-start;
+  border-radius: 0;
+  padding: 9px 12px;
+  font-size: 1.3rem;
+  color: var(--black);
+  font-weight: 500;
+
+  &:hover {
+    background-color: rgba(22, 24, 35, 0.03);
+  }
+
+  &.separate {
+    border-top: 1px solid rgba(22, 24, 35, 0.12);
+  }
+}
+
+//Header
+.header {
+  position: relative;
+  height: 50px;
+  margin-top: -8px;
+  flex-shrink: 0;
+}

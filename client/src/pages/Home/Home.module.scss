@@ -1,0 +1,34 @@
+.wrapper {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.container {
+  min-height: 400px;
+  padding: 0 15px;
+  margin: 15px 0 0;
+  background-color: var(--white);
+  width: 100%;
+  position: relative;
+  border-radius: 8px;
+}
+.books {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 8px;
+}
+
+.button {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
+
+  button {
+    font-size: 14px;
+    width: 210px;
+    max-width: 100%;
+    height: 40px;
+    border-radius: 8px;
+  }
+}

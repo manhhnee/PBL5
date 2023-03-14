@@ -1,0 +1,58 @@
+.wrapper {
+  width: 100%;
+  margin-top: 24px;
+  min-height: 258px;
+  background-color: var(--white);
+  border-radius: 8px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+}
+
+.icon {
+  margin-right: 10px;
+  font-size: 1.8rem;
+  color: red;
+}r
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #212121;
+}
+
+.book-line {
+  padding: 0 16px;
+  width: 100%;
+  height: 1px;
+  background-color: #f2f4f5;
+}
+
+.container {
+  display: flex;
+}
+
+.book {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.book-img {
+  max-width: 100%;
+  height: auto;
+}
+
+.book-title {
+  margin-top: 16px;
+  font-size: 1.7rem;
+  word-break: break-word;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 110px;
+}
