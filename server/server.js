@@ -3,8 +3,7 @@ require("dotenv");
 import cors from "cors";
 import initRoutes from "./src/routes";
 import connectDatabase from "./src/config/connectDatabase";
-
-const app = express();
+console.log(process.env.SECRET_KEY);
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
