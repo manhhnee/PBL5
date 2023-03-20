@@ -78,7 +78,6 @@ function Header() {
           ) : (
             <>
               <Button onClick={goLogin} primary>Đăng nhập</Button>
-              <Button outline>Đăng kí</Button>
             </>
           )}
           <Menu items={currentUser ? user_items : MENU_ITEMS}>
