@@ -11,6 +11,7 @@ function Button({
   href,
   primary = false,
   outline = false,
+  signin_signup = false,
   disabled = false,
   children,
   leftIcon,
@@ -42,7 +43,7 @@ function Button({
     Comp = 'a';
   }
 
-  let classes = cx('wrapper', { [className]: className, primary, outline, disabled });
+  let classes = cx('wrapper', { [className]: className, primary, outline, signin_signup, disabled });
 
   return (
     <Comp className={classes} {...props}>
@@ -58,8 +59,8 @@ Button.propTypes = {
   href: PropTypes.string,
   primary: PropTypes.bool,
   outline: PropTypes.bool,
-  text: PropTypes.bool,
   rounded: PropTypes.bool,
+  signin_signup: PropTypes.bool,
   disabled: PropTypes.bool,
   small: PropTypes.bool,
   large: PropTypes.bool,
