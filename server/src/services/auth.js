@@ -6,20 +6,26 @@ require("dotenv").config();
 const hashPassword = (password) =>
   bcrypt.hashSync(password, bcrypt.genSaltSync(12));
 
-export const registerService = ({ name, phone, address, userName, password }) =>
+export const registerService = ({
+  fullname,
+  phone,
+  address,
+  username,
+  password,
+}) =>
   new Promise(async (resolve, reject) => {
     try {
       const responseUser = await db.User.findOrCreate({
-        where: { userName },
+        where: { username },
         defaults: {
-          userName,
+          username,
           password: hashPassword(password),
         },
       });
       const responseInfor = await db.InforUser.findOrCreate({
         where: { phone },
         defaults: {
-          name,
+          fullname,
           phone,
           address,
         },
@@ -30,7 +36,7 @@ export const registerService = ({ name, phone, address, userName, password }) =>
           {
             id: responseUser[0].id,
             phone: responseInfor[0].phone,
-            userName: responseUser[0].userName,
+            username: responseUser[0].username,
           },
           process.env.SECRET_KEY,
           {
@@ -49,11 +55,11 @@ export const registerService = ({ name, phone, address, userName, password }) =>
     }
   });
 
-export const loginService = ({ userName, password }) =>
+export const loginService = ({ username, password }) =>
   new Promise(async (resolve, reject) => {
     try {
       const response = await db.User.findOne({
-        where: { userName },
+        where: { username },
         raw: true,
       });
       const isCorrectPassword =
@@ -61,7 +67,7 @@ export const loginService = ({ userName, password }) =>
       const token =
         isCorrectPassword &&
         jwt.sign(
-          { id: response.id, userName: response.userName },
+          { id: response.id, username: response.username },
           process.env.SECRET_KEY,
           { expiresIn: "2d" }
         );
@@ -71,7 +77,7 @@ export const loginService = ({ userName, password }) =>
           ? "Login is successfully !"
           : response
           ? "Password is wrong !"
-          : "userName number not found !",
+          : "username number not found !",
         token: token || null,
       });
     } catch (error) {

@@ -1,9 +1,9 @@
 import * as authService from "../services/auth";
 
 export const register = async (req, res) => {
-  const { name, phone, address, userName, password } = req.body;
+  const { fullname, phone, address, username, password } = req.body;
   try {
-    if (!name || !phone || !address || !userName || !password)
+    if (!fullname || !phone || !address || !username || !password)
       return res.status(400).json({
         err: 1,
         msg: "Missing inputs !",
@@ -20,9 +20,9 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { userName, password } = req.body;
+  const { username, password } = req.body;
   try {
-    if (!userName || !password)
+    if (!username || !password)
       return res.status(400).json({
         err: 1,
         msg: "Missing inputs !",

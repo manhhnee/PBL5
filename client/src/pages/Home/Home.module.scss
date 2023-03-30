@@ -3,6 +3,10 @@
   margin-top: 20px;
 }
 
+.slider {
+  margin-top: 15px;
+}
+
 .container {
   min-height: 400px;
   padding: 0 15px;
@@ -12,10 +16,16 @@
   position: relative;
   border-radius: 8px;
 }
-.books {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-gap: 8px;
+
+.title-field {
+  border-bottom: 1px solid var(--background-color);
+  padding: 12px 0 12px 12px;
+  font-size: 1.8rem;
+  color: var(--primary);
+
+  .icon {
+    margin-right: 22px;
+  }
 }
 
 .button {

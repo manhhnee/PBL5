@@ -1,17 +1,17 @@
 import classNames from 'classnames/bind';
 import HeadlessTippy from '@tippyjs/react/headless';
 import { Link, useNavigate } from 'react-router-dom';
+import { useCallback } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBell, faClipboard, faUser } from '@fortawesome/free-regular-svg-icons';
+import { faArrowRightFromBracket, faCartArrowDown, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './Header.module.scss';
 import config from '~/config';
 import images from '~/assets/images';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faClipboard, faUser } from '@fortawesome/free-regular-svg-icons';
-import { faArrowRightFromBracket, faCartArrowDown, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import Search from '~/layouts/components/Search';
 import Menu from '~/components/Popper/Menu';
 import Button from '~/components/Button';
-import { useCallback } from 'react';
 
 const cx = classNames.bind(styles);
 
@@ -25,9 +25,9 @@ const MENU_ITEMS = [
 
 function Header() {
   const navigate = useNavigate();
-  const goLogin = useCallback(() => {
-    navigate(config.routes.login)
-  })
+  const goLogin = useCallback((flag) => {
+    navigate(config.routes.login, { state: { flag } });
+  }, []);
   const currentUser = false;
   const user_items = [
     {
@@ -77,21 +77,24 @@ function Header() {
             </>
           ) : (
             <>
-              <Button onClick={goLogin} primary>Đăng nhập</Button>
+              <Button onClick={() => goLogin(false)} primary>
+                Đăng nhập
+              </Button>
+              <Button onClick={() => goLogin(true)} outline>
+                Đăng kí
+              </Button>
             </>
           )}
-          <Menu items={currentUser ? user_items : MENU_ITEMS}>
+          <Menu items={user_items}>
             {currentUser ? (
               <div className={cx('action-box')}>
                 <Link to="/account" className={cx('action-btn')}>
                   <FontAwesomeIcon icon={faUser} />
                 </Link>
-                <span className={cx('action-note')}>MMIT</span>
+                <span className={cx('action-note')}>MIT</span>
               </div>
             ) : (
-              <button className={cx('more-btn')}>
-                <FontAwesomeIcon icon={faEllipsisVertical} />
-              </button>
+              <></>
             )}
           </Menu>
         </div>

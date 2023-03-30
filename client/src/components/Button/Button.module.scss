@@ -5,7 +5,7 @@
   min-width: 100px;
   padding: 8px;
   border-radius: 4px;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: 700;
   font-family: var(--font-family);
   cursor: pointer;
@@ -71,6 +71,24 @@
 .text {
   &:hover {
     text-decoration: underline;
+  }
+}
+
+.signin_signup {
+  width: 150px;
+  background-color: #5995fd;
+  height: 49px;
+  border-radius: 49px;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: 0.5s;
+  font-size: 1.4rem;
+
+  &:hover {
+    opacity: 0.8;
   }
 }
 

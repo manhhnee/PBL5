@@ -30,7 +30,8 @@
   grid-template-columns: 1fr;
   z-index: 5;
 
-  form {
+  .sign-in-form,
+  .sign-up-form {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -90,25 +91,6 @@
     color: #333;
     font-weight: 500;
   }
-}
-
-.btn {
-  width: 150px;
-  background-color: #5995fd;
-  border: none;
-  outline: none;
-  height: 49px;
-  border-radius: 49px;
-  color: #fff;
-  text-transform: uppercase;
-  font-weight: 600;
-  margin: 10px 0;
-  cursor: pointer;
-  transition: 0.5s;
-}
-
-.btn:hover {
-  background-color: #4d84e2;
 }
 
 .panels-container {
@@ -176,6 +158,15 @@
 }
 
 .btn.transparent {
+  width: 150px;
+  background-color: #5995fd;
+  border-radius: 49px;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: 0.5s;
   margin: 0;
   background: none;
   border: 2px solid #fff;
@@ -183,6 +174,7 @@
   height: 41px;
   font-weight: 600;
   font-size: 1.2rem;
+  font-family: var(--font-family);
 }
 
 .right-panel .image,
@@ -206,12 +198,12 @@
   left: 25%;
 }
 
-.container.sign-up-mode form.sign-up-form {
+.container.sign-up-mode .sign-up-form {
   opacity: 1;
   z-index: 2;
 }
 
-.container.sign-up-mode form.sign-in-form {
+.container.sign-up-mode .sign-in-form {
   opacity: 0;
   z-index: 1;
 }
@@ -333,7 +325,8 @@
 }
 
 @media (max-width: 570px) {
-  form {
+  .sign-in-form,
+  .sign-up-form {
     padding: 0 1.5rem;
   }
 

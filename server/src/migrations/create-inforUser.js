@@ -12,7 +12,7 @@ module.exports = {
       IDUser: {
         type: Sequelize.INTEGER,
       },
-      name: {
+      fullname: {
         type: Sequelize.STRING,
       },
       phone: {

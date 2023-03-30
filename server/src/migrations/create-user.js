@@ -12,7 +12,7 @@ module.exports = {
       IDRole: {
         type: Sequelize.INTEGER,
       },
-      userName: {
+      username: {
         type: Sequelize.STRING,
       },
       password: {

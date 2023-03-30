@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   InforUser.init(
     {
       IDUser: DataTypes.INTEGER,
-      name: DataTypes.STRING,
+      fullname: DataTypes.STRING,
       phone: DataTypes.STRING,
       address: DataTypes.STRING,
       avatar: DataTypes.STRING,
