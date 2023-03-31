@@ -1,5 +1,4 @@
 import classNames from 'classnames/bind';
-import { Link } from 'react-router-dom';
 
 import styles from './Home.module.scss';
 import CrossBar from '~/layouts/components/CrossBar';
@@ -15,62 +14,75 @@ const cx = classNames.bind(styles);
 function Home() {
   const choiceItems = [
     {
+      id: 1,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
       title: 'Best Seller',
     },
     {
+      id: 2,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
       title: 'New Release',
     },
     {
+      id: 3,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
-      title: 'Best Seller',
+      title: 'Comming Soon',
     },
     {
+      id: 4,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
-      title: 'Best Seller',
+      title: 'Sales Off',
     },
     {
+      id: 5,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
-      title: 'Best Seller',
+      title: 'Voucher',
     },
   ];
 
   const typeItems = [
     {
+      id: 1,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
     },
     {
+      id: 2,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
     },
     {
+      id: 3,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
     },
     {
+      id: 4,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
     },
     {
+      id: 5,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
     },
     {
+      id: 6,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
     },
     {
+      id: 7,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
     },
     {
+      id: 8,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
     },
@@ -78,60 +90,70 @@ function Home() {
 
   const bookItems = [
     {
+      id: 1,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
       title: 'The God of Endings: A Novel',
       author: 'Jacqueline Holland',
     },
     {
+      id: 2,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
       title: 'The God of Endings: A Novel',
       author: 'Jacqueline Holland',
     },
     {
+      id: 3,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
       title: 'The God of Endings: A Novel',
       author: 'Jacqueline Holland',
     },
     {
+      id: 4,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
       title: 'The God of Endings: A Novel',
       author: 'Jacqueline Holland',
     },
     {
+      id: 5,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
       title: 'The God of Endings: A Novel',
       author: 'Jacqueline Holland',
     },
     {
+      id: 6,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
       title: 'The God of Endings: A Novel',
       author: 'Jacqueline Holland',
     },
     {
+      id: 7,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
       title: 'The God of Endings: A Novel',
       author: 'Jacqueline Holland',
     },
     {
+      id: 8,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
       title: 'The God of Endings: A Novel',
       author: 'Jacqueline Holland',
     },
     {
+      id: 9,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
       title: 'The God of Endings: A Novel',
       author: 'Jacqueline Holland',
     },
     {
+      id: 10,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
       title: 'The God of Endings: A Novel',
@@ -141,11 +163,12 @@ function Home() {
   return (
     <div className={cx('wrapper')}>
       <CrossBar
+        key={choiceItems.id}
         items={choiceItems}
         icon={faHeart}
         title="2H&M luôn hân hạnh phục vụ quý khách. Khách hàng có thể yên tâm về chất lượng sản phẩm. Hơn 1000 cuốn sách cho quý khách có thể lựa chọn."
       ></CrossBar>
-      <CrossBar items={typeItems} icon={faBookmark} title="Thể loại"></CrossBar>
+      <CrossBar key={typeItems.id} items={typeItems} icon={faBookmark} title="Thể loại"></CrossBar>
       <div className={cx('slider')}>
         <Image src={images.slide1} alt="Slide1"></Image>
       </div>
@@ -155,7 +178,7 @@ function Home() {
           <span className={cx('title')}>Phổ biến</span>
         </div>
         <div className={cx('book-list')}>
-          <BookItem items={bookItems} />
+          <BookItem key={bookItems.id} items={bookItems} />
         </div>
         <div className={cx('button')}>
           <Button outline>Xem thêm</Button>

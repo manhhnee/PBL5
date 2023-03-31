@@ -25,4 +25,8 @@ function BookItem({ items }) {
   );
 }
 
+BookItem.protoTypes = {
+  items: PropTypes.array.isRequired,
+};
+
 export default BookItem;

@@ -21,7 +21,7 @@ function CrossBar({ items = [], icon, title }) {
             <FontAwesomeIcon icon={faChevronLeft}></FontAwesomeIcon>
           </span>
           {items.map((item) => {
-            return <CategoryItem data={item}></CategoryItem>;
+            return <CategoryItem key={item.id} data={item}></CategoryItem>;
           })}
           <span className={cx('icon')}>
             <FontAwesomeIcon icon={faChevronRight}></FontAwesomeIcon>

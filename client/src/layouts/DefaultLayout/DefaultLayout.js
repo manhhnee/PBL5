@@ -25,7 +25,7 @@ function DefaultLayout({ children }) {
       <Header />
       <div className={cx('img-field')}>
         <img src={images.background} alt="Background" className={cx('background-img')} />
-        <img ref={ref} src={images.logo} alt="logo" className={cx('img-text')} />
+        <img ref={ref} src={images.logo2} alt="logo" className={cx('img-text')} />
       </div>
       <div className={cx('container')}>
         <div className={cx('content')}>{children}</div>

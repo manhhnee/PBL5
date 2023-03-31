@@ -15,7 +15,7 @@ function Footer() {
       <div className={cx('container')}>
         <aside className={cx('sidebar')}>
           <div className={cx('sidebar-logo')}>
-            <img className={cx('logo')} src={images.logo} alt="logo"></img>
+            <img className={cx('logo')} src={images.logo2} alt="logo"></img>
           </div>
           <h3 className={cx('social')}>Mạng xã hội</h3>
           <div className={cx('icons')}>

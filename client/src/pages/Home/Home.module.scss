@@ -14,7 +14,7 @@
   background-color: var(--white);
   width: 100%;
   position: relative;
-  border-radius: 8px;
+  border-radius: var(--default-border-radius);
 }
 
 .title-field {
@@ -39,6 +39,6 @@
     width: 210px;
     max-width: 100%;
     height: 40px;
-    border-radius: 8px;
+    border-radius: var(--default-border-radius);
   }
 }

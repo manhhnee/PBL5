@@ -1,7 +1,7 @@
 .wrapper {
   width: 100%;
   background-color: var(--white);
-  border-radius: 8px;
+  border-radius: var(--default-border-radius);
   margin-top: 15px;
 
   --border-category-item: 22px;

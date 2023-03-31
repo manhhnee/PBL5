@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faClipboard, faUser } from '@fortawesome/free-regular-svg-icons';
-import { faArrowRightFromBracket, faCartArrowDown, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRightFromBracket, faCartArrowDown } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './Header.module.scss';
 import config from '~/config';
@@ -14,14 +14,6 @@ import Menu from '~/components/Popper/Menu';
 import Button from '~/components/Button';
 
 const cx = classNames.bind(styles);
-
-const MENU_ITEMS = [
-  {
-    icon: <FontAwesomeIcon icon={faUser} />,
-    title: 'Thông tin cá nhân',
-    to: '/profile',
-  },
-];
 
 function Header() {
   const navigate = useNavigate();
@@ -51,7 +43,7 @@ function Header() {
     <header className={cx('wrapper')}>
       <div className={cx('inner')}>
         <Link to={config.routes.home} className={cx('logo-link')}>
-          <img src={images.logo} alt="Fahasa" />
+          <img src={images.logo1} alt="Fahasa" />
         </Link>
 
         {/* Search de cho nay */}

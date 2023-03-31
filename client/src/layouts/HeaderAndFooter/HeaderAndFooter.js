@@ -1,15 +1,24 @@
+import PropTypes from 'prop-types';
+import classNames from 'classnames/bind';
+
 import Header from '~/layouts/components/Header';
 import Footer from '~/layouts/components/Footer';
-function HeaderOnly({ children }) {
+import styles from './HeaderAndFooter.module.scss';
+
+const cx = classNames.bind(styles);
+
+function HeaderAndFooter({ children }) {
   return (
-    <div>
+    <div className={cx('wrapper')}>
       <Header />
-      <div className="container">
-        <div className="content">{children}</div>
-      </div>
+      <div className={cx('container')}>{children}</div>
       <Footer />
     </div>
   );
 }
 
-export default HeaderOnly;
+HeaderAndFooter.protoTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+export default HeaderAndFooter;

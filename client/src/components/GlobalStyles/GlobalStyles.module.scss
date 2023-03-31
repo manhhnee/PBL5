@@ -12,6 +12,7 @@
 
   --default-layout-header-height: 68px;
   --default-layout-width: 1268px;
+  --default-border-radius: 8px;
 }
 * {
   margin: 0;
@@ -64,7 +65,7 @@ a {
 // Custom tippy tooltip
 body {
   .tippy-box {
-    border-radius: 8px;
+    border-radius: var(--default-border-radius);
     font-weight: 600;
     font-size: 1.6rem;
     line-height: 2.2rem;
