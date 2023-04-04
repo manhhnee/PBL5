@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
-
-import styles from './CrossBar.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+
+import styles from './CrossBar.module.scss';
 import CategoryItem from '~/components/CategoryItem';
 
 const cx = classNames.bind(styles);

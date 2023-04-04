@@ -8,12 +8,18 @@ import Image from '~/components/Image';
 const cx = classNames.bind(styles);
 
 function BookItem({ items }) {
+  function scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+    });
+  }
   return (
     <div className={cx('book-items')}>
       <div className={cx('container')}>
         {items.map((item) => {
           return (
-            <Link className={cx('item')}>
+            <Link key={item.id} onClick={scrollToTop} to="/bookdetail" className={cx('item')}>
               <Image src={item.img} alt={item.alt} className={cx('img')} />
               <div className={cx('title')}>{item.title}</div>
               <div className={cx('author')}>{item.author}</div>
