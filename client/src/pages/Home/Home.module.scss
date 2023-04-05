@@ -42,3 +42,15 @@
     border-radius: var(--default-border-radius);
   }
 }
+
+.image {
+  width: 110px;
+  height: 120px;
+}
+
+.title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 110px;
+}

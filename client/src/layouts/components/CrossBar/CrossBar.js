@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 import styles from './CrossBar.module.scss';
 import CategoryItem from '~/components/CategoryItem';
@@ -9,24 +11,44 @@ import CategoryItem from '~/components/CategoryItem';
 const cx = classNames.bind(styles);
 
 function CrossBar({ items = [], icon, title }) {
+  function SampleNextArrow(props) {
+    const { className, style, onClick } = props;
+    return <div className={cx('next-arrow', className)} style={{ ...style }} onClick={onClick} />;
+  }
+
+  function SamplePrevArrow(props) {
+    const { className, style, onClick } = props;
+    return <div className={cx('prev-arrow', className)} style={{ ...style }} onClick={onClick} />;
+  }
+
+  const settings = {
+    className: 'center',
+    infinite: true,
+    centerPadding: '60px',
+    slidesToShow: 5,
+    swipeToSlide: true,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
+  };
+
   return (
-    <div className={cx('wrapper')}>
-      <div className={cx('container')} tabIndex="-1">
-        <div className={cx('title-field')}>
-          <FontAwesomeIcon className={cx('icon-title')} icon={icon}></FontAwesomeIcon>
-          {title}
-        </div>
-        <div className={cx('content')}>
-          <span className={cx('icon')}>
-            <FontAwesomeIcon icon={faChevronLeft}></FontAwesomeIcon>
-          </span>
+    <div className={cx('container')}>
+      <div className={cx('title-field')}>
+        <FontAwesomeIcon className={cx('icon-title')} icon={icon}></FontAwesomeIcon>
+        <span>{title}</span>
+      </div>
+      <div className={cx('content')}>
+        <Slider {...settings}>
           {items.map((item) => {
-            return <CategoryItem key={item.id} data={item}></CategoryItem>;
+            return (
+              <div>
+                <div className={cx('content')}>
+                  <CategoryItem data={item}></CategoryItem>
+                </div>
+              </div>
+            );
           })}
-          <span className={cx('icon')}>
-            <FontAwesomeIcon icon={faChevronRight}></FontAwesomeIcon>
-          </span>
-        </div>
+        </Slider>
       </div>
     </div>
   );

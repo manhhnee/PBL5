@@ -1,17 +1,32 @@
 import classNames from 'classnames/bind';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBook, faBookmark, faHeart } from '@fortawesome/free-solid-svg-icons';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 import styles from './Home.module.scss';
 import CrossBar from '~/layouts/components/CrossBar';
 import BookItem from '~/components/BookItem';
 import Button from '~/components/Button';
-import { faBook, faBookmark, faHeart } from '@fortawesome/free-solid-svg-icons';
 import Image from '~/components/Image';
 import images from '~/assets/images';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
 function Home() {
+  const settings = {
+    className: 'center',
+    infinite: true,
+    centerPadding: '60px',
+    slidesToShow: 5,
+    swipeToSlide: true,
+    afterChange: function (index) {
+      console.log(`Slider Changed to: ${index + 1}, background: #222; color: #bada55`);
+    },
+  };
+
   const choiceItems = [
     {
       id: 1,
@@ -39,6 +54,24 @@ function Home() {
     },
     {
       id: 5,
+      img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
+      alt: 'Product',
+      title: 'Voucher',
+    },
+    {
+      id: 6,
+      img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
+      alt: 'Product',
+      title: 'Voucher',
+    },
+    {
+      id: 7,
+      img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
+      alt: 'Product',
+      title: 'Voucher',
+    },
+    {
+      id: 8,
       img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
       alt: 'Product',
       title: 'Voucher',
@@ -168,6 +201,7 @@ function Home() {
         icon={faHeart}
         title="2H&M luôn hân hạnh phục vụ quý khách. Khách hàng có thể yên tâm về chất lượng sản phẩm. Hơn 1000 cuốn sách cho quý khách có thể lựa chọn."
       ></CrossBar>
+
       <CrossBar key={typeItems.id} items={typeItems} icon={faBookmark} title="Thể loại"></CrossBar>
       <div className={cx('slider')}>
         <Image src={images.slide1} alt="Slide1"></Image>
