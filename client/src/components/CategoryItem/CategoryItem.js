@@ -6,9 +6,10 @@ import styles from './CategoryItem.module.scss';
 
 const cx = classNames.bind(styles);
 
-function CategoryItem({ data }) {
+function CategoryItem({ data, className }) {
+  const classes = cx('wrapper', { [className]: className });
   return (
-    <Link className={cx('wrapper')}>
+    <Link className={classes}>
       <Image src={data.img} alt={data.alt} className={cx('image')} />
       <span className={cx('title')}>{data.title}</span>
     </Link>

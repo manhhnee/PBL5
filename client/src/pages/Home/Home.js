@@ -1,32 +1,17 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook, faBookmark, faHeart } from '@fortawesome/free-solid-svg-icons';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 
 import styles from './Home.module.scss';
-import CrossBar from '~/layouts/components/CrossBar';
+import CrossBar from '~/components/CrossBar';
 import BookItem from '~/components/BookItem';
 import Button from '~/components/Button';
 import Image from '~/components/Image';
 import images from '~/assets/images';
-import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
 function Home() {
-  const settings = {
-    className: 'center',
-    infinite: true,
-    centerPadding: '60px',
-    slidesToShow: 5,
-    swipeToSlide: true,
-    afterChange: function (index) {
-      console.log(`Slider Changed to: ${index + 1}, background: #222; color: #bada55`);
-    },
-  };
-
   const choiceItems = [
     {
       id: 1,
