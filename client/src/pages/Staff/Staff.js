@@ -94,13 +94,7 @@ function Staff() {
         <div className={cx('calendar-header')}>
           <span className={cx('month-picker')}>{month_names[month]}</span>
           <div className={cx('year-picker')}>
-            <span className={cx('year-change')} id="prev-year" onClick={() => setYear(year - 1)}>
-              <pre>{'<'}</pre>
-            </span>
             <span className={cx('year')}>{year}</span>
-            <span className={cx('year-change')} id="next-year" onClick={() => setYear(year + 1)}>
-              <pre>{'>'}</pre>
-            </span>
           </div>
         </div>
         <div className={cx('calendar-body')}>
@@ -123,15 +117,10 @@ function Staff() {
                 )}
               >
                 {day}
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
               </div>
             ))}
           </div>
         </div>
-        <div className={cx('month-list')}></div>
       </div>
     </div>
   );
