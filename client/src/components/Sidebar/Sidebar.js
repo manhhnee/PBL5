@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { faBagShopping, faHouseChimney } from '@fortawesome/free-solid-svg-icons';
+import { faHouseChimney } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './Sidebar.module.scss';
 import config from '~/config';
@@ -12,7 +12,7 @@ function Sidebar() {
   return (
     <aside className={cx('wrapper')}>
       <Button
-        to={config.routes.home}
+        to={config.routes.staffRecent}
         leftIcon={<FontAwesomeIcon icon={faHouseChimney}></FontAwesomeIcon>}
         className={cx('btn-home')}
       >

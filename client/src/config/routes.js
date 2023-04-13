@@ -4,7 +4,10 @@ const routes = {
   search: '/search',
   login: '/login',
   bookdetail: '/bookdetail',
-  staff: '/staff',
+  staffRecent: '/staff/recentOrders',
+  staffWaiting: '/staff/waitingOrders',
+  staffDelivering: '/staff/DeliveringOrders',
+  staffSuccess: '/staff/SuccessOrders',
 };
 
 export default routes;
