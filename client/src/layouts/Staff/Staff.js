@@ -1,17 +1,17 @@
+import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRectangleList } from '@fortawesome/free-solid-svg-icons';
+import { useState } from 'react';
 
 import styles from './Staff.module.scss';
 import Sidebar from '~/components/Sidebar/Sidebar';
 import Button from '~/components/Button/Button';
-import Image from '~/components/Image/Image';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRectangleList } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import config from '~/config';
 
 const cx = classNames.bind(styles);
 
-function Staff() {
+function Staff({ children }) {
   const [month, setMonth] = useState(new Date().getMonth());
   const [year, setYear] = useState(new Date().getFullYear());
   const [showMonthPicker, setShowMonthPicker] = useState(false);
@@ -74,6 +74,7 @@ function Staff() {
             <Button
               className={cx('btn-state1')}
               leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faRectangleList} />}
+              to={config.routes.staffWaiting}
             >
               <span className={cx('number')}>4</span>
               <span className={cx('state')}>Đơn hàng đang chờ</span>
@@ -81,6 +82,7 @@ function Staff() {
             <Button
               className={cx('btn-state2')}
               leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faRectangleList} />}
+              to={config.routes.staffDelivering}
             >
               <span className={cx('number')}>4</span>
               <span className={cx('state')}>Đang vận chuyển</span>
@@ -88,75 +90,14 @@ function Staff() {
             <Button
               className={cx('btn-state3')}
               leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faRectangleList} />}
+              to={config.routes.staffSuccess}
             >
               <span className={cx('number')}>4</span>
               <span className={cx('state')}>Giao thành công</span>
             </Button>
           </div>
         </div>
-        <div className={cx('content')}>
-          <div className={cx('header-content')}>
-            <span className={cx('title-content')}>Đơn hàng gần đây</span>
-            <Link className={cx('all-order')}>Xem toàn bộ đơn hàng</Link>
-          </div>
-          <div className={cx('order-list')}>
-            <div className={cx('order')}>
-              <Image
-                className={cx('order-image')}
-                src="https://dienchau2.edu.vn/wp-content/uploads/2023/03/Meme-My-Dieu-bay-hay-hai-huoc.fna&oh=00_AfDImdqtt7DBEkFehcuqyeDvh6QUGaYyJ3GVCCnnGnNwMA&oe=6403CBA8.jpeg"
-                alt="avatar"
-              ></Image>
-              <div className={cx('name-order')}>Hồ Thanh Hưng</div>
-              <div className={cx('day-order')}>Mon, Dec 26</div>
-              <div className={cx('time-order')}>9.00AM</div>
-              <div className={cx('price-order')}>200.000 đ</div>
-            </div>
-            <div className={cx('order')}>
-              <Image
-                className={cx('order-image')}
-                src="https://dienchau2.edu.vn/wp-content/uploads/2023/03/Meme-My-Dieu-bay-hay-hai-huoc.fna&oh=00_AfDImdqtt7DBEkFehcuqyeDvh6QUGaYyJ3GVCCnnGnNwMA&oe=6403CBA8.jpeg"
-                alt="avatar"
-              ></Image>
-              <div className={cx('name-order')}>Hồ Thanh Hưng</div>
-              <div className={cx('day-order')}>Mon, Dec 26</div>
-              <div className={cx('time-order')}>9.00AM</div>
-              <div className={cx('price-order')}>200.000 đ</div>
-            </div>
-            <div className={cx('order')}>
-              <Image
-                className={cx('order-image')}
-                src="https://dienchau2.edu.vn/wp-content/uploads/2023/03/Meme-My-Dieu-bay-hay-hai-huoc.fna&oh=00_AfDImdqtt7DBEkFehcuqyeDvh6QUGaYyJ3GVCCnnGnNwMA&oe=6403CBA8.jpeg"
-                alt="avatar"
-              ></Image>
-              <div className={cx('name-order')}>Hồ Thanh Hưng</div>
-              <div className={cx('day-order')}>Mon, Dec 26</div>
-              <div className={cx('time-order')}>9.00AM</div>
-              <div className={cx('price-order')}>200.000 đ</div>
-            </div>
-            <div className={cx('order')}>
-              <Image
-                className={cx('order-image')}
-                src="https://dienchau2.edu.vn/wp-content/uploads/2023/03/Meme-My-Dieu-bay-hay-hai-huoc.fna&oh=00_AfDImdqtt7DBEkFehcuqyeDvh6QUGaYyJ3GVCCnnGnNwMA&oe=6403CBA8.jpeg"
-                alt="avatar"
-              ></Image>
-              <div className={cx('name-order')}>Hồ Thanh Hưng</div>
-              <div className={cx('day-order')}>Mon, Dec 26</div>
-              <div className={cx('time-order')}>9.00AM</div>
-              <div className={cx('price-order')}>200.000 đ</div>
-            </div>
-            <div className={cx('order')}>
-              <Image
-                className={cx('order-image')}
-                src="https://dienchau2.edu.vn/wp-content/uploads/2023/03/Meme-My-Dieu-bay-hay-hai-huoc.fna&oh=00_AfDImdqtt7DBEkFehcuqyeDvh6QUGaYyJ3GVCCnnGnNwMA&oe=6403CBA8.jpeg"
-                alt="avatar"
-              ></Image>
-              <div className={cx('name-order')}>Hồ Thanh Hưng</div>
-              <div className={cx('day-order')}>Mon, Dec 26</div>
-              <div className={cx('time-order')}>9.00AM</div>
-              <div className={cx('price-order')}>200.000 đ</div>
-            </div>
-          </div>
-        </div>
+        {children}
       </div>
       <div className={cx('calendar')}>
         <div className={cx('calendar-header')}>
@@ -230,5 +171,9 @@ function Staff() {
     </div>
   );
 }
+
+Staff.protoTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 export default Staff;
