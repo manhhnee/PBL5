@@ -17,39 +17,45 @@ function Login() {
   const [isSignupMode, setIsSignupMode] = useState(location.state?.flag);
   const [payload, setPayload] = useState({ fullname: '', phone: '', address: '', username: '', password: '' });
 
+  const handleSignupClick = () => setIsSignupMode(true);
+  const handleSigninClick = () => setIsSignupMode(false);
 
-  const handleSignIn =
-    useEffect(() => {
-      const login = async () => {
-        var username = document.querySelector('input[name="username"]');
-        var password = document.querySelector('input[name="password"]');
-        let usernameInput = username.value.trim();
-        let passwordInput = password.value.trim();
-        try {
-          await axios.post('http://localhost:5000/login', {}, {
+  const handleSignIn = useEffect(() => {
+    const login = async () => {
+      var username = document.querySelector('input[name="username"]');
+      var password = document.querySelector('input[name="password"]');
+      let usernameInput = username.value.trim();
+      let passwordInput = password.value.trim();
+      try {
+        await axios.post(
+          'http://localhost:5000/login',
+          {},
+          {
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
             },
             body: JSON.stringify({
               Username: usernameInput,
-              Password: passwordInput
-            })
-          }, (data) => {
-            console.log(data)
+              Password: passwordInput,
+            }),
+          },
+          (data) => {
+            console.log(data);
             if (data.success === false) {
-              alert("Đăng nhập không thành công")
-            }
-            else {
-              alert("Đăng nhập thành công")
+              alert('Đăng nhập không thành công');
+            } else {
+              alert('Đăng nhập thành công');
               // setCookie('token',data.token,1)
               document.cookie = `token=${data.token}`;
-            }})
-        } catch (error) {
-          console.log(error);
-        }
+            }
+          },
+        );
+      } catch (error) {
+        console.log(error);
       }
-      login()
-    })
+    };
+    login();
+  });
   return (
     <div className={cx('wrapper')}>
       <div className={cx('container', `${isSignupMode ? 'sign-up-mode' : ''}`)}>
@@ -57,54 +63,19 @@ function Login() {
           <div className={cx('signin-signup')}>
             <div className={cx('sign-in-form')}>
               <h2 className={cx('title')}>Trang đăng nhập</h2>
-              <InputForm
-                placeholder="Username"
-                leftIcon={faUser}
-                type="text"
-                name={'username'}
-              />
-              <InputForm
-                placeholder="Password"
-                leftIcon={faLock}
-                type="password"
-                name={'password'}
-              />
+              <InputForm placeholder="Username" leftIcon={faUser} type="text" name={'username'} />
+              <InputForm placeholder="Password" leftIcon={faLock} type="password" name={'password'} />
               <Button signin_signup className={cx('btn')} onClick={handleSignIn}>
                 Đăng nhập
               </Button>
             </div>
             <div className={cx('sign-up-form')}>
               <h2 className={cx('title')}>Trang đăng kí</h2>
-              <InputForm
-                placeholder="Fullname"
-                leftIcon={faSignature}
-                type="text"
-                name={'fullname'}
-              />
-              <InputForm
-                placeholder="Phone"
-                leftIcon={faPhone}
-                type="text"
-                name={'phone'}
-              />
-              <InputForm
-                placeholder="Address"
-                leftIcon={faLocationDot}
-                type="text"
-                name={'address'}
-              />
-              <InputForm
-                placeholder="Username"
-                leftIcon={faUser}
-                type="text"
-                name={'username'}
-              />
-              <InputForm
-                placeholder="Password"
-                leftIcon={faLock}
-                type="text"
-                name={'password'}
-              />
+              <InputForm placeholder="Fullname" leftIcon={faSignature} type="text" name={'fullname'} />
+              <InputForm placeholder="Phone" leftIcon={faPhone} type="text" name={'phone'} />
+              <InputForm placeholder="Address" leftIcon={faLocationDot} type="text" name={'address'} />
+              <InputForm placeholder="Username" leftIcon={faUser} type="text" name={'username'} />
+              <InputForm placeholder="Password" leftIcon={faLock} type="text" name={'password'} />
               <Button signin_signup className={cx('btn')}>
                 Đăng kí
               </Button>
@@ -116,7 +87,7 @@ function Login() {
             <div className={cx('content')}>
               <h3>PBL5: Đồ án công nghệ phần mềm</h3>
               <p>Thành viên nhóm: Nguyễn Đức Mạnh, Trần Anh Hào, Hồ Thanh Hưng</p>
-              <button className={cx('btn', 'transparent')}>
+              <button className={cx('btn', 'transparent')} onClick={handleSignupClick}>
                 Đăng kí
               </button>
             </div>
@@ -126,7 +97,7 @@ function Login() {
             <div className={cx('content')}>
               <h3>PBL5: Đồ án công nghệ phần mềm</h3>
               <p>Thành viên nhóm: Nguyễn Đức Mạnh, Trần Anh Hào, Hồ Thanh Hưng</p>
-              <button className={cx('btn', 'transparent')} onClick={handleSignIn}>
+              <button className={cx('btn', 'transparent')} onClick={handleSigninClick}>
                 Đăng nhập
               </button>
             </div>
