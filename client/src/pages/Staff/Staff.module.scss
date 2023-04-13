@@ -3,7 +3,6 @@
   --light-main: #fdfdfd;
   --light-second: #c3c2c8;
   --light-hover: #edf0f5;
-  --light-text: #151426;
 
   --blue: #0000ff;
 
@@ -12,13 +11,18 @@
 
 .wrapper {
   display: flex;
+  max-height: 100vh;
 }
 
 .container {
-  flex: 1;
-  margin-left: 12px;
-  margin-top: 12px;
-  max-width: 827px;
+  padding: 12px;
+  flex: 1 1;
+  padding-left: 12px;
+  padding-top: 12px;
+  max-width: 890px;
+  background-color: #f5f5fb;
+  max-height: 100vh;
+  overflow-y: auto;
 }
 
 .header {
@@ -30,7 +34,7 @@
 }
 
 .name {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 700;
   color: var(--black);
   margin-top: 12px;
@@ -79,19 +83,15 @@
   font-weight: 600;
 }
 
+//calendar
+
 .calendar {
   height: max-content;
   width: max-content;
   background-color: var(--bg-main);
-  border-radius: 30px;
-  padding: 20px;
   position: relative;
   overflow: hidden;
   /* transform: scale(1.25); */
-}
-
-.calendar {
-  box-shadow: var(--shadow);
 }
 
 .calendar-header {
@@ -100,7 +100,7 @@
   align-items: center;
   font-size: 25px;
   font-weight: 600;
-  color: var(--light-text);
+  color: var(--black);
   padding: 10px;
 }
 
@@ -113,6 +113,7 @@
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   font-weight: 600;
+  cursor: default;
 }
 
 .calendar-week-day div {
@@ -125,10 +126,10 @@
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 2px;
-  color: var(--light-text);
+  color: var(--black);
 }
 
-.calendar-days div {
+.calendar-day {
   width: 50px;
   height: 50px;
   display: flex;
@@ -139,8 +140,68 @@
   cursor: pointer;
 }
 
-.calendar-days div span {
+.calendar-day:hover span {
+  transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
+}
+
+.calendar-day span {
   position: absolute;
+}
+
+.calendar-day span:nth-child(1),
+.calendar-day span:nth-child(3) {
+  width: 2px;
+  height: 0;
+  background-color: var(--black);
+}
+
+.calendar-day:hover span:nth-child(1),
+.calendar-day:hover span:nth-child(3) {
+  height: 100%;
+}
+
+.calendar-day span:nth-child(1) {
+  bottom: 0;
+  left: 0;
+}
+
+.calendar-day span:nth-child(3) {
+  top: 0;
+  right: 0;
+}
+
+.calendar-day span:nth-child(2),
+.calendar-day span:nth-child(4) {
+  width: 0;
+  height: 2px;
+  background-color: var(--black);
+}
+
+.calendar-day:hover span:nth-child(2),
+.calendar-day:hover span:nth-child(4) {
+  width: 100%;
+}
+
+.calendar-day span:nth-child(2) {
+  top: 0;
+  left: 0;
+}
+
+.calendar-day span:nth-child(4) {
+  bottom: 0;
+  right: 0;
+}
+
+.calendar-day:hover span:nth-child(2) {
+  transition-delay: 0.2s;
+}
+
+.calendar-day:hover span:nth-child(3) {
+  transition-delay: 0.4s;
+}
+
+.calendar-day:hover span:nth-child(4) {
+  transition-delay: 0.6s;
 }
 
 .calendar-day.curr-date,
@@ -148,10 +209,10 @@
   background-color: var(--blue);
   color: var(--white);
   border-radius: 50%;
-}
 
-.calendar-day.curr-date span {
-  display: none;
+  span {
+    display: none;
+  }
 }
 
 .month-picker {
@@ -181,4 +242,90 @@
 
 .year-change:hover {
   background-color: var(--light-hover);
+}
+
+.month-list {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: var(--light-main);
+  grid-template-columns: repeat(3, auto);
+  gap: 5px;
+  display: grid;
+  visibility: visible;
+  pointer-events: visible;
+  transition: all 0.2s ease-in-out;
+}
+
+.month-list-item {
+  display: grid;
+  place-items: center;
+  transform: scale(1);
+}
+
+.month-name {
+  width: 100%;
+  padding: 5px 20px;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  color: var(--black);
+
+  &:hover {
+    background-color: var(--light-hover);
+  }
+}
+
+//order list
+
+.content {
+  padding-top: 30px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 20px;
+}
+
+.title-content {
+  color: var(--black);
+  font-weight: 600;
+  font-size: 2rem;
+}
+
+.all-order {
+  color: var(--blue);
+  font-weight: 600;
+  font-size: 1.8rem;
+  text-decoration: underline;
+}
+
+.order {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--white);
+  border-radius: 10px;
+  margin: 20px 0;
+}
+
+.order-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin: 30px;
+}
+
+.name-order,
+.day-order,
+.time-order {
+  color: var(--text-color);
+}
+
+.price-order {
+  padding-right: 30px;
+  color: var(--primary);
 }
