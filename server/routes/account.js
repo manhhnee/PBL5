@@ -9,6 +9,7 @@ var router = express.Router()
 
  router.post('/register',AccountController.register)
  router.post('/login',AccountController.login)
+ router.post('/',(req,res,next) => {console.log(req.body.name);res.json(req.body.name)})
 //  router.get('/private',AuthController.verifyToken,AuthController.isCustomer,AccountController.getAccount)
 
 module.exports = router
