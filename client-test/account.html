@@ -17,7 +17,7 @@
         }
         var box = document.querySelector('.box')
         
-        function getJwtFromCookie() {
+        function getJwtFromCookie() {                    //lấy token được lưu trong cookie ra
             const name = 'token='
             const decodedCookie = decodeURIComponent(document.cookie)
             const cookieArray = decodedCookie.split(';')
@@ -36,7 +36,7 @@
         fetch('http://localhost:3000/user/profile', {
         method: 'GET',
         headers: {
-            'Authorization': `Bearer ${getJwtFromCookie()}`
+            'Authorization': `Bearer ${getJwtFromCookie()}`                     // trả token về server để xử lí
         }
         })
         .then(response => response.json())
