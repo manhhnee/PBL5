@@ -66,7 +66,7 @@ account.login = function (data, result) {   // data = [username,password]
                     'mk');
                 console.log(token)
 
-                result({ success: true, token: token });
+                result({ success: true, token: token, role:role[0].roleName });
             })
         })
 

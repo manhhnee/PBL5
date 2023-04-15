@@ -5,7 +5,7 @@ class AuthController {
     verifyToken(req, res, next) {           // nếu có token hợp lệ thì tạo req.user = thông tin người dùng và đưa cho middware khác xử lí
         // Lấy header Authorization từ yêu cầu
         const tokenHeader = req.headers['authorization'];
-
+        console.log(tokenHeader)
         // Kiểm tra xem header Authorization có tồn tại hay không
         if (tokenHeader) {
             // Tách header Authorization ra và lấy token
@@ -19,11 +19,11 @@ class AuthController {
                 // Chuyển tiếp request đến middleware tiếp theo
                 next();
             } catch (err) {
-                console.log(err)
                 // Token không hợp lệ
                 return res.status(401).json({success:false, message:'yêu cầu đăng nhập'});
             }
-        } else {
+        } 
+        else {
             // Header Authorization không tồn tại
             return res.status(401).json({success:false, message:'yêu cầu đăng nhập'});
         }
