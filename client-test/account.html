@@ -17,7 +17,7 @@
         }
         var box = document.querySelector('.box')
         
-        function getJwtFromCookie() {
+        function getJwtFromCookie() {                    //lấy token được lưu trong cookie ra
             const name = 'token='
             const decodedCookie = decodeURIComponent(document.cookie)
             const cookieArray = decodedCookie.split(';')
@@ -36,18 +36,17 @@
         fetch('http://localhost:3000/user/profile', {
         method: 'GET',
         headers: {
-            'Authorization': `Bearer ${getJwtFromCookie()}`
+            'Authorization': `Bearer ${getJwtFromCookie()}`                     // trả token về server để xử lí
         }
         })
         .then(response => response.json())
         .then(data => {
             
-             
+            console.log(data)
             let html = ''
             if (data.success !== false) {                           
                 html = `<H1>xin chào ${data.user.LastName} với vai trò ${data.role} `
-                    html+='<button onclick="logout()">log out</button>'
-                console.log(data)
+                    html+='<button onclick="logout()">log out</button>'       
                 box.innerHTML = html
             }
             else {
