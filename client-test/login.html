@@ -59,15 +59,14 @@
                 {
                     message.innerHTML = `${data.message}`
                     message.style.color = 'red'
-
                 }
                 else
                 {
-                    message.innerHTML = 'đăng nhập thành công.'
+                    message.innerHTML = `đăng nhập thành công với vai trò ${data.role} `
                     message.style.color = 'green'
                     // setCookie('token',data.token,1)
                     document.cookie = `token=${data.token}`;
-                    location.replace("http://127.0.0.1:5500/templatePBL5/account.html")
+                     location.replace("http://127.0.0.1:5500/client-test/account.html")
                 }
                 
             })

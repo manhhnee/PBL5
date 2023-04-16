@@ -9,6 +9,9 @@
 <body>
     Username: <input type="text" id="username"><br>
     password: <input type="text" id="password"><br>
+    FirstName: <input type="text" id="FirstName"><br>
+    LastName: <input type="text" id="LastName"><br>
+    PhoneNumber: <input type="text" id="PhoneNumber"><br>
     <br>
     <p class="message"></p>
     <br>
@@ -20,8 +23,14 @@
             var message = document.querySelector('.message')
             var username = document.querySelector('#username')
             var password = document.querySelector('#password')
+            var FirstName = document.querySelector('#FirstName')
+            var LastName = document.querySelector('#LastName')
+            var PhoneNumber = document.querySelector('#PhoneNumber')
             let usernameInput = username.value.trim();
             let passwordInput = password.value.trim();
+            let FirstNameInput = FirstName.value.trim();
+            let LastNameInput = LastName.value.trim();
+            let PhoneNumberInput = PhoneNumber.value.trim();
             fetch("http://localhost:3000/register",{
                 method: 'POST',
                 headers:{
@@ -30,7 +39,10 @@
                 body: JSON.stringify({
                     Username: usernameInput,
                     Password:passwordInput,
-                    id_Role:3
+                    id_Role:3,
+                    FirstName:FirstNameInput,
+                    LastName:LastNameInput,
+                    PhoneNumber:PhoneNumberInput
                 })
             })
             .then(response=>response.json())
