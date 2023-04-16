@@ -1,10 +1,11 @@
 import classNames from 'classnames/bind';
-import HeadlessTippy from '@tippyjs/react/headless';
 import { Link, useNavigate } from 'react-router-dom';
-import { useCallback } from 'react';
+import HeadlessTippy from '@tippyjs/react/headless';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faClipboard, faUser } from '@fortawesome/free-regular-svg-icons';
 import { faArrowRightFromBracket, faCartArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { useCallback, useEffect, useState } from 'react';
+import removeAccents, { remove } from 'remove-accents';
 
 import styles from './Header.module.scss';
 import config from '~/config';
@@ -16,16 +17,60 @@ import Button from '~/components/Button';
 const cx = classNames.bind(styles);
 
 function Header() {
+  const [currentUser, setCurrenUser] = useState(false);
+  const [name, setName] = useState('');
+  const [infor, setInfor] = useState({});
   const navigate = useNavigate();
   const goLogin = useCallback((flag) => {
     navigate(config.routes.login, { state: { flag } });
+  });
+  function getJwtFromCookie() {
+    //lấy token được lưu trong cookie ra
+    const name = 'token=';
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const cookieArray = decodedCookie.split(';');
+    for (let i = 0; i < cookieArray.length; i++) {
+      let cookie = cookieArray[i];
+      while (cookie.charAt(0) === ' ') {
+        cookie = cookie.substring(1);
+      }
+      if (cookie.indexOf(name) === 0) {
+        return cookie.substring(name.length, cookie.length);
+      }
+    }
+    return '';
+  }
+
+  function Logout() {
+    document.cookie = 'token=;';
+    window.location.replace('/');
+  }
+
+  useEffect(() => {
+    fetch('http://localhost:5000/user/profile', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${getJwtFromCookie()}`, // trả token về server để xử lí
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.success === true) {
+          setCurrenUser(true);
+          setInfor(response.user);
+          setName(removeAccents(response.user.FirstName + response.user.LastName));
+        } else {
+          setInfor({});
+          setCurrenUser(false);
+        }
+      });
   }, []);
-  const currentUser = false;
+
   const user_items = [
     {
       icon: <FontAwesomeIcon icon={faUser} />,
       title: 'Thông tin cá nhân',
-      to: '/login',
+      to: `/@/${name}/information`,
     },
     {
       icon: <FontAwesomeIcon icon={faClipboard} />,
@@ -35,7 +80,7 @@ function Header() {
     {
       icon: <FontAwesomeIcon icon={faArrowRightFromBracket} />,
       title: 'Đăng xuất',
-      to: '/',
+      onClick: Logout,
     },
   ];
 
@@ -83,7 +128,7 @@ function Header() {
                 <Link to="/account" className={cx('action-btn')}>
                   <FontAwesomeIcon icon={faUser} />
                 </Link>
-                <span className={cx('action-note')}>MIT</span>
+                <span className={cx('action-note')}>{infor.FirstName + ' ' + infor.LastName}</span>
               </div>
             ) : (
               <></>

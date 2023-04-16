@@ -39,7 +39,7 @@
 
 .action-box {
   display: flex;
-  width: 85.8px;
+  max-width: 100px;
   flex-direction: column;
   align-items: center;
   font-family: var(--font-family);
@@ -58,6 +58,10 @@
 .action-note {
   font-size: 1.3rem;
   color: var(--black);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 88px;
 }
 
 .more-btn {
