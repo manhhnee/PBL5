@@ -2,29 +2,43 @@ import { faLock, faPhone, faUser, faLocationDot, faSignature } from '@fortawesom
 import classNames from 'classnames/bind';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 
 import styles from './Login.module.scss';
 import images from '~/assets/images';
 import Button from '~/components/Button';
 import InputForm from '~/components/InputForm';
-import * as actions from '~/store/actions';
+import config from '~/config';
 
 const cx = classNames.bind(styles);
 
 function Login() {
   const location = useLocation();
-  const dispatch = useDispatch();
 
   const [isSignupMode, setIsSignupMode] = useState(location.state?.flag);
-  const [payload, setPayload] = useState({ fullname: '', phone: '', address: '', username: '', password: '' });
+  const [payload, setPayload] = useState({ username: '', password: '' });
 
   const handleSignupClick = () => setIsSignupMode(true);
   const handleSigninClick = () => setIsSignupMode(false);
 
-  const handleSubmit = async () => {
-    console.log(payload);
-    dispatch(actions.register(payload));
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    const response = await fetch('http://localhost:5000/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        Username: payload.username.trim(),
+        Password: payload.password.trim(),
+      }),
+    });
+    const data = await response.json();
+    if (data.success === true) {
+      document.cookie = `token=${data.token}`;
+      window.location.replace(config.routes.home);
+    } else {
+      console.log('error');
+    }
   };
   return (
     <div className={cx('wrapper')}>
@@ -49,7 +63,7 @@ function Login() {
                 setValue={setPayload}
                 name={'password'}
               />
-              <Button signin_signup className={cx('btn')} onClick={handleSubmit}>
+              <Button signin_signup className={cx('btn')} onClick={handleLoginSubmit}>
                 Đăng nhập
               </Button>
             </div>
@@ -95,7 +109,7 @@ function Login() {
                 setValue={setPayload}
                 name={'password'}
               />
-              <Button signin_signup className={cx('btn')} onClick={handleSubmit}>
+              <Button signin_signup className={cx('btn')} onClick={handleLoginSubmit}>
                 Đăng kí
               </Button>
             </div>

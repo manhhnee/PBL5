@@ -39,9 +39,9 @@ function CrossBar({ items = [], icon, title }) {
       </div>
       <div className={cx('content')}>
         <Slider {...settings}>
-          {items.map((item) => {
+          {items.map((item, index) => {
             return (
-              <div>
+              <div key={index}>
                 <div className={cx('content')}>
                   <CategoryItem data={item}></CategoryItem>
                 </div>

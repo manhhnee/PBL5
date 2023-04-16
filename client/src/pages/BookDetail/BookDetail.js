@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './BookDetail.module.scss';
 import Image from '~/components/Image/Image';
