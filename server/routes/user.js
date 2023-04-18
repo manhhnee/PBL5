@@ -9,5 +9,6 @@ var InforUserController = require('../controllers/inforUser')
 
 
  router.get('/profile',AuthController.verifyToken,AuthController.isCustomer,InforUserController.getInforUser)
+ router.get('/:id',InforUserController.FindInforUser)
 
 module.exports = router
