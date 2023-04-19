@@ -5,5 +5,10 @@ class InforUserController{
             res.json({user:data,role:req.user.role,success:true})
         })
     }
+    FindInforUser(req,res,next){
+        InforUserModel.findWithAccountId(req.params.id,function(data){
+            res.json(data)
+        })
+    }
 }
 module.exports = new InforUserController();
