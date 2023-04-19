@@ -8,7 +8,7 @@ import { faCheckCircle, faSpinner, faTruckFast } from '@fortawesome/free-solid-s
 
 const cx = classNames.bind(styles);
 
-function Staff() {
+function StaffRecent() {
   return (
     <div className={cx('content')}>
       <div className={cx('header-content')}>
@@ -82,4 +82,4 @@ function Staff() {
   );
 }
 
-export default Staff;
+export default StaffRecent;
