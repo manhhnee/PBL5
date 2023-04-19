@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRectangleList } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import styles from './Staff.module.scss';
 import Sidebar from '~/components/Sidebar/Sidebar';
@@ -15,6 +15,42 @@ function Staff({ children }) {
   const [month, setMonth] = useState(new Date().getMonth());
   const [year, setYear] = useState(new Date().getFullYear());
   const [showMonthPicker, setShowMonthPicker] = useState(false);
+
+  const [infor, setInfor] = useState({});
+
+  function getJwtFromCookie() {
+    //lấy token được lưu trong cookie ra
+    const name = 'token=';
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const cookieArray = decodedCookie.split(';');
+    for (let i = 0; i < cookieArray.length; i++) {
+      let cookie = cookieArray[i];
+      while (cookie.charAt(0) === ' ') {
+        cookie = cookie.substring(1);
+      }
+      if (cookie.indexOf(name) === 0) {
+        return cookie.substring(name.length, cookie.length);
+      }
+    }
+    return '';
+  }
+
+  useEffect(() => {
+    fetch('http://localhost:5000/user/staff', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${getJwtFromCookie()}`, // trả token về server để xử lí
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.success === true) {
+          setInfor(response.user);
+        } else {
+          alert('error');
+        }
+      });
+  }, []);
 
   const month_names = [
     'January',
@@ -69,7 +105,7 @@ function Staff({ children }) {
             Ngày {currentDate.getDate()} Tháng {currentDate.getMonth() + 1} Năm {currentDate.getFullYear()}, Thứ{' '}
             {currentDate.getDay() + 1}
           </span>
-          <span className={cx('name')}>Xin chào, Hồ Hưng</span>
+          <span className={cx('name')}>Xin chào, {infor.FirstName + ' ' + infor.LastName}</span>
           <div className={cx('states')}>
             <Button
               className={cx('btn-state1')}

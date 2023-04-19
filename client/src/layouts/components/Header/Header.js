@@ -44,6 +44,7 @@ function Header() {
   function Logout() {
     document.cookie = 'token=;';
     window.location.replace('/');
+    localStorage.setItem('Role', null);
   }
 
   useEffect(() => {

@@ -8,7 +8,7 @@ import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 
-function Staff() {
+function StaffSuccess() {
   return (
     <div className={cx('content')}>
       <div className={cx('header-content')}>
@@ -99,4 +99,4 @@ function Staff() {
   );
 }
 
-export default Staff;
+export default StaffSuccess;

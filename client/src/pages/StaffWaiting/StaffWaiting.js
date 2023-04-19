@@ -8,7 +8,7 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 
-function Staff() {
+function StaffWaiting() {
   return (
     <div className={cx('content')}>
       <div className={cx('header-content')}>
@@ -81,4 +81,4 @@ function Staff() {
   );
 }
 
-export default Staff;
+export default StaffWaiting;
