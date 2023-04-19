@@ -20,8 +20,7 @@ function Login() {
   const handleSignupClick = () => setIsSignupMode(true);
   const handleSigninClick = () => setIsSignupMode(false);
 
-  const handleLoginSubmit = async (e) => {
-    e.preventDefault();
+  const HandleLoginSubmit = async () => {
     const response = await fetch('http://localhost:5000/api/login', {
       method: 'POST',
       headers: {
@@ -34,10 +33,18 @@ function Login() {
     });
     const data = await response.json();
     if (data.success === true) {
+      localStorage.setItem('Role', data.role);
       document.cookie = `token=${data.token}`;
-      window.location.replace(config.routes.home);
+      if (data.role === 'ADMIN') {
+        window.location.replace('/admin');
+      } else if (data.role === 'STAFF') {
+        window.location.replace(config.routes.staffRecent);
+      } else {
+        window.location.replace(config.routes.home);
+      }
     } else {
-      console.log('error');
+      alert('Error');
+      window.location.reload();
     }
   };
   return (
@@ -63,7 +70,7 @@ function Login() {
                 setValue={setPayload}
                 name={'password'}
               />
-              <Button signin_signup className={cx('btn')} onClick={handleLoginSubmit}>
+              <Button signin_signup className={cx('btn')} onClick={HandleLoginSubmit}>
                 Đăng nhập
               </Button>
             </div>
@@ -109,7 +116,7 @@ function Login() {
                 setValue={setPayload}
                 name={'password'}
               />
-              <Button signin_signup className={cx('btn')} onClick={handleLoginSubmit}>
+              <Button signin_signup className={cx('btn')} onClick={HandleLoginSubmit}>
                 Đăng kí
               </Button>
             </div>
