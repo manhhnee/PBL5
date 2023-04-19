@@ -1,7 +1,7 @@
 import { faLock, faPhone, faUser, faLocationDot, faSignature } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames/bind';
 import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import styles from './Login.module.scss';
 import images from '~/assets/images';
@@ -32,8 +32,8 @@ function Login() {
       }),
     });
     const data = await response.json();
-    localStorage.setItem('Role', data.role);
     if (data.success === true) {
+      localStorage.setItem('Role', data.role);
       document.cookie = `token=${data.token}`;
       if (data.role === 'ADMIN') {
         window.location.replace('/admin');

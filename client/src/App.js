@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { publicRoutes, staffRoutes } from './routes';
 import { DefaultLayout } from './layouts';
