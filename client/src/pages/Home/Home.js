@@ -8,10 +8,12 @@ import BookItem from '~/components/BookItem';
 import Button from '~/components/Button';
 import Image from '~/components/Image';
 import images from '~/assets/images';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
 const cx = classNames.bind(styles);
 
-function Home() {
+function Home () {
   const choiceItems = [
     {
       id: 1,
@@ -106,78 +108,41 @@ function Home() {
     },
   ];
 
-  const bookItems = [
-    {
-      id: 1,
-      img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
-      alt: 'Product',
-      title: 'The God of Endings: A Novel',
-      author: 'Jacqueline Holland',
-    },
-    {
-      id: 2,
-      img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
-      alt: 'Product',
-      title: 'The God of Endings: A Novel',
-      author: 'Jacqueline Holland',
-    },
-    {
-      id: 3,
-      img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
-      alt: 'Product',
-      title: 'The God of Endings: A Novel',
-      author: 'Jacqueline Holland',
-    },
-    {
-      id: 4,
-      img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
-      alt: 'Product',
-      title: 'The God of Endings: A Novel',
-      author: 'Jacqueline Holland',
-    },
-    {
-      id: 5,
-      img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
-      alt: 'Product',
-      title: 'The God of Endings: A Novel',
-      author: 'Jacqueline Holland',
-    },
-    {
-      id: 6,
-      img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
-      alt: 'Product',
-      title: 'The God of Endings: A Novel',
-      author: 'Jacqueline Holland',
-    },
-    {
-      id: 7,
-      img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
-      alt: 'Product',
-      title: 'The God of Endings: A Novel',
-      author: 'Jacqueline Holland',
-    },
-    {
-      id: 8,
-      img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
-      alt: 'Product',
-      title: 'The God of Endings: A Novel',
-      author: 'Jacqueline Holland',
-    },
-    {
-      id: 9,
-      img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
-      alt: 'Product',
-      title: 'The God of Endings: A Novel',
-      author: 'Jacqueline Holland',
-    },
-    {
-      id: 10,
-      img: 'https://cdn0.fahasa.com/media/catalog/product/b/l/blt2.jpg',
-      alt: 'Product',
-      title: 'The God of Endings: A Novel',
-      author: 'Jacqueline Holland',
-    },
-  ];
+  const [books, setBooks] = useState([]);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      const response = await axios.get('http://localhost:5000/book/show');
+      const booksData = response.data;
+
+      // Loop through booksData and fetch images for each book
+      const booksWithImages = await Promise.all(
+        booksData.map(async (book) => {
+          const imageResponse = await axios.get(`http://localhost:5000/image/show/${book.id}`);
+          const imageData = imageResponse.data[0];
+
+          // check if the image data is available or not
+          var image;
+          if (imageData && imageData.Image) {
+            image = imageData.Image;
+          } else {
+            image = null;
+          }
+
+          // Combine book data and image data into a single object
+          return {
+            ...book,
+            image,
+          };
+        }),
+      );
+
+      setBooks(booksWithImages);
+    };
+
+    fetchBooks();
+  }, []);
+
   return (
     <div className={cx('wrapper')}>
       <CrossBar
@@ -197,7 +162,7 @@ function Home() {
           <span className={cx('title')}>Phổ biến</span>
         </div>
         <div className={cx('book-list')}>
-          <BookItem key={bookItems.id} items={bookItems} />
+          <BookItem key={books.id} items={books} />
         </div>
         <div className={cx('button')}>
           <Button outline>Xem thêm</Button>
