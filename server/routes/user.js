@@ -17,14 +17,6 @@ router.get(
   AuthController.isStaff,
   InforUserController.getInforUser
 );
+router.get("/:id", InforUserController.FindInforUser);
 
-<<<<<<< HEAD
 module.exports = router;
-=======
-
- router.get('/profile',AuthController.verifyToken,AuthController.isCustomer,InforUserController.getInforUser)
- router.get('/staff',AuthController.verifyToken,AuthController.isStaff,InforUserController.getInforUser)
- router.get('/:id',InforUserController.FindInforUser)
-
-module.exports = router
->>>>>>> master
