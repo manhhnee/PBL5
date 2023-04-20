@@ -12,5 +12,6 @@ app.use(express.json());
 app.use(cors());
 app.use(cookie_parser());
 
-route(app);
-app.listen(port, () => console.log(`run at port http://localhost:${port}`));
+
+route(app)
+app.listen(port,()=>console.log(`run at port http://localhost:${port}`));
