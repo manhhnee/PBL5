@@ -4,6 +4,7 @@
      const BookRoute = require('./book')
      const ImageBookRoute = require('./imageBook')
      const RatingRoute = require('./rating')
+     const SupplierRoute = require('./supplier')
      function route(app){
           app.use('/user',UserRoute)
           app.use('/api',accountRoute)
@@ -11,6 +12,7 @@
           app.use('/book',BookRoute)
           app.use('/image',ImageBookRoute)
           app.use('/rating',RatingRoute)
+          app.use('/supplier',SupplierRoute)
      }
 
      module.exports = route
