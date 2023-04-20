@@ -3,7 +3,7 @@ const routes = {
   profile: '/@/:name/information',
   search: '/search',
   login: '/login',
-  bookdetail: '/bookdetail',
+  bookdetail: '/bookdetail/:id',
   staffRecent: '/staff/recentOrders',
   staffWaiting: '/staff/waitingOrders',
   staffDelivering: '/staff/DeliveringOrders',
