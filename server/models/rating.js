@@ -20,10 +20,10 @@ rating.add = function(data,results){
 }
 rating.find = function(data,results){
     console.log(data)
-    db.query("SELECT * FROM rating WHERE id_Book = ?",data.idBook, function (err,images) {
+    db.query("SELECT * FROM rating WHERE id_Book = ?",data.idBook, function (err,ratings) {
         if(err) return err
         else{
-            results(images)
+            results(ratings)
         }
     })
 }
