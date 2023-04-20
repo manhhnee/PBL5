@@ -5,7 +5,7 @@ var CategoryController = require("../controllers/category");
 // router.get('/URL',itemsController.method)
 
 router.post("/add", CategoryController.add);
-router.get("/category", CategoryController.showAll);
+router.get("/", CategoryController.showAll);
 router.delete("/delete/:id", CategoryController.delete);
 router.put("/update/:id", CategoryController.update);
 

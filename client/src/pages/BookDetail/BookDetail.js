@@ -25,7 +25,7 @@ function BookDetail() {
 
   useEffect(() => {
     const fetchAPIBooks = async () => {
-      const response = await axios.get(`http://localhost:5000/api/detail/${id}`);
+      const response = await axios.get(`http://localhost:5000/api/book/detail/${id}`);
       const booksData = await response.data;
       setBook(booksData);
       // Loop through booksData and fetch images for each book
@@ -37,8 +37,15 @@ function BookDetail() {
       setMainImage(imagesData[0].Image);
     };
 
+    const fetchAPIStar = async () => {
+      const response = await axios.get(`http://localhost:5000/api/rating/totalstar/${id}`);
+      const starData = await response.data;
+      setTotalRating(starData.stars);
+    };
+
     fetchAPIBooks();
     fetchAPIImages();
+    fetchAPIStar();
   }, []);
 
   function handleIncrement() {
