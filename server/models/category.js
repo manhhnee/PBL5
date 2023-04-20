@@ -48,7 +48,8 @@ category.delete = function(idCategory,results){
     })
 }
 category.update = function(idCategory, data,results){
-    db.query("UPDATE category SET Name =?, Image =? WHERE id =?", [data.Name, data.Image, idCategory], function (err,categories) {
+    db.query("UPDATE category SET Name =?, Image =? WHERE id =?",
+    [data.Name, data.Image, idCategory], function (err,categories) {
         if (err) return err
         else {
             results({success: true, message:'cập nhật thành công'})
