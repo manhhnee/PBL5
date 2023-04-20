@@ -579,7 +579,8 @@ ALTER TABLE `supplier`
 --
 ALTER TABLE `account`
   ADD CONSTRAINT `account_ibfk_1` FOREIGN KEY (`id_Role`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
+<<Head>
+<>>
 --
 -- Constraints for table `book`
 --
