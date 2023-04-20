@@ -97,13 +97,13 @@ Email  : manirujjamanakash@gmail.com
         const searchParams = new URLSearchParams(window.location.search);
         const idbook = searchParams.get('id');
         console.log(idbook);
-        fetch(`http://localhost:3000/book/detail/${idbook}`, {
+        fetch(`http://localhost:5000/book/detail/${idbook}`, {
                 method: 'GET'
             })
                 .then(response => response.json())
                 .then(book=>{
                   
-                    fetch(`http://localhost:3000/rating/show/${book.id}`, { method: 'GET'})
+                    fetch(`http://localhost:5000/rating/show/${book.id}`, { method: 'GET'})
                             .then(response => response.json())
                             .then(response=>{
                               var html = ''
@@ -117,7 +117,7 @@ Email  : manirujjamanakash@gmail.com
                               }
                               stars.innerHTML = html
                             })
-                    fetch(`http://localhost:3000/image/show/${book.id}`, { method: 'GET'})
+                    fetch(`http://localhost:5000/image/show/${book.id}`, { method: 'GET'})
                             .then(response => response.json())
                             .then(images=>{
                                 let html = ''
@@ -131,11 +131,11 @@ Email  : manirujjamanakash@gmail.com
                     description.innerHTML = book.Description
                     price.innerHTML = book.Price  
                     
-                    fetch(`http://localhost:3000/rating/show/detail/${book.id}`, { method: 'GET'})
+                    fetch(`http://localhost:5000/rating/show/detail/${book.id}`, { method: 'GET'})
     .then(response => response.json())
     .then(ratings => {
         let userPromises = ratings.map(rating => {
-            return fetch(`http://localhost:3000/user/${rating.id_Account}`)
+            return fetch(`http://localhost:5000/user/${rating.id_Account}`)
                 .then(response => response.json());
         });
 
@@ -148,9 +148,10 @@ Email  : manirujjamanakash@gmail.com
                 for(let j = 0; j < ratings[i].star; j++) {
                   ratingextra+=`<span class="float-right"><i class="text-warning fa fa-star"></i></span>`
                 }
+               
                 html += `<div class="row">
                             <div class="col-md-2">
-                                <img src="https://image.ibb.co/jw55Ex/def_face.jpg" class="img img-rounded img-fluid"/>
+                                <img src="${users[i].Avatar||'https://image.ibb.co/jw55Ex/def_face.jpg'}" class="img img-rounded img-fluid"/>
                                 <p class="text-secondary text-center">15 Minutes Ago</p>
                             </div>
                             <div class="col-md-10">
