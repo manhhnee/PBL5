@@ -1,5 +1,6 @@
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
-import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 
@@ -8,6 +9,7 @@ import Image from '~/components/Image/Image';
 import Button from '~/components/Button/Button';
 import Rate from '~/components/Rate';
 import Star from '~/components/Star';
+import { useParams } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -15,6 +17,36 @@ function BookDetail() {
   const [count, setCount] = useState(1);
   const [isActive, setIsActive] = useState(false);
   const [totalRating, setTotalRating] = useState(5);
+  const [book, setBook] = useState({});
+  const [imageList, setImageList] = useState([]);
+  const [mainImage, setMainImage] = useState();
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    const fetchAPIBooks = async () => {
+      const response = await axios.get(`http://localhost:5000/api/book/detail/${id}`);
+      const booksData = await response.data;
+      setBook(booksData);
+      // Loop through booksData and fetch images for each book
+    };
+    const fetchAPIImages = async () => {
+      const response = await axios.get(`http://localhost:5000/api/image/${id}`);
+      const imagesData = await response.data;
+      setImageList(imagesData);
+      setMainImage(imagesData[0].Image);
+    };
+
+    const fetchAPIStar = async () => {
+      const response = await axios.get(`http://localhost:5000/api/rating/totalstar/${id}`);
+      const starData = await response.data;
+      setTotalRating(starData.stars);
+    };
+
+    fetchAPIBooks();
+    fetchAPIImages();
+    fetchAPIStar();
+  }, []);
 
   function handleIncrement() {
     setCount(count + 1);
@@ -35,48 +67,30 @@ function BookDetail() {
     <>
       <div className={cx('main-detail')}>
         <div className={cx('left-content')}>
-          <div className={cx('thumbnail')}>
-            <Image
-              className={cx('small-img')}
-              src="https://i.bloganchoi.com/bloganchoi.com/wp-content/uploads/2023/02/my-dieu-ngoi-bay-hay-696x571.jpg?fit=700%2C20000&quality=95&ssl=1"
-              alt="img1"
-            ></Image>
-          </div>
-          <div className={cx('thumbnail')}>
-            <Image
-              className={cx('small-img')}
-              src="https://afamilycdn.com/150157425591193600/2023/3/6/d-1678083500951102773938-1678087074156-16780870743291018826034.jpeg"
-              alt="img2"
-            ></Image>
-          </div>
-          <div className={cx('thumbnail')}>
-            <Image
-              className={cx('small-img')}
-              src="https://dienchau2.edu.vn/wp-content/uploads/2023/03/Meme-My-Dieu-bay-hay-hai-huoc.fna&oh=00_AfDImdqtt7DBEkFehcuqyeDvh6QUGaYyJ3GVCCnnGnNwMA&oe=6403CBA8.jpeg  "
-              alt="img3"
-            ></Image>
-          </div>
+          {imageList.map((image, index) => {
+            return (
+              <div className={cx('thumbnail')}>
+                <Image key={index} className={cx('small-img')} src={image.Image} alt="img1"></Image>{' '}
+              </div>
+            );
+          })}
         </div>
         <div className={cx('center-content')}>
-          <Image
-            className={cx('large-img')}
-            src="https://cafefcdn.com/203337114487263232/2023/3/6/photo-13-1678089866114549939516.jpeg"
-            alt="large-img4"
-          ></Image>
+          <Image className={cx('large-img')} alt="img4" src={mainImage}></Image>
           <Button outline className={cx('btn')}>
             <FontAwesomeIcon className={cx('icon')} icon={faCartShopping}></FontAwesomeIcon>
             Thêm vào giỏ hàng
           </Button>
         </div>
         <div className={cx('right-content')}>
-          <span className={cx('bookname')}>Dragon ball tập 1</span>
+          <span className={cx('bookname')}>{book.Name}</span>
           <div className={cx('star')}>
             <Star rating={totalRating} setRating={setTotalRating}></Star>
           </div>
-          <span className={cx('price')}>25.000 đ</span>
+          <span className={cx('price')}>{book.Price} đ</span>
           <span className={cx('supplier')}>Nhà cung cấp: Nhà xuất bản Kim Đồng</span>
-          <span className={cx('publisher')}>Nhà xuất bản: Kim Đồng</span>
-          <span className={cx('author')}>Tác giả: 鳥山昭</span>
+          <span className={cx('publisher')}>Nhà xuất bản: {book.Publisher}</span>
+          <span className={cx('author')}>Tác giả: {book.Author}</span>
           <span className={cx('quantity')}>Số lượng: 10</span>
           <div className={cx('buy-field')}>
             <div className={cx('container-input')}>
@@ -111,19 +125,7 @@ function BookDetail() {
               <Rate></Rate>
             </>
           ) : (
-            <div className={cx('description')}>
-              Dragon Ball (ドラゴンボール Doragon Bōru?) là bộ truyện tranh nhiều tập được viết và vẽ minh họa bởi
-              Toriyama Akira. Loạt truyện tranh bắt đầu xuất bản hàng tuần trong tạp chí Weekly Shōnen Jump từ năm 1984
-              đến 1995 với 519 chương và sau đó được xuất bản trong 42 tập truyện dày bởi nhà xuất bản Shueisha. Sau 20
-              năm dừng sáng tác, từ năm 2015, tác giả Toriyama Akira đã tiếp tục sáng tác bộ truyện Dragon Ball Super,
-              với nội dung tiếp nối bộ truyện gốc.<br></br>
-              <br></br> Dragon Ball là bộ truyện nổi tiếng và phổ biến rộng rãi bậc nhất trên toàn thế giới, là một
-              trong những bộ manga được tiêu thụ nhiều nhất mọi thời đại.<br></br>
-              <br></br> Tương phản với tiểu thuyết Tây du ký của Trung Quốc, loạt truyện mô tả cuộc hành trình của Son
-              Goku từ lúc bé đến trưởng thành, qua các lần tầm sư học võ và khám phá thế giới để truy tìm các viên ngọc
-              rồng với điều ước từ rồng thiêng. Xuyên suốt hành trình của Son Goku, cậu đã gặp được nhiều bạn bè và
-              chống lại những kẻ hung ác có âm mưu dùng điều ước từ rồng thiêng để làm bá chủ thế giới.
-            </div>
+            <div className={cx('description')}>{book.Description}</div>
           )}
         </div>
       </div>

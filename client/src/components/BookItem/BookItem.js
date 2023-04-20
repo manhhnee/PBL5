@@ -19,7 +19,7 @@ function BookItem({ items }) {
       <div className={cx('container')}>
         {items.map((item) => {
           return (
-            <Link key={item.id} onClick={scrollToTop} to="/bookdetail" className={cx('item')}>
+            <Link key={item.id} onClick={scrollToTop} to={`/bookdetail/${item.id}`} className={cx('item')}>
               <Image src={item.image} className={cx('img')} />
               <div className={cx('title')}>{item.Name}</div>
               <div className={cx('author')}>{item.Author}</div>

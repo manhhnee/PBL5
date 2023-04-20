@@ -21,7 +21,7 @@ function Login() {
   const handleSigninClick = () => setIsSignupMode(false);
 
   const HandleLoginSubmit = async () => {
-    const response = await fetch('http://localhost:5000/api/login', {
+    const response = await fetch('http://localhost:5000/api/account/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
