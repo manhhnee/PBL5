@@ -8,7 +8,7 @@ import { faTruckFast } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 
-function Staff() {
+function StaffDelivering() {
   return (
     <div className={cx('content')}>
       <div className={cx('header-content')}>
@@ -91,4 +91,4 @@ function Staff() {
   );
 }
 
-export default Staff;
+export default StaffDelivering;

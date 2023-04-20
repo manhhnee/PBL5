@@ -8,11 +8,11 @@ import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 
-function Staff() {
+function StaffSuccess() {
   return (
     <div className={cx('content')}>
       <div className={cx('header-content')}>
-        <span className={cx('title-content')}>Đơn hàng gần đây</span>
+        <span className={cx('title-content')}>Đơn hàng giao thành công</span>
         <Link className={cx('all-order')}>Xem toàn bộ đơn hàng</Link>
       </div>
       <div className={cx('order-list')}>
@@ -99,4 +99,4 @@ function Staff() {
   );
 }
 
-export default Staff;
+export default StaffSuccess;

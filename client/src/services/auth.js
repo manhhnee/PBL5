@@ -1,16 +1,15 @@
-import axiosConfig from '~/axiosConfig';
+import * as httpRequest from '~/utils/httpRequest';
 
-export const apiRegister = (payload) =>
-  new Promise(async (resolve, reject) => {
-    try {
-      const response = await axiosConfig({
-        method: 'post',
-        url: '/api/v1/auth/register',
-        data: payload,
-      });
-
-      resolve(response);
-    } catch (error) {
-      reject(error);
-    }
-  });
+export const apiLogin = async () => {
+  try {
+    const res = await httpRequest.get('login', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    console.log(res.data);
+  } catch (err) {
+    console.log(err);
+  }
+};
