@@ -1,18 +1,18 @@
-     const accountRoute = require('./account')
-     const UserRoute = require('./user')
-     const CategoryRoute = require('./category')
-     const BookRoute = require('./book')
-     const ImageBookRoute = require('./imageBook')
-     const RatingRoute = require('./rating')
-     const SupplierRoute = require('./supplier')
-     function route(app){
-          app.use('/user',UserRoute)
-          app.use('/api',accountRoute)
-          app.use('/category',CategoryRoute)
-          app.use('/book',BookRoute)
-          app.use('/image',ImageBookRoute)
-          app.use('/rating',RatingRoute)
-          app.use('/supplier',SupplierRoute)
-     }
 
-     module.exports = route
+const accountRoute = require("./account");
+const UserRoute = require("./user");
+const CategoryRoute = require("./category");
+const BookRoute = require("./book");
+const ImageBookRoute = require("./imageBook");
+const RatingRoute = require("./rating");
+const SupplierRoute = require('./supplier');
+function route(app) {
+  app.use("/api/user", UserRoute);
+  app.use("/api/account", accountRoute);
+  app.use("/api/category", CategoryRoute);
+  app.use("/api/book", BookRoute);
+  app.use("/api/image", ImageBookRoute);
+  app.use("/api/rating", RatingRoute);
+   app.use('/supplier',SupplierRoute);
+}
+module.exports = route;

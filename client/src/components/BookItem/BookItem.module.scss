@@ -9,6 +9,7 @@
   flex-direction: column;
   align-items: center;
   margin-top: 22px;
+  text-align: center;
 }
 
 .img {
@@ -25,9 +26,15 @@
 
 .title {
   font-size: 1.6rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .author {
   font-size: 1.4rem;
   color: var(--primary);
+  text-transform: capitalize;
 }
