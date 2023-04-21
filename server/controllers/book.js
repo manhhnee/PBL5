@@ -7,7 +7,9 @@ class bookController {
     });
   }
   showAll(req, res, next) {
-    bookModel.find({}, function (data) {
+    const { search = ' ', category = '', minPrice = '', maxPrice = '',author='', limit = 10, page = 1 } = req.query;
+    var filter = {search,category,minPrice,maxPrice,author,limit,page}
+    bookModel.find(filter, function (data) {
       res.json(data);
     });
   }
