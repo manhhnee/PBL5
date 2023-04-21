@@ -85,8 +85,15 @@ book.find = function (data, results) {
                         return;
                     }
                     ratings = rating;
+                    var stars = 0
+                    for(let i = 0;i<ratings.length;i++) {
+                        stars+=ratings[i].star
+                    }
+                    stars = Math.round(stars / ratings.length)
+                    if (isNaN(stars)) stars = 0
+                    book.stars = stars
                     // Thực hiện các thao tác cần thiết với ratings ở đây
-                    console.log(book, images, ratings);
+                   
                     results({ book: book, images: images, ratings: ratings })
                     // Thực hiện các thao tác cần thiết với book, images, ratings ở đây
                 });
