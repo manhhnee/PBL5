@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="details.css">
+    <title>Document</title>
+</head>
+<body>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<!--
+Author : Maniruzzaman Akash
+Email  : manirujjamanakash@gmail.com
+-->
+
+<!--To Work with icons-->
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<link href="detail.css" rel="stylesheet">
+<!------ Include the above in your HEAD tag ---------->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>eCommerce Product Detail</title>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+
+  </head>
+
+  <body>
+	
+	<div class="container">
+		<div class="card">
+			<div class="container-fliud">
+				<div class="wrapper row">
+					<div class="preview col-md-6">
+						
+						<div class="preview-pic tab-content">
+						  <div class="tab-pane active" id="pic-1"><img src="" /></div>					  
+						</div>
+						<ul class="preview-thumbnail nav nav-tabs"> 
+                            
+						</ul>
+						
+					</div>
+					<div class="details col-md-6">
+						<h3 class="product-title">men's shoes fashion</h3>
+						<div class="rating">
+							<div class="stars">
+								
+							</div>
+						</div>
+						<p class="product-description">Suspendisse quos? Tempus cras iure temporibus? Eu laudantium cubilia sem sem! Repudiandae et! Massa senectus enim minim sociosqu delectus posuere.</p>
+						<h4 class="price">current price: <span>$180</span></h4>
+						<p class="vote"><strong>91%</strong> of buyers enjoyed this product! <strong>(87 votes)</strong></p>
+						<div class="action">
+							<button class="add-to-cart btn btn-default" type="button">add to cart</button>
+							<button class="like btn btn-default" type="button"><span class="fa fa-heart"></span></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+  <div class="review">
+    <div class="card">
+	    <div class="card-body">
+	       
+	        	<div class="card card-inner">
+            	    <div class="card-body">
+            	        
+            	    </div>
+	            </div>
+            
+	    </div>
+	</div>
+  </div>
+    <script>
+      var comment = document.querySelector('.card-body')
+      var stars = document.querySelector('.stars')
+        var names = document.querySelector('.product-title')
+        var description = document.querySelector('.product-description')
+        var price = document.querySelector('.price')
+        var mainImage = document.querySelector('.tab-content img');
+        var ImageList = document.querySelector('.preview-thumbnail.nav-tabs')
+        const searchParams = new URLSearchParams(window.location.search);
+        const idbook = searchParams.get('id');
+        console.log(idbook);
+        fetch(`http://localhost:5000/api/book/detail/${idbook}`, {
+                method: 'GET'
+            })
+                .then(response => response.json())
+                .then(book=>{
+                  
+                    fetch(`http://localhost:5000/api/rating/totalstar/${book.id}`, { method: 'GET'})
+                            .then(response => response.json())
+                            .then(response=>{
+                              var html = ''
+                              for(let i =0; i<response.stars; i++)
+                              {
+                                html+=`<span class="fa fa-star checked"></span>`
+                              }
+                              for(let i =0; i <5-response.stars; i++)
+                              {
+                                html+=`<span class="fa fa-star"></span>`
+                              }
+                              stars.innerHTML = html
+                            })
+                    fetch(`http://localhost:5000/api/image/${book.id}`, { method: 'GET'})
+                            .then(response => response.json())
+                            .then(images=>{
+                                let html = ''
+                                mainImage.src = images[0].Image
+                                for(let i=0; i<images.length; i++){
+                                    html+=`<li><a data-toggle="tab"><img src="${images[i].Image}" /></a></li>`
+                                }
+                                ImageList.innerHTML = html
+                            })
+                    names.innerHTML = book.Name
+                    description.innerHTML = book.Description
+                    price.innerHTML = book.Price  
+                    
+                    fetch(`http://localhost:5000/api/rating/detail/${book.id}`, { method: 'GET'})
+    .then(response => response.json())
+    .then(ratings => {
+        let userPromises = ratings.map(rating => {
+            return fetch(`http://localhost:5000/api/user/${rating.id_Account}`)
+                .then(response => response.json());
+        });
+
+        Promise.all(userPromises).then(users => {
+          
+            let html = '';
+            let ratingextra = ''
+            for (let i = 0; i < ratings.length; i++) {
+              ratingextra = ''
+                for(let j = 0; j < ratings[i].star; j++) {
+                  ratingextra+=`<span class="float-right"><i class="text-warning fa fa-star"></i></span>`
+                }
+               
+                html += `<div class="row">
+                            <div class="col-md-2">
+                                <img src="${users[i].Avatar||'https://image.ibb.co/jw55Ex/def_face.jpg'}" class="img img-rounded img-fluid"/>
+                                <p class="text-secondary text-center">15 Minutes Ago</p>
+                            </div>
+                            <div class="col-md-10">
+                                <p class="rating-extra">
+                                    <a class="float-left" href="https://maniruzzaman-akash.blogspot.com/p/contact.html"><strong>${users[i].FirstName} ${users[i].LastName}</strong></a>
+                                    ${ratingextra}
+                                </p>
+                                <div class="clearfix"></div>
+                                <p>${ratings[i].comment}</p>
+                                <p>
+                                    <a class="float-right btn btn-outline-primary ml-2"> <i class="fa fa-reply"></i> Reply</a>
+                                    <a class="float-right btn text-white btn-danger"> <i class="fa fa-heart"></i> Like</a>
+                                </p>
+                            </div>
+                        </div>`;
+            }
+            comment.innerHTML = html;
+        });
+    });
+
+
+
+                })
+    </script>
+  </body>
+</html>
+
+</body>
+</html>
+Footer
+© 2023 GitHub, Inc.
+Footer navigation
+Terms
+Privacy
+Security
+Status
+Docs
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
+PBL5/detail.html at hao · manhhnee/PBL5
