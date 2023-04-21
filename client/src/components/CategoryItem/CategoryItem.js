@@ -10,8 +10,8 @@ function CategoryItem({ data, className }) {
   const classes = cx('wrapper', { [className]: className });
   return (
     <Link className={classes}>
-      <Image src={data.img} alt={data.alt} className={cx('image')} />
-      <span className={cx('title')}>{data.title}</span>
+      <Image src={data.Image} alt="default" className={cx('image')} />
+      <span className={cx('title')}>{data.Name}</span>
     </Link>
   );
 }
