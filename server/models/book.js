@@ -27,12 +27,32 @@ book.add = function(data,results){
 book.find = function(data,results){
     console.log(data)
     if(!data.id){
-        db.query("SELECT * FROM book", function (err,books) {
+        const offset = (data.page - 1) * data.limit;
+       
+        let query = `SELECT b.id, b.id_Category, b.Name, b.Author, b.Price, b.Description, i.Image  
+            FROM book b LEFT JOIN ( SELECT id_Book, MIN(id) AS min_id FROM image_book GROUP BY id_Book ) m 
+            ON b.id = m.id_Book LEFT JOIN image_book i ON m.min_id = i.id 
+            WHERE Name LIKE '%${data.search}%'`
+        if (data.category) {
+            query += ` AND id_Category = ${data.category}`;        
+        }
+        if (data.minPrice) {
+            query += ` AND Price >= ${data.minPrice}`;
+        }      
+        if (data.maxPrice) {
+            query += ` AND Price <= ${data.maxPrice}`;
+        }
+        if (data.author) {
+            query += ` AND Author = ${data.author}`;        
+        }
+        query += ` ORDER BY b.id DESC LIMIT ${data.limit} OFFSET ${offset}`
+        console.log(query);
+        db.query(query, function(err,books){
             if (err) return err
             else {
                 results(books)
             }
-        })
+        })       
     }
     else
     {
