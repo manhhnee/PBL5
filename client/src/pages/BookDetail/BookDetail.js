@@ -20,6 +20,7 @@ function BookDetail() {
   const [book, setBook] = useState({});
   const [imageList, setImageList] = useState([]);
   const [mainImage, setMainImage] = useState();
+  const [ratings, setRatings] = useState([]);
 
   const { id } = useParams();
 
@@ -27,26 +28,16 @@ function BookDetail() {
     const fetchAPIBooks = async () => {
       const response = await axios.get(`http://localhost:5000/api/book/detail/${id}`);
       const booksData = await response.data;
-      setBook(booksData);
-      // Loop through booksData and fetch images for each book
-    };
-    const fetchAPIImages = async () => {
-      const response = await axios.get(`http://localhost:5000/api/image/${id}`);
-      const imagesData = await response.data;
-      setImageList(imagesData);
-      setMainImage(imagesData[0].Image);
-    };
-
-    const fetchAPIStar = async () => {
-      const response = await axios.get(`http://localhost:5000/api/rating/totalstar/${id}`);
-      const starData = await response.data;
-      setTotalRating(starData.stars);
+      setBook(booksData.book);
+      setTotalRating(booksData.book.stars);
+      setImageList(booksData.images);
+      setMainImage(booksData.images[0].Image);
+      setRatings(booksData.ratings);
     };
 
     fetchAPIBooks();
-    fetchAPIImages();
-    fetchAPIStar();
   }, []);
+  console.log(ratings);
 
   function handleIncrement() {
     setCount(count + 1);
@@ -122,7 +113,9 @@ function BookDetail() {
         <div className={cx('content')}>
           {isActive ? (
             <>
-              <Rate></Rate>
+              {ratings.map((rating, index) => {
+                return <Rate data={rating} key={index} />;
+              })}
             </>
           ) : (
             <div className={cx('description')}>{book.Description}</div>

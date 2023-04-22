@@ -3,11 +3,11 @@ import styles from './Profile.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouseChimney, faTruck } from '@fortawesome/free-solid-svg-icons';
 import { faFirstOrder } from '@fortawesome/free-brands-svg-icons';
-import { useEffect } from 'react';
 
 import Sidebar from '~/components/Sidebar/Sidebar';
 import Button from '~/components/Button/Button';
 import config from '~/config';
+
 const cx = classNames.bind(styles);
 
 function Profile() {

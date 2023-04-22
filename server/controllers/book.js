@@ -7,14 +7,21 @@ class bookController {
     });
   }
   showAll(req, res, next) {
-    const { search = ' ', category = '', minPrice = '', maxPrice = '',author='', limit = 10, page = 1 } = req.query;
-    var filter = {search,category,minPrice,maxPrice,author,limit,page}
+    const {
+      search = " ",
+      category = "",
+      minPrice = "",
+      maxPrice = "",
+      author = "",
+      limit = 5,
+      page = 1,
+    } = req.query;
+    var filter = { search, category, minPrice, maxPrice, author, limit, page };
     bookModel.find(filter, function (data) {
       res.json(data);
     });
   }
   showOne(req, res, next) {
-    console.log(req.params.id);
     bookModel.find({ id: req.params.id }, function (data) {
       res.json(data);
     });
