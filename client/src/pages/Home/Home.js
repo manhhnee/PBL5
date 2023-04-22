@@ -10,6 +10,8 @@ import BookItem from '~/components/BookItem';
 import Button from '~/components/Button';
 import Image from '~/components/Image';
 import images from '~/assets/images';
+import * as BookService from '~/services/bookServices';
+import * as CategoryService from '~/services/categoryServices';
 
 const cx = classNames.bind(styles);
 
@@ -70,19 +72,17 @@ function Home() {
 
   useEffect(() => {
     const fetchApiBooks = async () => {
-      const response = await axios.get('http://localhost:5000/api/book');
-      const data = await response.data;
-      setBooks(data);
+      const response = await BookService.showBook();
+      setBooks(response);
     };
     const fetchAPICategories = async () => {
-      const response = await axios.get('http://localhost:5000/api/category');
-      const data = await response.data;
-      setCategories(data);
+      const response = await CategoryService.showCategory();
+      setCategories(response);
     };
 
     fetchAPICategories();
     fetchApiBooks();
-  });
+  }, []);
 
   return (
     <div className={cx('wrapper')}>

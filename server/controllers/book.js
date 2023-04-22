@@ -13,7 +13,7 @@ class bookController {
       minPrice = "",
       maxPrice = "",
       author = "",
-      limit = 5,
+      limit = 10,
       page = 1,
     } = req.query;
     var filter = { search, category, minPrice, maxPrice, author, limit, page };

@@ -37,7 +37,6 @@ function BookDetail() {
 
     fetchAPIBooks();
   }, []);
-  console.log(ratings);
 
   function handleIncrement() {
     setCount(count + 1);

@@ -4,38 +4,38 @@ import HeadlessTippy from '@tippyjs/react/headless';
 import { useRef } from 'react';
 import classNames from 'classnames/bind';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 
 import styles from './Search.module.scss';
 import { useDebounce } from '~/hooks';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import * as searchServices from '~/services/searchServices';
+
 import BookItemSearch from '~/components/BookItemSearch';
 
 const cx = classNames.bind(styles);
 
 function Search() {
   const [searchValue, setSearchValue] = useState('');
-  const [searchResult, setSearchResult] = useState(['Naruto']);
+  const [searchResult, setSearchResult] = useState([]);
   const [showResult, setShowResult] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const debounced = useDebounce(searchValue, 500);
 
   useEffect(() => {
+    if (!debounced.trim()) {
+      setSearchResult([]);
+      return;
+    }
     const fetchApi = async () => {
       setLoading(true);
-      const result = await axios.get('http://localhost:5000/api/book');
-      const data = result.data;
-      const test = await searchServices.search();
-      console.log(test);
-
-      setSearchResult(data);
+      const results = await searchServices.search(debounced);
+      setSearchResult(results);
       setLoading(false);
     };
 
     fetchApi();
-  }, []);
+  }, [debounced]);
 
   const handleClear = () => {
     setSearchValue('');
@@ -67,7 +67,14 @@ function Search() {
             <PopperWrapper>
               <h4 className={cx('search-title')}>Book</h4>
               {searchResult.map((result) => {
-                return <BookItemSearch data={result} key={result.id} />;
+                return (
+                  <BookItemSearch
+                    data={result}
+                    key={result.id}
+                    to={`/bookdetail/${result.id}`}
+                    onClick={() => window.location.replace()}
+                  />
+                );
               })}
             </PopperWrapper>
           </div>
@@ -78,7 +85,7 @@ function Search() {
           <input
             ref={inputRef}
             value={searchValue}
-            placeholder="Search accounts and videos"
+            placeholder="Search Book "
             spellCheck={false}
             onChange={handleChange}
             onFocus={() => setShowResult(true)}
