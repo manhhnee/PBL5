@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faClipboard, faUser } from '@fortawesome/free-regular-svg-icons';
 import { faArrowRightFromBracket, faCartArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { useCallback, useEffect, useState } from 'react';
-import removeAccents from 'remove-accents';
 
 import styles from './Header.module.scss';
 import config from '~/config';
@@ -116,7 +115,7 @@ function Header() {
               <Button onClick={() => goLogin(false)} primary>
                 Đăng nhập
               </Button>
-              <Button onClick={() => goLogin(true)} outline>
+              <Button onClick={() => goLogin(true)} outline className={cx('btn')}>
                 Đăng kí
               </Button>
             </>
