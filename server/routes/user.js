@@ -6,13 +6,13 @@ var InforUserController = require("../controllers/inforUser");
 // router.get('/URL',itemsController.method)
 
 router.get(
-  "/profile",
+  "/profile/customer",
   AuthController.verifyToken,
   AuthController.isCustomer,
   InforUserController.getInforUser
 );
 router.get(
-  "/staff",
+  "/profile/staff",
   AuthController.verifyToken,
   AuthController.isStaff,
   InforUserController.getInforUser
