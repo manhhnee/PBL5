@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -123,13 +124,16 @@ Email  : manirujjamanakash@gmail.com
         const searchParams = new URLSearchParams(window.location.search);
         const idbook = searchParams.get('id');
         console.log(idbook);
-        fetch(`http://localhost:5000/book/detail/${idbook}`, {
+
+        fetch(`http://localhost:5000/api/book/detail/${idbook}`, {
                 method: 'GET'
             })
                 .then(response => response.json())
                 .then(book=>{
                   
-                    fetch(`http://localhost:5000/rating/show/${book.id}`, { method: 'GET'})
+
+                    fetch(`http://localhost:5000/api/rating/totalstar/${book.id}`, { method: 'GET'})
+
                             .then(response => response.json())
                             .then(response=>{
                               var html = ''
@@ -143,7 +147,9 @@ Email  : manirujjamanakash@gmail.com
                               }
                               stars.innerHTML = html
                             })
-                    fetch(`http://localhost:5000/image/show/${book.id}`, { method: 'GET'})
+
+                    fetch(`http://localhost:5000/api/image/${book.id}`, { method: 'GET'})
+
                             .then(response => response.json())
                             .then(images=>{
                                 let html = ''
@@ -156,12 +162,13 @@ Email  : manirujjamanakash@gmail.com
                     names.innerHTML = book.Name
                     description.innerHTML = book.Description
                     price.innerHTML = book.Price  
-                    
-                    fetch(`http://localhost:5000/rating/show/detail/${book.id}`, { method: 'GET'})
+
+                    fetch(`http://localhost:5000/api/rating/detail/${book.id}`, { method: 'GET'})
     .then(response => response.json())
     .then(ratings => {
         let userPromises = ratings.map(rating => {
-            return fetch(`http://localhost:5000/user/${rating.id_Account}`)
+            return fetch(`http://localhost:5000/api/user/${rating.id_Account}`)
+
                 .then(response => response.json());
         });
 
@@ -202,8 +209,10 @@ Email  : manirujjamanakash@gmail.com
 
                 })
     </script>
-            </body>
-        </html>
 
-    </body>
+  </body>
 </html>
+
+</body>
+</html>
+
