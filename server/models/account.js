@@ -26,17 +26,17 @@ account.register = function (data, result) {
               "INSERT INTO account (Username, Password, id_Role) VALUES (?, ?, ?)",
               [data.Username, hash, data.id_Role],
               function (err, user) {
-                console.log(user.insertId);
                 if (err) return err;
                 else {
                   db.query(
                     "INSERT INTO inforuser (id_Account,FirstName,LastName,PhoneNumber,Address) VALUES (?, ?, ?, ?, ?)",
+
                     [
                       user.insertId,
                       data.FirstName,
                       data.LastName,
                       data.PhoneNumber,
-                      data.Address
+                      data.Address,
                     ],
                     function (err, users) {
                       if (err) return err;
@@ -59,7 +59,6 @@ account.register = function (data, result) {
 };
 account.login = function (data, result) {
   // data = [username,password]
-  console.log(data);
   db.query(
     "SELECT * FROM account WHERE Username = ?",
     data.Username,
@@ -93,7 +92,6 @@ account.login = function (data, result) {
               },
               "mk"
             );
-            console.log(token);
 
             result({ success: true, token: token, role: role[0].roleName });
           });

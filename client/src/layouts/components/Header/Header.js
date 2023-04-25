@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faClipboard, faUser } from '@fortawesome/free-regular-svg-icons';
 import { faArrowRightFromBracket, faCartArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { useCallback, useEffect, useState } from 'react';
-import removeAccents from 'remove-accents';
 
 import styles from './Header.module.scss';
 import config from '~/config';
@@ -18,7 +17,6 @@ const cx = classNames.bind(styles);
 
 function Header() {
   const [currentUser, setCurrenUser] = useState(false);
-  const [name, setName] = useState('');
   const [infor, setInfor] = useState({});
   const navigate = useNavigate();
   const goLogin = useCallback((flag) => {
@@ -48,7 +46,7 @@ function Header() {
   }
 
   useEffect(() => {
-    fetch('http://localhost:5000/user/profile', {
+    fetch('http://localhost:5000/api/user/profile/customer', {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${getJwtFromCookie()}`, // trả token về server để xử lí
@@ -59,7 +57,6 @@ function Header() {
         if (response.success === true) {
           setCurrenUser(true);
           setInfor(response.user);
-          setName(removeAccents(response.user.FirstName + response.user.LastName));
         } else {
           setInfor({});
           setCurrenUser(false);
@@ -71,7 +68,7 @@ function Header() {
     {
       icon: <FontAwesomeIcon icon={faUser} />,
       title: 'Thông tin cá nhân',
-      to: `/@/${name}/information`,
+      to: `/customer/profile/${infor.id}`,
     },
     {
       icon: <FontAwesomeIcon icon={faClipboard} />,
@@ -89,7 +86,7 @@ function Header() {
     <header className={cx('wrapper')}>
       <div className={cx('inner')}>
         <Link to={config.routes.home} className={cx('logo-link')}>
-          <img src={images.logo1} alt="Fahasa" />
+          <img src={images.logo3} alt="2H&MBookStore" />
         </Link>
 
         {/* Search de cho nay */}
@@ -118,7 +115,7 @@ function Header() {
               <Button onClick={() => goLogin(false)} primary>
                 Đăng nhập
               </Button>
-              <Button onClick={() => goLogin(true)} outline>
+              <Button onClick={() => goLogin(true)} outline className={cx('btn')}>
                 Đăng kí
               </Button>
             </>

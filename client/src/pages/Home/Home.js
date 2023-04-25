@@ -10,6 +10,8 @@ import BookItem from '~/components/BookItem';
 import Button from '~/components/Button';
 import Image from '~/components/Image';
 import images from '~/assets/images';
+import * as BookService from '~/services/bookServices';
+import * as CategoryService from '~/services/categoryServices';
 
 const cx = classNames.bind(styles);
 
@@ -69,43 +71,17 @@ function Home() {
   ];
 
   useEffect(() => {
-    const fetchBooks = async () => {
-      const response = await axios.get('http://localhost:5000/api/book');
-      const booksData = response.data;
-
-      // Loop through booksData and fetch images for each book
-      const booksWithImages = await Promise.all(
-        booksData.map(async (book) => {
-          const imageResponse = await axios.get(`http://localhost:5000/api/image/${book.id}`);
-          const imageData = imageResponse.data[0];
-
-          // check if the image data is available or not
-          var image;
-          if (imageData && imageData.Image) {
-            image = imageData.Image;
-          } else {
-            image = null;
-          }
-
-          // Combine book data and image data into a single object
-          return {
-            ...book,
-            image,
-          };
-        }),
-      );
-
-      setBooks(booksWithImages);
+    const fetchApiBooks = async () => {
+      const response = await BookService.showBook();
+      setBooks(response);
     };
-
     const fetchAPICategories = async () => {
-      const response = await axios.get('http://localhost:5000/api/category');
-      const data = await response.data;
-      setCategories(data);
+      const response = await CategoryService.showCategory();
+      setCategories(response);
     };
 
-    fetchBooks();
     fetchAPICategories();
+    fetchApiBooks();
   }, []);
 
   return (

@@ -6,8 +6,6 @@
 }
 
 .container {
-  width: var(--default-layout-width);
-  max-width: 100%;
-  display: flex;
-  flex-direction: column;
+  width: 100%;
+  padding-top: calc(var(--default-layout-header-height));
 }
