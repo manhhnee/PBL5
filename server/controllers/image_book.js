@@ -1,8 +1,8 @@
 const imageBookModel = require('../models/image_book');
 class imageBookController{
     add(req,res,next){
-        console.log(req.body)
-        imageBookModel.add(req.body,function(data){
+        const BookPath = req.file ? `http://localhost:5000/${req.file.path}` : null;
+        imageBookModel.add(req.params.idBook,BookPath,function(data){
             res.json(data)
         })
     }

@@ -8,9 +8,9 @@ const image_book = function (image_book) {
         this.Image = image_book.Image
 
 }
-image_book.add = function (data, results) {
+image_book.add = function (idBook,BookPath, results) {
     db.query("INSERT INTO image_book (id_Book, Image) VALUES (?, ?)",
-    [data.id_Book, data.Image], function (err, images) {
+    [idBook,BookPath], function (err, images) {
         if (err) return err
         else {
             results({ success: true, message: 'thêm thành công' })
