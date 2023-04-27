@@ -2,7 +2,7 @@ const express = require("express");
 var router = express.Router();
 var AuthController = require("../controllers/auth");
 var InforUserController = require("../controllers/inforUser");
-
+var upload = require("../config/uploadImage/Avatar")
 // router.get('/URL',itemsController.method)
 
 router.get(
@@ -18,5 +18,12 @@ router.get(
   InforUserController.getInforUser
 );
 router.get("/:id", InforUserController.FindInforUser);
+
+router.put("/edit",
+AuthController.verifyToken,
+AuthController.isCustomer,
+upload.single('Avatar'),
+InforUserController.update
+);
 
 module.exports = router;

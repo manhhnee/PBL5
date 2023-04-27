@@ -78,7 +78,10 @@ book.find = function (data, results) {
             return;
           }
           images = image;
+<<<<<<< HEAD
           // Thực hiện các thao tác cần thiết với images ở đây
+=======
+>>>>>>> hao
 
           db.query(
             `SELECT rating.id,rating.id_Account,rating.comment,rating.star, inforuser.FirstName,inforuser.LastName,inforuser.Avatar
@@ -109,15 +112,15 @@ book.find = function (data, results) {
     }
 }
 book.delete = function (idBook, results) {
-    db.query("DELETE FROM book WHERE id =?", idBook, function (err, books) {
-        if (err) return err
-        else {
-            console.log(books)
-            results({ success: true, message: 'xóa thành công' })
-        }
-    })
-}
+  db.query("DELETE FROM book WHERE id =?", idBook, function (err, books) {
+    if (err) return err;
+    else {
+      results({ success: true, message: "xóa thành công" });
+    }
+  });
+};
 book.update = function (idBook, data, results) {
+<<<<<<< HEAD
     db.query("UPDATE book SET id_Category =?,Name =?,Price =?,Author =?,Description =?,Publication_Date= ?,Publisher=? WHERE id =?",
         [data.id_Category, data.Name, data.Price, data.Author, data.Description, data.Publication_Date, data.Publisher, idBook], function (err, books) {
             if (err) return err
@@ -160,6 +163,8 @@ book.delete = function (idBook, results) {
   });
 };
 book.update = function (idBook, data, results) {
+=======
+>>>>>>> hao
   db.query(
     "UPDATE book SET id_Category =?,Name =?,Price =?,Author =?,Description =?,Publication_Date= ?,Publisher=? WHERE id =?",
     [
