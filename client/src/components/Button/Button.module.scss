@@ -60,6 +60,28 @@
   }
 }
 
+.white {
+  color: var(--blue);
+  background-color: var(--white);
+  border-color: var(--black);
+
+  &:hover {
+    border-color: var(--black);
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.01), rgba(0, 0, 0, 0.01)), #ece5e6;
+  }
+}
+
+.blue {
+  color: var(--white);
+  background-color: var(--blue);
+  border-color: var(--blue);
+
+  &:hover {
+    border-color: var(--blue);
+    background-color: #3c79f5;
+  }
+}
+
 .outline {
   color: var(--primary);
   border-color: currentColor;

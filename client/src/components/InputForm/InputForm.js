@@ -9,9 +9,7 @@ function InputForm({ placeholder, leftIcon, type, value, setValue, name, classNa
   let classes = cx('wrapper', { [className]: className });
   return (
     <div className={classes}>
-      <div className={cx('icon')}>
-        <FontAwesomeIcon icon={leftIcon}></FontAwesomeIcon>
-      </div>
+      <div className={cx('icon')}>{leftIcon && <FontAwesomeIcon icon={leftIcon}></FontAwesomeIcon>}</div>
       <input
         type={type}
         placeholder={placeholder}
@@ -21,5 +19,15 @@ function InputForm({ placeholder, leftIcon, type, value, setValue, name, classNa
     </div>
   );
 }
+
+InputForm.protoTypes = {
+  placeholder: PropTypes.string,
+  leftIcon: PropTypes.node,
+  type: PropTypes.node.isRequired,
+  value: PropTypes.string,
+  setValue: PropTypes.func,
+  name: PropTypes.string,
+  className: PropTypes.node,
+};
 
 export default InputForm;
