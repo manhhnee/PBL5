@@ -3,16 +3,6 @@
   height: calc(100vh - var(--default-layout-header-height));
 }
 
-.container {
-  padding: 12px;
-  flex: 1 1;
-  padding-left: 12px;
-  padding-top: 12px;
-  background-color: #f5f5fb;
-  max-height: 100vh;
-  overflow-y: auto;
-}
-
 //sidebar
 
 .btn {
@@ -34,74 +24,87 @@
   }
 }
 
-.container-left {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.header {
-  color: #7f72d9;
-  text-transform: capitalize;
-  margin-left: 16px;
-}
-
-//container
-
-.header {
-  display: flex;
-  flex-direction: column;
-}
-.date {
-  font-size: 1.4rem;
-}
-
-.name {
-  font-size: 2.5rem;
-  font-weight: 700;
+.btn.active {
   color: var(--black);
-  margin-top: 12px;
+  border-right: 3px solid var(--blue);
 }
 
-.states {
-  margin-top: 30px;
-  display: flex;
-  justify-content: space-around;
+.container {
+  padding: 12px;
+  padding-right: 50px;
+  flex: 1 1;
+  padding-left: 12px;
+  padding-top: 12px;
+  background-color: #f5f5fb;
+  max-height: 100vh;
+  overflow-y: auto;
 }
 
-.btn-state1,
-.btn-state2,
-.btn-state3 {
-  height: 118px;
-  font-size: 22px;
-  border-radius: 10px;
-  color: var(--white);
-  min-width: 222px;
-}
-
-.btn-state1 {
-  background-color: #fcb35c;
-}
-
-.btn-state2 {
-  background-color: #7f72d9;
-}
-
-.btn-state3 {
-  background-color: #6051bb;
-}
-
-.icon {
-  margin-right: 12px;
-}
-
-.number,
-.state {
-  font-size: 1.6rem;
-  line-height: 24px;
-  font-weight: 400;
-}
-
-.number {
+.main-header {
+  font-size: 3.6rem;
   font-weight: 600;
+  color: var(--black);
+}
+
+.information-field {
+  padding-top: 30px;
+}
+
+.header {
+  font-size: 2rem;
+  color: var(--black);
+  font-weight: 500;
+}
+
+.information,
+.text-field {
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--text-color);
+}
+
+.description-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.cancel-btn {
+  margin-left: auto;
+}
+
+.save-btn {
+  margin-left: 20px;
+}
+
+.input-field {
+  display: flex;
+  padding-left: 200px;
+  align-items: center;
+}
+
+.input {
+  border-radius: 10px;
+  font-size: 1.6rem;
+  background-color: var(--white);
+  margin-right: 30px;
+  max-height: 49px;
+  max-width: 300px;
+  border: 2px solid var(--text-color);
+
+  input {
+    font-size: 1.5rem;
+    color: var(--text-color);
+  }
+}
+
+.image {
+  width: 126px;
+  height: 126px;
+  border-radius: 9999px;
+}
+
+.upload-btn {
+  height: 88px;
+  width: 577px;
+  margin-left: 100px;
 }
