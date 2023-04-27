@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,6 +17,7 @@ const cx = classNames.bind(styles);
 function Profile() {
   const { id } = useParams();
   const [activeButton, setActiveButton] = useState('btn1');
+
   const [payload, setPayload] = useState({
     username: '',
     password: '',
@@ -24,7 +25,39 @@ function Profile() {
     lastName: '',
     phoneNumber: '',
     address: '',
+    image: '',
   });
+
+  useEffect(() => {}, []);
+
+  function getJwtFromCookie() {
+    const name = 'token=';
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const cookieArray = decodedCookie.split(';');
+    for (let i = 0; i < cookieArray.length; i++) {
+      let cookie = cookieArray[i];
+      while (cookie.charAt(0) === ' ') {
+        cookie = cookie.substring(1);
+      }
+      if (cookie.indexOf(name) === 0) {
+        return cookie.substring(name.length, cookie.length);
+      }
+    }
+    return '';
+  }
+
+  function renderProfile() {
+    fetch('http://localhost:5000/api/user/profile', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${getJwtFromCookie()}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((user) => {
+        console.log(user);
+      });
+  }
 
   const handleClick = (buttonName) => {
     if (activeButton !== buttonName) {
