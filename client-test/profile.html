@@ -43,7 +43,7 @@
             return ''
         }
         const renderProfile = ()=>{
-            fetch('http://localhost:5000/api/user/profile', {
+            fetch('http://localhost:5000/api/user/profile/customer', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${getJwtFromCookie()}`
