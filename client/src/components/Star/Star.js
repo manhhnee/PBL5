@@ -48,6 +48,7 @@ const Star = ({ rating = 5, setRating, isUpdate = false }) => {
 Star.proptoTypes = {
   rating: PropTypes.number,
   setRating: PropTypes.node,
+  isUpdate: PropTypes.bool,
 };
 
 export default Star;

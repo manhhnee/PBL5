@@ -36,7 +36,7 @@ function BookDetail() {
     };
 
     fetchAPIBooks();
-  }, []);
+  }, [id]);
 
   function handleIncrement() {
     setCount(count + 1);

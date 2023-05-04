@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock, faMessage, faUser } from '@fortawesome/free-regular-svg-icons';
-
-import Sidebar from '~/components/Sidebar';
-import Button from '~/components/Button';
-import InputForm from '~/components/InputForm';
-import styles from './Profile.module.scss';
-import config from '~/config';
-import Image from '~/components/Image';
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
+
+import InputForm from '~/components/InputForm';
+import styles from './Information.module.scss';
+import Button from '~/components/Button';
+import Profile from '~/layouts/Profile';
 
 const cx = classNames.bind(styles);
 
-function Profile() {
-  const { id } = useParams();
-  const [activeButton, setActiveButton] = useState('btn1');
+function Information() {
+  const [infor, setInfor] = useState({});
+  const [avatar, setAvatar] = useState({});
+  const [image, setImage] = useState('');
 
   const [payload, setPayload] = useState({
     username: '',
@@ -25,10 +22,8 @@ function Profile() {
     lastName: '',
     phoneNumber: '',
     address: '',
-    image: '',
+    avatar: '',
   });
-
-  useEffect(() => {}, []);
 
   function getJwtFromCookie() {
     const name = 'token=';
@@ -46,53 +41,64 @@ function Profile() {
     return '';
   }
 
-  function renderProfile() {
-    fetch('http://localhost:5000/api/user/profile', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${getJwtFromCookie()}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((user) => {
-        console.log(user);
+  useEffect(() => {
+    const fetchAPIProfile = async () => {
+      const response = await fetch('http://localhost:5000/api/user/profile/customer', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${getJwtFromCookie()}`, // trả token về server để xử lí
+        },
       });
-  }
+      const data = await response.json();
+      if (data.success) {
+        setInfor(data.user);
+        setImage(data.user.Avatar);
+      } else {
+        setInfor({});
+        setImage('');
+      }
+    };
+    fetchAPIProfile();
+  }, []);
 
-  const handleClick = (buttonName) => {
-    if (activeButton !== buttonName) {
-      setActiveButton(buttonName);
+  const handleUpdate = async () => {
+    const formData = new FormData();
+    formData.append('FirstName', payload.firstName);
+    formData.append('LastName', payload.lastName);
+    formData.append('PhoneNumber', payload.phoneNumber);
+    formData.append('Address', payload.address);
+    formData.append('Avatar', avatar);
+    const response = await fetch('http://localhost:5000/api/user/edit', {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${getJwtFromCookie()}`, // trả token về server để xử lí
+      },
+      body: formData,
+    });
+
+    const data = await response.json();
+    if (data.success === true) {
+      alert(data.message);
+      setInfor({ ...infor, payload });
+    } else {
+      alert(data.message);
     }
+    window.location.reload();
+  };
+
+  const handleImgChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setImage(e.target.result);
+    };
+
+    reader.readAsDataURL(file);
+    setAvatar(e.target.files[0]);
   };
 
   return (
-    <div className={cx('wrapper')}>
-      <Sidebar>
-        <Button
-          to={`/customer/profile/${id}`}
-          leftIcon={<FontAwesomeIcon icon={faUser}></FontAwesomeIcon>}
-          className={cx('btn', `${activeButton === 'btn1' ? 'active' : ''}`)}
-          onClick={() => handleClick('btn1')}
-        >
-          Trang cá nhân
-        </Button>
-        <Button
-          to={`/customer/orderList/${id}`}
-          leftIcon={<FontAwesomeIcon icon={faClock}></FontAwesomeIcon>}
-          className={cx('btn', `${activeButton === 'btn2' ? 'active' : ''}`)}
-          onClick={() => handleClick('btn2')}
-        >
-          Lịch sử đơn hàng
-        </Button>
-        <Button
-          to={config.routes.profile}
-          leftIcon={<FontAwesomeIcon icon={faMessage}></FontAwesomeIcon>}
-          className={cx('btn', `${activeButton === 'btn3' ? 'active' : ''}`)}
-          onClick={() => handleClick('btn3')}
-        >
-          Phản hồi
-        </Button>
-      </Sidebar>
+    <Profile>
       <div className={cx('container')}>
         <div className={cx('main-header')}>Trang cá nhân</div>
         <div className={cx('information-field')}>
@@ -103,7 +109,7 @@ function Profile() {
               <Button white className={cx('cancel-btn')}>
                 Hủy
               </Button>
-              <Button blue className={cx('save-btn')}>
+              <Button blue className={cx('save-btn')} onClick={handleUpdate}>
                 Lưu thay đổi
               </Button>
             </div>
@@ -112,7 +118,7 @@ function Profile() {
             <div className={cx('header')}>Họ và tên</div>
             <div className={cx('input-field')}>
               <InputForm
-                placeholder="Enter first name..."
+                placeholder={infor.FirstName}
                 type="text"
                 value={payload.firstName}
                 setValue={setPayload}
@@ -120,7 +126,7 @@ function Profile() {
                 className={cx('input')}
               />
               <InputForm
-                placeholder="Enter last name..."
+                placeholder={infor.LastName}
                 type="text"
                 value={payload.lastName}
                 setValue={setPayload}
@@ -133,7 +139,7 @@ function Profile() {
             <div className={cx('header')}>Địa chỉ</div>
             <div className={cx('input-field')}>
               <InputForm
-                placeholder="Enter Address..."
+                placeholder={infor.Address}
                 type="text"
                 value={payload.address}
                 setValue={setPayload}
@@ -146,7 +152,7 @@ function Profile() {
             <div className={cx('header')}>Số điện thoại</div>
             <div className={cx('input-field')}>
               <InputForm
-                placeholder="Enter PhoneNumber..."
+                placeholder={infor.PhoneNumber}
                 type="text"
                 value={payload.phoneNumber}
                 setValue={setPayload}
@@ -179,20 +185,17 @@ function Profile() {
           <div className={cx('text-field')}>
             <div className={cx('header')}>Ảnh của bạn</div>
             <div className={cx('input-field')}>
-              <Image
-                src="https://cafefcdn.com/thumb_w/640/203337114487263232/2022/3/3/photo1646280815645-1646280816151764748403.jpg"
-                className={cx('image')}
-              ></Image>
-              <Button white className={cx('upload-btn')}>
+              {avatar && <img src={image} className={cx('image')} alt="Avatar" />}
+              <label htmlFor="file-upload" className={cx('upload-btn')}>
                 <FontAwesomeIcon icon={faUpload}></FontAwesomeIcon>
-                <span>Nhấn để thêm ảnh hoặc kéo thả vào đây</span>
-              </Button>
+                <input id="file-upload" type="file" onChange={handleImgChange}></input>
+              </label>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </Profile>
   );
 }
 
-export default Profile;
+export default Information;
