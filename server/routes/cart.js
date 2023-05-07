@@ -5,8 +5,7 @@ const CartItemController = require('../controllers/cart_item');
 
 
 // Cart item
-// Route to add a new cart item
-router.post('/', CartItemController.Create);
+router.post('/', CartItemController.Add);
 
 // Route to update an existing cart item's quantity
 router.patch('/:cartItemId', CartItemController.Update);
