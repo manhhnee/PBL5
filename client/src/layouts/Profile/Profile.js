@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,12 +13,14 @@ const cx = classNames.bind(styles);
 
 function Profile({ children }) {
   const { id } = useParams();
-  const [activeButton, setActiveButton] = useState('btn1');
+  let buttonName = 'btn1';
+  const [activeButton, setActiveButton] = useState(buttonName);
   const handleClick = (buttonName) => {
     if (activeButton !== buttonName) {
       setActiveButton(buttonName);
     }
   };
+  useEffect(() => {}, [activeButton]);
 
   return (
     <div className={cx('wrapper')}>
