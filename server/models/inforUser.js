@@ -11,13 +11,11 @@ const inforUser = function (inforUser) {
 };
 inforUser.findWithAccountId = function (idAccount, results) {
   db.query(
-    `SELECT inforuser.*, account.Username
-              FROM inforuser
-              JOIN account ON inforuser.id_Account = account.id 
-              WHERE inforuser.id_Account = ?`,
+    "SELECT * FROM inforuser WHERE id_Account = ?",
     idAccount,
     (err, infor) => {
       if (err) throw err;
+      console.log(infor);
       results(infor[0]);
     }
   );
