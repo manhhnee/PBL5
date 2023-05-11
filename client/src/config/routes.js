@@ -6,6 +6,7 @@ const routes = {
   search: '/search',
   login: '/login',
   bookdetail: '/bookdetail/:id',
+  allbooks: '/allbooks',
   staffRecent: '/staff/recentOrders',
   staffWaiting: '/staff/waitingOrders',
   staffDelivering: '/staff/DeliveringOrders',
