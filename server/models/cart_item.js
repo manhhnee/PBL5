@@ -8,26 +8,16 @@ class CartItem {
     this.quantity = quantity
   }
 
-  static async createCartItem (bookSupplierId, cartId, quantity) {
-    return new Promise((resolve, reject) => {
-      db.query(
-        `INSERT INTO cart_item (id_BookSupplier, id_cart, quantity) VALUES (?, ?, ?)`,
-        [bookSupplierId, cartId, quantity],
-        (err, res) => {
-          if (err) {
-            reject(err)
-          } else {
-            const newCartItem = new CartItem(
-              res.insertId,
-              bookSupplierId,
-              cartId,
-              quantity
-            )
-            resolve(newCartItem)
-          }
-        }
-      )
-    })
+  static async addCartItem(cartId, bookSupplierId, quantity) {
+    try {
+      const [result] = await db.query(
+        'INSERT INTO Cart_Item (CartId, BookSupplierId, Quantity) VALUES (?, ?, ?)',
+        [cartId, bookSupplierId, quantity]
+      );
+      return result.insertId;
+    } catch (error) {
+      throw error;
+    }
   }
 
   static async updateCartItemQuantity (cartItemId, newQuantity) {

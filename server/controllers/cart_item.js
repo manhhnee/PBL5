@@ -1,97 +1,87 @@
-const CartItemModel = require('../models/cart_item');
-const CartModel = require('../models/cart');
-const jwt = require('jsonwebtoken');
-
+const CartItemModel = require('../models/cart_item')
+const BookSupplierModel = require('../models/book_supplier')
+const CartModel = require('../models/cart')
+const jwt = require('jsonwebtoken')
 
 class CartItemController {
   async Add(req, res){
     try {
-      const token = req.headers.authorization.split(' ')[1]; // Extract JWT from Authorization header
-      const decoded = jwt.verify(token, 'mk'); // Verify JWT
-      const accountId = decoded.id;
-      const {bookId, quantity} = req.body;
+      // Lấy id_Book từ URL
+      const { id_Book } = req.params;
   
-      // Check if the book exists and retrieve its information
-      const [book] = await db.query('SELECT * FROM books WHERE id = ?', [bookId]);
+      // Lấy thông tin về BookSupplier từ database dựa trên id_Book
+      const bookSupplier = await BookSupplierModel.getBookSupplierByBookId(id_Book);
+      const { id: id_BookSupplier } = bookSupplier[0];
   
-      if (!book) {
-        return res.status(404).json({ message: 'Book not found' });
-      }
-  
-      // Check if the user has an existing cart
-      const [cart] = await db.query('SELECT * FROM cart WHERE id_Account = ?', [accountId]);
-  
-      if (!cart) {
-        // If the user doesn't have a cart yet, create a new cart for them
-        await db.query('INSERT INTO cart (id_Account) VALUES (?)', [accountId]);
-      }
-  
-      // Add the book to the cart or update its quantity if it already exists in the cart
-      const [cartItem] = await db.query(
-        'SELECT * FROM cart_items WHERE id_Cart = ? AND id_Book = ?',
-        [cart.id, bookId]
-      );
-  
-      if (!cartItem) {
-        await db.query(
-          'INSERT INTO cart_items (id_Cart, id_Book, quantity) VALUES (?, ?, ?)',
-          [cart.id, bookId, quantity]
-        );
-      } else {
-        await db.query(
-          'UPDATE cart_items SET quantity = ? WHERE id_Cart = ? AND id_Book = ?',
-          [cartItem.quantity + quantity, cart.id, bookId]
-        );
-      }
-  
-      res.status(200).json({ message: 'Book added to cart successfully' });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: 'Internal server error' });
-    }
-  }
-
-  async Update(req, res){
-    const { cartItemId } = req.params;
-    const { quantity } = req.body;
-    try {
-      const success = await CartItemModel.updateCartItemQuantity(cartItemId, quantity);
-      if (success) {
-        res.sendStatus(204);
-      } else {
-        res.sendStatus(404);
-      }
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Server Error');
-    }
-  }
-
-  async Delete(req, res){
-    const { cartItemId } = req.params;
-    try {
-      const success = await CartItemModel.deleteCartItem(cartItemId);
-      if (success) {
-        res.sendStatus(204);
-      } else {
-        res.sendStatus(404);
-      }
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Server Error');
-    }
-  }
-  async ShowAll(req, res) {
-    try {
+      // Lấy thông tin về tài khoản từ token được gửi trong header
       const decoded = jwt.verify(req.cookies.token, 'mk');
-
+  
+      // Lấy thông tin giỏ hàng của tài khoản đó từ database
       const cart = await CartModel.getCartByAccountId(decoded.id);
       const cartId = cart[0].id;
-      const cartItems = await CartItemModel.getCartItemsByCartId(cartId);
-      res.json(cartItems);
+  
+      // Kiểm tra xem Cart Item đã tồn tại trong giỏ hàng chưa
+      const existingCartItem = await CartItemModel.getCartItemByCartIdAndBookSupplierId(cartId, id_BookSupplier);
+  
+      if (existingCartItem.length > 0) {
+        // Nếu Cart Item đã tồn tại, cập nhật số lượng
+        const newQuantity = existingCartItem[0].quantity + parseInt(req.body.quantity);
+        await CartItemModel.updateCartItem(existingCartItem[0].id, newQuantity);
+      } else {
+        // Nếu Cart Item chưa tồn tại, tạo mới
+        await CartItemModel.createCartItem(cartId, id_BookSupplier, req.body.quantity);
+      }
+      res.json({ message: 'Thêm Cart Item vào giỏ hàng thành công' });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Internal server error' });
+      res.status(500).json({ message: 'Lỗi server' });
+    }
+  };
+
+  async Update (req, res) {
+    const { cartItemId } = req.params
+    const { quantity } = req.body
+    try {
+      const success = await CartItemModel.updateCartItemQuantity(
+        cartItemId,
+        quantity
+      )
+      if (success) {
+        res.sendStatus(204)
+      } else {
+        res.sendStatus(404)
+      }
+    } catch (err) {
+      console.error(err)
+      res.status(500).send('Server Error')
+    }
+  }
+
+  async Delete (req, res) {
+    const { cartItemId } = req.params
+    try {
+      const success = await CartItemModel.deleteCartItem(cartItemId)
+      if (success) {
+        res.sendStatus(204)
+      } else {
+        res.sendStatus(404)
+      }
+    } catch (err) {
+      console.error(err)
+      res.status(500).send('Server Error')
+    }
+  }
+  async ShowAll (req, res) {
+    try {
+      const decoded = jwt.verify(req.cookies.token, 'mk')
+
+      const cart = await CartModel.getCartByAccountId(decoded.id)
+      const cartId = cart[0].id
+      const cartItems = await CartItemModel.getCartItemsByCartId(cartId)
+      res.json(cartItems)
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ message: 'Internal server error' })
     }
   }
 }

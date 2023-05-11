@@ -2,13 +2,14 @@ const express = require('express');
 const router = express.Router();
 const CartController = require('../controllers/cart');
 const CartItemController = require('../controllers/cart_item');
+const AuthController = require('../controllers/auth');
 
 
 // Cart item
-router.post('/', CartItemController.Add);
+router.post('/:id_Book', CartItemController.Add);
 
 // Route to update an existing cart item's quantity
-router.patch('/:cartItemId', CartItemController.Update);
+router.put('/:cartItemId', CartItemController.Update);
 
 // Route to delete a cart item
 router.delete('/:cartItemId', CartItemController.Delete);
