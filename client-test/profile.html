@@ -1,31 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
 
-<body>
-    <label for="firstName">First name:</label>
-    <input type="text" id="firstName" name="firstName" value="">
+    <body>
+        <label for="firstName">First name:</label>
+        <input type="text" id="firstName" name="firstName" value="">
 
-    <label for="lastName">Last name:</label>
-    <input type="text" id="lastName" name="lastName" value="">
+        <label for="lastName">Last name:</label>
+        <input type="text" id="lastName" name="lastName" value="">
 
-    <label for="phoneNumber">Phone number:</label>
-    <input type="text" id="phoneNumber" name="phoneNumber" value="">
+        <label for="phoneNumber">Phone number:</label>
+        <input type="text" id="phoneNumber" name="phoneNumber" value="">
 
-    <label for="address">Address:</label>
-    <input type="text" id="address" name="address" value="">
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address" value="">
 
-    <label for="avatar">Avatar:</label>
-    <input type="file" id="avatar" name="avatar">
-    <img  id="image" src="">
+        <label for="avatar">Avatar:</label>
+        <input type="file" id="avatar" name="avatar">
+        <img id="image" src="">
 
-    <button id="updateBtn">Update</button>
-    <script>
+        <button id="updateBtn">Update</button>
+        <script>
         const updateBtn = document.getElementById("updateBtn");
         function getJwtFromCookie() {
             const name = 'token='
@@ -97,6 +97,5 @@
 
 
     </script>
-
-</body>
+    </body>
 </html>

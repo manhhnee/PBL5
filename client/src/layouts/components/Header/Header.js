@@ -17,11 +17,32 @@ const cx = classNames.bind(styles);
 
 function Header() {
   const [currentUser, setCurrenUser] = useState(false);
+  const [showHeader, setShowHeader] = useState(true);
   const [infor, setInfor] = useState({});
+
   const navigate = useNavigate();
-  const goLogin = useCallback((flag) => {
-    navigate(config.routes.login, { state: { flag } });
-  });
+  const goLogin = useCallback(
+    (flag) => {
+      navigate(config.routes.login, { state: { flag } });
+    },
+    [navigate],
+  );
+
+  useEffect(() => {
+    let prevScroll = window.pageYOffset;
+    const handleScroll = () => {
+      const currentScroll = window.pageYOffset;
+      if (prevScroll >= currentScroll) {
+        setShowHeader(true);
+      } else {
+        setShowHeader(false);
+      }
+      prevScroll = currentScroll;
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   function getJwtFromCookie() {
     //lấy token được lưu trong cookie ra
     const name = 'token=';
@@ -68,7 +89,7 @@ function Header() {
     {
       icon: <FontAwesomeIcon icon={faUser} />,
       title: 'Thông tin cá nhân',
-      to: `/customer/profile/${infor.id}`,
+      to: `/customer/information/${infor.id}`,
     },
     {
       icon: <FontAwesomeIcon icon={faClipboard} />,
@@ -83,7 +104,7 @@ function Header() {
   ];
 
   return (
-    <header className={cx('wrapper')}>
+    <header className={cx('wrapper', `${showHeader ? 'show' : ''}`)}>
       <div className={cx('inner')}>
         <Link to={config.routes.home} className={cx('logo-link')}>
           <img src={images.logo3} alt="2H&MBookStore" />

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
-import Image from '~/components/Image';
-import Button from '~/components/Button';
-import styles from './Cart.module.scss';
 import classNames from 'classnames/bind';
+
+import BookItemCart from '~/components/BookItemCart/BookItemCart';
+import styles from './Cart.module.scss';
+
 const cx = classNames.bind(styles);
 
-function Cart () {
+function Cart() {
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
@@ -22,33 +22,13 @@ function Cart () {
   }, []);
 
   return (
-    <div className={cx('cart-items-container')}>
+    <div className={cx('container')}>
       {cartItems.length === 0 ? (
         <p className={cx('cart-item-null')}>Không có sản phẩm nào trong giỏ hàng của bạn.</p>
       ) : (
-        <ul className={cx('cart-items-list')}>
-          {cartItems.map((item) => (
-            <li key={item.id} className={cx('cart-item')}>
-              <div className={cx('cart-item-details')}>
-                <Image src={item.image} alt={item.Name} />
-                <div className={cx('cart-item-info')}>
-                  <p className={cx('cart-item-name')}>{item.Name}</p>
-                  <p>{item.supplier}</p>
-                  <div className={'cart-item-quantity'}>
-                    <span>Số lượng: {item.quantity}</span>
-                  </div>
-                </div>
-              </div>
-              <div className={cx('cart-item-function')}>
-                <p className={cx('cart-item-price')}>{item.price * item.quantity}đ</p>
-                <div className={cx('cart-item-btn')}>
-                  <Button primary={true}>Thanh toán</Button>
-                  <Button outline={true}>Xóa</Button>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
+        cartItems.map((cartItem) => {
+          return <BookItemCart data={cartItem} key={cartItem.id} />;
+        })
       )}
     </div>
   );

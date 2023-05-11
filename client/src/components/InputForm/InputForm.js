@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const cx = classNames.bind(styles);
 
-function InputForm({ placeholder, leftIcon, type, value, setValue, name, className }) {
+function InputForm({ placeholder, leftIcon, type, value, setValue, name, className, onSthChange }) {
   let classes = cx('wrapper', { [className]: className });
   return (
     <div className={classes}>

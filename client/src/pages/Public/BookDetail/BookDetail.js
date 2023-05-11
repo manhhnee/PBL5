@@ -36,11 +36,11 @@ function BookDetail() {
     };
 
     fetchAPIBooks();
-  }, []);
+  }, [id]);
 
   function addToCart(bookId) {
     axios
-      .post("http://localhost:5000/api/cart", {
+      .post('http://localhost:5000/api/cart', {
         bookId: bookId,
         quantity: 1,
       })
