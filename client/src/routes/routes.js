@@ -5,6 +5,8 @@ import Home from '~/pages/Home';
 import Error from '~/pages/Error';
 import Information from '~/pages/Information';
 import History from '~/pages/History';
+import Profile from '~/pages/Profile';
+import Cart from '~/pages/Cart';
 import Login from '~/pages/Public/Login';
 import BookDetail from '~/pages/BookDetail/BookDetail';
 import StaffRecent from '~/pages/StaffRecent';
@@ -18,6 +20,8 @@ const publicRoutes = [
   { path: config.routes.home, component: Home },
   { path: config.routes.information, component: Information, layout: HeaderOnly },
   { path: config.routes.history, component: History, layout: HeaderOnly },
+  { path: config.routes.cart, component: Cart, layout: HeaderOnly },
+  { path: config.routes.profile, component: Profile, layout: HeaderOnly },
   { path: config.routes.bookdetail, component: BookDetail, layout: HeaderAndFooter },
   { path: config.routes.error, component: Error, layout: null },
 ];

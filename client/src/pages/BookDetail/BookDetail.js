@@ -38,6 +38,21 @@ function BookDetail() {
     fetchAPIBooks();
   }, [id]);
 
+  function addToCart(bookId) {
+    axios
+      .post("http://localhost:5000/api/cart", {
+        bookId: bookId,
+        quantity: 1,
+      })
+      .then((response) => {
+        console.log(response);
+        // Update the state of the cart in your React component
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   function handleIncrement() {
     setCount(count + 1);
   }
@@ -67,7 +82,7 @@ function BookDetail() {
         </div>
         <div className={cx('center-content')}>
           <Image className={cx('large-img')} alt="img4" src={mainImage}></Image>
-          <Button outline className={cx('btn')}>
+          <Button outline className={cx('btn')} onClick={() => addToCart(book.id)}>
             <FontAwesomeIcon className={cx('icon')} icon={faCartShopping}></FontAwesomeIcon>
             Thêm vào giỏ hàng
           </Button>

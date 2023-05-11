@@ -2,15 +2,19 @@ const CartModel = require('../models/cart')
 const jwt = require('jsonwebtoken')
 
 class CartController {
-  async getCartByAccountId(req, res) {
-    const token = req.headers.authorization.split(' ')[1]; // Extract JWT from Authorization header
-    const decoded = jwt.verify(token, 'mk'); // Verify JWT
-  
+  async getCartByAccountId(req, res, next) {
     try {
-      const cart = await CartModel.getCartByAccountId(decoded.id);
-      res.status(200).json(cart);
+      // Lấy accountId từ decoded token
+      const decoded = jwt.verify(req.cookies.token, 'mk');
+      const accountId = decoded.id;
+  
+      // Gọi hàm getCartByAccountId để lấy thông tin giỏ hàng
+      const cart = await CartModel.getCartByAccountId(accountId);
+  
+      // Trả về kết quả
+      res.json({ success: true, cart });
     } catch (err) {
-      res.status(500).json({ message: "Failed to get cart", error: err });
+      next(err);
     }
   }
 }
