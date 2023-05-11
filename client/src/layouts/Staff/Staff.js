@@ -69,28 +69,6 @@ function Staff({ children }) {
           Home
         </Button>
         <Button
-          to={config.routes.staffRecent}
-          leftIcon={<FontAwesomeIcon icon={faFirstOrder}></FontAwesomeIcon>}
-          className={cx('btn')}
-        >
-          Đặt hàng
-        </Button>
-        <Button
-          to={config.routes.staffRecent}
-          leftIcon={<FontAwesomeIcon icon={faTruck}></FontAwesomeIcon>}
-          className={cx('btn')}
-        >
-          Vận chuyển
-        </Button>
-        <Button
-          to={config.routes.staffRecent}
-          leftIcon={<FontAwesomeIcon icon={faHouseChimney}></FontAwesomeIcon>}
-          className={cx('btn')}
-        >
-          Đơn hàng
-        </Button>
-
-        <Button
           onClick={Logout}
           leftIcon={<FontAwesomeIcon icon={faHouseChimney}></FontAwesomeIcon>}
           className={cx('btn')}

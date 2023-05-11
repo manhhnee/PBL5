@@ -1,100 +1,100 @@
-const db = require('../config/db/index')
+const db = require("../config/db/index");
 
 class CartItem {
-  constructor (id, bookSupplierId, cartId, quantity) {
-    this.id = id
-    this.bookSupplierId = bookSupplierId
-    this.cartId = cartId
-    this.quantity = quantity
+  constructor(id, bookSupplierId, cartId, quantity) {
+    this.id = id;
+    this.bookSupplierId = bookSupplierId;
+    this.cartId = cartId;
+    this.quantity = quantity;
   }
 
-  static async createCartItem (bookSupplierId, cartId, quantity) {
+  static async createCartItem(bookSupplierId, cartId, quantity) {
     return new Promise((resolve, reject) => {
       db.query(
         `INSERT INTO cart_item (id_BookSupplier, id_cart, quantity) VALUES (?, ?, ?)`,
         [bookSupplierId, cartId, quantity],
         (err, res) => {
           if (err) {
-            reject(err)
+            reject(err);
           } else {
             const newCartItem = new CartItem(
               res.insertId,
               bookSupplierId,
               cartId,
               quantity
-            )
-            resolve(newCartItem)
+            );
+            resolve(newCartItem);
           }
         }
-      )
-    })
+      );
+    });
   }
 
-  static async updateCartItemQuantity (cartItemId, newQuantity) {
+  static async updateCartItemQuantity(cartItemId, newQuantity) {
     return new Promise((resolve, reject) => {
       db.query(
         `UPDATE cart_item SET quantity = ? WHERE id = ?`,
         [newQuantity, cartItemId],
         (err, res) => {
           if (err) {
-            reject(err)
+            reject(err);
           } else {
-            resolve(res.affectedRows > 0)
+            resolve(res.affectedRows > 0);
           }
         }
-      )
-    })
+      );
+    });
   }
 
-  static async deleteCartItem (cartItemId) {
+  static async deleteCartItem(cartItemId) {
     return new Promise((resolve, reject) => {
       db.query(
         `DELETE FROM cart_item WHERE id = ?`,
         [cartItemId],
         (err, res) => {
           if (err) {
-            reject(err)
+            reject(err);
           } else {
-            resolve(res.affectedRows > 0)
+            resolve(res.affectedRows > 0);
           }
         }
-      )
-    })
+      );
+    });
   }
 
-  static async getCartItemByCartIdAndBookSupplierId (cartId, bookSupplierId) {
+  static async getCartItemByCartIdAndBookSupplierId(cartId, bookSupplierId) {
     return new Promise((resolve, reject) => {
       db.query(
         `SELECT * FROM cart_item WHERE id_cart = ? AND id_BookSupplier = ?`,
         [cartId, bookSupplierId],
         (err, res) => {
           if (err) {
-            reject(err)
+            reject(err);
           } else {
             if (res.length > 0) {
-              const { id, id_BookSupplier, id_cart, quantity } = res[0]
+              const { id, id_BookSupplier, id_cart, quantity } = res[0];
               const cartItem = new CartItem(
                 id,
                 id_BookSupplier,
                 id_cart,
                 quantity
-              )
-              resolve(cartItem)
+              );
+              resolve(cartItem);
             } else {
-              resolve(null)
+              resolve(null);
             }
           }
         }
-      )
-    })
+      );
+    });
   }
 
-  static async getCartItemsByCartId (cartId) {
+  static async getCartItemsByCartId(cartId) {
     return new Promise((resolve, reject) => {
       db.query(
         `SELECT ci.id, ci.id_BookSupplier, ci.id_cart, ci.quantity, 
-        b.Name, b.Author, b.Price, 
-        bs.Import_Price, bs.Amount, 
+        b.Name, b.Author, b.Price,
+        bs.Import_Price, bs.Amount, ct.Name as Category_Name,
         ib.Image, s.Name as Supplier 
         FROM cart_item ci
         INNER JOIN book_supplier bs ON ci.id_BookSupplier = bs.id
@@ -103,13 +103,14 @@ class CartItem {
           SELECT id_Book, Image FROM image_book GROUP BY id_Book
         ) ib ON b.id = ib.id_Book
         INNER JOIN supplier s ON bs.id_Supplier = s.id
+        INNER JOIN category ct ON b.id_Category = ct.id
         WHERE ci.id_cart = ?`,
         [cartId],
         (err, res) => {
           if (err) {
-            reject(err)
+            reject(err);
           } else {
-            const cartItems = res.map(row => {
+            const cartItems = res.map((row) => {
               const {
                 id,
                 id_BookSupplier,
@@ -121,8 +122,9 @@ class CartItem {
                 Import_Price,
                 Amount,
                 Image,
-                Supplier
-              } = row
+                Supplier,
+                Category_Name,
+              } = row;
               return {
                 id,
                 bookSupplierId: id_BookSupplier,
@@ -134,15 +136,16 @@ class CartItem {
                 importPrice: Import_Price,
                 amount: Amount,
                 image: Image,
-                supplier: Supplier
-              }
-            })
-            resolve(cartItems)
+                supplier: Supplier,
+                Category_Name: Category_Name,
+              };
+            });
+            resolve(cartItems);
           }
         }
-      )
-    })
+      );
+    });
   }
 }
 
-module.exports = CartItem
+module.exports = CartItem;

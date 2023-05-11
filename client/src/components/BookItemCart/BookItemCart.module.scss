@@ -1,7 +1,10 @@
 .wrapper {
   display: flex;
-  padding: 30px 0;
-  border-bottom: 1px solid var(--text-color);
+  margin: 12px;
+  padding: 16px 8px;
+  border-radius: 4px;
+  box-shadow: 1px 4px 6px #888888;
+  background-color: #fff;
 }
 
 .content-left {
@@ -43,7 +46,7 @@
 .content-right {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .icon {
@@ -53,4 +56,8 @@
 .options {
   display: flex;
   justify-content: space-between;
+}
+
+.btn {
+  margin: 0 8px;
 }

@@ -43,7 +43,7 @@ function Login() {
       localStorage.setItem('Role', data.role);
       document.cookie = `token=${data.token}`;
       if (data.role === 'ADMIN') {
-        window.location.replace(config.routes.adminDelivering);
+        window.location.replace(config.routes.adminRecent);
       } else if (data.role === 'STAFF') {
         window.location.replace(config.routes.staffRecent);
       } else {

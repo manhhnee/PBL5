@@ -1,7 +1,6 @@
 import classNames from 'classnames/bind';
 
 import styles from './Error.module.scss';
-import Button from '~/components/Button/Button';
 
 const cx = classNames.bind(styles);
 
@@ -100,7 +99,6 @@ function Error() {
           </g>
         </g>
       </svg>
-      <Button blue>Back to Home</Button>
     </div>
   );
 }

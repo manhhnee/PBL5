@@ -8,48 +8,85 @@ import styles from './Admin.module.scss';
 import Sidebar from '~/components/Sidebar/Sidebar';
 import Button from '~/components/Button/Button';
 import config from '~/config';
+import { useEffect, useState } from 'react';
 
 const cx = classNames.bind(styles);
 
 function Admin({ children }) {
+  const [infor, setInfor] = useState({});
+
+  function getJwtFromCookie() {
+    //lấy token được lưu trong cookie ra
+    const name = 'token=';
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const cookieArray = decodedCookie.split(';');
+    for (let i = 0; i < cookieArray.length; i++) {
+      let cookie = cookieArray[i];
+      while (cookie.charAt(0) === ' ') {
+        cookie = cookie.substring(1);
+      }
+      if (cookie.indexOf(name) === 0) {
+        return cookie.substring(name.length, cookie.length);
+      }
+    }
+    return '';
+  }
+
   function Logout() {
     document.cookie = 'token=; path=/';
     window.location.replace(config.routes.login);
     localStorage.setItem('Role', null);
   }
 
+  useEffect(() => {
+    fetch('http://localhost:5000/api/user/profile/admin', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${getJwtFromCookie()}`, // trả token về server để xử lí
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.success === true) {
+          setInfor(response.user);
+        } else {
+          alert(response.message);
+          window.location.replace(config.routes.login);
+        }
+      });
+  }, []);
   const currentDate = new Date();
 
   return (
     <div className={cx('wrapper')}>
       <Sidebar>
         <Button
-          to={config.routes.staffRecent}
+          to={config.routes.adminRecent}
           leftIcon={<FontAwesomeIcon icon={faHouseChimney}></FontAwesomeIcon>}
           className={cx('btn')}
         >
-          Home
+          Trang chủ
         </Button>
         <Button
-          to={config.routes.staffRecent}
+          to={config.routes.adminRecent}
           leftIcon={<FontAwesomeIcon icon={faFirstOrder}></FontAwesomeIcon>}
           className={cx('btn')}
         >
-          Đặt hàng
+          Nhân viên
         </Button>
         <Button
-          to={config.routes.staffRecent}
+          to={config.routes.adminRecent}
           leftIcon={<FontAwesomeIcon icon={faTruck}></FontAwesomeIcon>}
           className={cx('btn')}
         >
-          Vận chuyển
+          Doanh thu
         </Button>
         <Button
-          to={config.routes.staffRecent}
+          to={config.routes.adminRecent}
           leftIcon={<FontAwesomeIcon icon={faHouseChimney}></FontAwesomeIcon>}
           className={cx('btn')}
         >
-          Đơn hàng
+          Kho hàng
         </Button>
 
         <Button
@@ -66,11 +103,12 @@ function Admin({ children }) {
             Ngày {currentDate.getDate()} Tháng {currentDate.getMonth() + 1} Năm {currentDate.getFullYear()}, Thứ{' '}
             {currentDate.getDay() + 1}
           </span>
+          <span className={cx('name')}>Xin chào, {infor.FirstName + ' ' + infor.LastName}</span>
           <div className={cx('states')}>
             <Button
               className={cx('btn-state1')}
               leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faRectangleList} />}
-              to={config.routes.adminDelivering}
+              to={config.routes.adminWaiting}
             >
               <span className={cx('number')}>4</span>
               <span className={cx('state')}>Đơn hàng đang chờ</span>
@@ -86,7 +124,7 @@ function Admin({ children }) {
             <Button
               className={cx('btn-state3')}
               leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faRectangleList} />}
-              to={config.routes.adminDelivering}
+              to={config.routes.adminSuccess}
             >
               <span className={cx('number')}>4</span>
               <span className={cx('state')}>Giao thành công</span>
