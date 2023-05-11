@@ -11,7 +11,7 @@ class CartItem {
   static async createCartItem (bookSupplierId, cartId, quantity) {
     return new Promise((resolve, reject) => {
       db.query(
-        `INSERT INTO cart_item (id_book_supplier, id_cart, quantity) VALUES (?, ?, ?)`,
+        `INSERT INTO cart_item (id_BookSupplier, id_cart, quantity) VALUES (?, ?, ?)`,
         [bookSupplierId, cartId, quantity],
         (err, res) => {
           if (err) {
@@ -65,17 +65,17 @@ class CartItem {
   static async getCartItemByCartIdAndBookSupplierId (cartId, bookSupplierId) {
     return new Promise((resolve, reject) => {
       db.query(
-        `SELECT * FROM cart_item WHERE id_cart = ? AND id_book_supplier = ?`,
+        `SELECT * FROM cart_item WHERE id_cart = ? AND id_BookSupplier = ?`,
         [cartId, bookSupplierId],
         (err, res) => {
           if (err) {
             reject(err)
           } else {
             if (res.length > 0) {
-              const { id, id_book_supplier, id_cart, quantity } = res[0]
+              const { id, id_BookSupplier, id_cart, quantity } = res[0]
               const cartItem = new CartItem(
                 id,
-                id_book_supplier,
+                id_BookSupplier,
                 id_cart,
                 quantity
               )

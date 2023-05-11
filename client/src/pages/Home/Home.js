@@ -1,7 +1,6 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook, faBookmark, faHeart } from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
 import styles from './Home.module.scss';
