@@ -8,16 +8,3 @@ export const showBook = async () => {
     console.log(e);
   }
 };
-
-export const show20Book = async (limit = 20) => {
-  try {
-    const res = await httpRequest.get('book', {
-      params: {
-        limit,
-      },
-    });
-    return res;
-  } catch (err) {
-    console.log(err);
-  }
-};

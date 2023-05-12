@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import { adminRoutes, publicRoutes, staffRoutes } from './routes';
 import { DefaultLayout } from './layouts';
 import config from './config';
-import { Error } from '~/pages/Public';
 
 function App() {
   return (
@@ -30,7 +29,6 @@ function App() {
               />
             );
           })}
-          <Route path="/error" element={<Error />} />
           {staffRoutes.map((route, index) => {
             const Page = route.component;
 
@@ -81,7 +79,6 @@ function App() {
               />
             );
           })}
-          <Route path="*" element={<Navigate to="/error" />} />
         </Routes>
       </div>
     </Router>

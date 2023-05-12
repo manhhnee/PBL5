@@ -1,6 +1,6 @@
 .wrapper {
   display: flex;
-  height: 100vh;
+  max-height: 100vh;
 }
 
 .container {
@@ -21,7 +21,7 @@
   width: 100%;
   height: 56px;
   justify-content: left;
-  color: var(--black);
+  color: var(--text-color);
   font-size: 1.6rem;
   margin-top: 15px;
 
@@ -34,6 +34,11 @@
   }
 }
 
+.line {
+  border-bottom: 1px solid #f5f5fb;
+  padding-top: 22px;
+}
+
 .container-left {
   display: flex;
   flex-direction: column;
@@ -43,6 +48,7 @@
 .header {
   color: #7f72d9;
   text-transform: capitalize;
+  margin-left: 16px;
 }
 
 //container
@@ -60,4 +66,47 @@
   font-weight: 700;
   color: var(--black);
   margin-top: 12px;
+}
+
+.states {
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.btn-state1,
+.btn-state2,
+.btn-state3 {
+  height: 118px;
+  font-size: 22px;
+  border-radius: 10px;
+  color: var(--white);
+  min-width: 222px;
+}
+
+.btn-state1 {
+  background-color: #fcb35c;
+}
+
+.btn-state2 {
+  background-color: #7f72d9;
+}
+
+.btn-state3 {
+  background-color: #6051bb;
+}
+
+.icon {
+  margin-right: 12px;
+}
+
+.number,
+.state {
+  font-size: 1.6rem;
+  line-height: 24px;
+  font-weight: 400;
+}
+
+.number {
+  font-weight: 600;
 }

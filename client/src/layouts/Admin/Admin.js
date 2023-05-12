@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartLine, faHouseChimney, faPerson, faRightFromBracket, faTruck } from '@fortawesome/free-solid-svg-icons';
+import { faRectangleList, faHouseChimney, faTruck } from '@fortawesome/free-solid-svg-icons';
+import { faFirstOrder } from '@fortawesome/free-brands-svg-icons';
 
+import styles from './Admin.module.scss';
 import Sidebar from '~/components/Sidebar/Sidebar';
 import Button from '~/components/Button/Button';
 import config from '~/config';
-import styles from './Admin.module.scss';
 import { useEffect, useState } from 'react';
 
 const cx = classNames.bind(styles);
@@ -67,8 +68,8 @@ function Admin({ children }) {
           Trang chủ
         </Button>
         <Button
-          to={config.routes.manageStaff}
-          leftIcon={<FontAwesomeIcon icon={faPerson}></FontAwesomeIcon>}
+          to={config.routes.adminRecent}
+          leftIcon={<FontAwesomeIcon icon={faFirstOrder}></FontAwesomeIcon>}
           className={cx('btn')}
         >
           Nhân viên
@@ -78,19 +79,19 @@ function Admin({ children }) {
           leftIcon={<FontAwesomeIcon icon={faTruck}></FontAwesomeIcon>}
           className={cx('btn')}
         >
-          Kho hàng
+          Doanh thu
         </Button>
         <Button
           to={config.routes.adminRecent}
-          leftIcon={<FontAwesomeIcon icon={faChartLine}></FontAwesomeIcon>}
+          leftIcon={<FontAwesomeIcon icon={faHouseChimney}></FontAwesomeIcon>}
           className={cx('btn')}
         >
-          Doanh thu
+          Kho hàng
         </Button>
 
         <Button
           onClick={Logout}
-          leftIcon={<FontAwesomeIcon icon={faRightFromBracket}></FontAwesomeIcon>}
+          leftIcon={<FontAwesomeIcon icon={faHouseChimney}></FontAwesomeIcon>}
           className={cx('btn')}
         >
           Đăng xuất
@@ -103,6 +104,32 @@ function Admin({ children }) {
             {currentDate.getDay() + 1}
           </span>
           <span className={cx('name')}>Xin chào, {infor.FirstName + ' ' + infor.LastName}</span>
+          <div className={cx('states')}>
+            <Button
+              className={cx('btn-state1')}
+              leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faRectangleList} />}
+              to={config.routes.adminWaiting}
+            >
+              <span className={cx('number')}>4</span>
+              <span className={cx('state')}>Đơn hàng đang chờ</span>
+            </Button>
+            <Button
+              className={cx('btn-state2')}
+              leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faRectangleList} />}
+              to={config.routes.adminDelivering}
+            >
+              <span className={cx('number')}>4</span>
+              <span className={cx('state')}>Đang vận chuyển</span>
+            </Button>
+            <Button
+              className={cx('btn-state3')}
+              leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faRectangleList} />}
+              to={config.routes.adminSuccess}
+            >
+              <span className={cx('number')}>4</span>
+              <span className={cx('state')}>Giao thành công</span>
+            </Button>
+          </div>
         </div>
         {children}
       </div>

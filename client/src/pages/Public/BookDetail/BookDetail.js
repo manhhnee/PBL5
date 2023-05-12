@@ -36,7 +36,7 @@ function BookDetail() {
     };
 
     fetchAPIBooks();
-  }, [book, id]);
+  }, [id]);
 
   function addToCart(bookId) {
     axios
@@ -74,8 +74,8 @@ function BookDetail() {
         <div className={cx('left-content')}>
           {imageList.map((image, index) => {
             return (
-              <div className={cx('thumbnail')} key={index}>
-                <Image className={cx('small-img')} src={image.Image} alt="img1"></Image>{' '}
+              <div className={cx('thumbnail')}>
+                <Image key={index} className={cx('small-img')} src={image.Image} alt="img1"></Image>{' '}
               </div>
             );
           })}
@@ -92,11 +92,7 @@ function BookDetail() {
           <div className={cx('star')}>
             <Star rating={totalRating} setRating={setTotalRating}></Star>
           </div>
-          <span className={cx('price')}>
-            {book.Price === undefined
-              ? 0
-              : book.Price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '')}
-          </span>
+          <span className={cx('price')}>{book.Price} đ</span>
           <span className={cx('supplier')}>Nhà cung cấp: Nhà xuất bản Kim Đồng</span>
           <span className={cx('publisher')}>Nhà xuất bản: {book.Publisher}</span>
           <span className={cx('author')}>Tác giả: {book.Author}</span>

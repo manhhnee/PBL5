@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRectangleList, faHouseChimney } from '@fortawesome/free-solid-svg-icons';
+import { faRectangleList, faHouseChimney, faTruck } from '@fortawesome/free-solid-svg-icons';
+import { faFirstOrder } from '@fortawesome/free-brands-svg-icons';
 import { useState, useEffect } from 'react';
 
 import styles from './Staff.module.scss';

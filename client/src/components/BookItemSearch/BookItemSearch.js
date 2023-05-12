@@ -19,10 +19,4 @@ function BookItemSearch({ data, to, onClick }) {
   );
 }
 
-BookItemSearch.protoTypes = {
-  data: PropTypes.node.isRequired,
-  to: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
-};
-
 export default BookItemSearch;
