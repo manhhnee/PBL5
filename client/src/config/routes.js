@@ -1,13 +1,14 @@
 const routes = {
   home: '/',
   error: '/error',
+  search: '/search',
+  login: '/login',
+  //profile
   information: '/customer/information/:id',
   history: '/customer/history/:id',
   cart: '/cart',
-  search: '/search',
-  login: '/login',
   bookdetail: '/bookdetail/:id',
-  allbooks: '/allbooks',
+  allbook: '/allbook',
   //staff
   staffRecent: '/staff/recentOrders',
   staffWaiting: '/staff/waitingOrders',
@@ -18,6 +19,8 @@ const routes = {
   adminWaiting: '/admin/waitingOrders',
   adminDelivering: '/admin/deliveringOrders',
   adminSuccess: '/admin/successOrders',
+  manageStaff: '/admin/manageStaff',
+  revenue: '/admin/revenue',
 };
 
 export default routes;

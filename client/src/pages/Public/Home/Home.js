@@ -11,6 +11,7 @@ import Image from '~/components/Image';
 import images from '~/assets/images';
 import * as BookService from '~/services/bookServices';
 import * as CategoryService from '~/services/categoryServices';
+import config from '~/config';
 
 const cx = classNames.bind(styles);
 
@@ -105,7 +106,9 @@ function Home() {
           <BookItem key={books.id} items={books} />
         </div>
         <div className={cx('button')}>
-          <Button outline>Xem thêm</Button>
+          <Button outline to={config.routes.allbook}>
+            Xem thêm
+          </Button>
         </div>
       </div>
     </div>
