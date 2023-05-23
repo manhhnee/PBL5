@@ -1,13 +1,13 @@
 const db = require("../config/db/index");
 
 const book = function (book) {
-  (this.id = book.id),
+    (this.id = book.id),
     (this.id_Category = book.id_Category),
     (this.Name = book.Name),
     (this.Price = book.Price),
     (this.Author = book.Author),
     (this.Description = book.Description);
-  (this.Publication_Date = book.Publication_Date),
+    (this.Publication_Date = book.Publication_Date),
     (this.Publisher = book.Publisher);
 };
 book.add = function (data, results) {
@@ -61,8 +61,12 @@ book.find = function (data, results) {
     var images = [];
     var ratings = [];
     var book = {};
-
-    db.query("SELECT * FROM book WHERE id = ?", data.id, function (err, books) {
+    var query = `SELECT b.*,bs.id as id_BookSupplier, bs.Import_Price, bs.Amount, s.Name as Supplier
+                  FROM book b
+                  INNER JOIN book_supplier bs ON bs.id_Book = b.id
+                  INNER JOIN supplier s ON s.id = bs.id_Supplier
+                  WHERE b.id = ? ORDER BY bs.Import_Price ASC LIMIT 1`
+    db.query(query, data.id, function (err, books) {
       if (err) {
         console.log(err);
         return;
@@ -78,7 +82,6 @@ book.find = function (data, results) {
             return;
           }
           images = image;
-
           db.query(
             `SELECT rating.id,rating.id_Account,rating.comment,rating.star, inforuser.FirstName,inforuser.LastName,inforuser.Avatar
                     FROM rating
@@ -90,6 +93,7 @@ book.find = function (data, results) {
                         return;
                     }
                     ratings = rating;
+
                     var stars = 0
                     for (let i = 0; i < ratings.length; i++) {
                         stars += ratings[i].star
@@ -98,7 +102,6 @@ book.find = function (data, results) {
                     if (isNaN(stars)) stars = 0
                     book.stars = stars
                     // Thực hiện các thao tác cần thiết với ratings ở đây
-
                     results({ book: book, images: images, ratings: ratings })
                     // Thực hiện các thao tác cần thiết với book, images, ratings ở đây
                 });
@@ -106,6 +109,7 @@ book.find = function (data, results) {
         });
     }
 }
+
 book.delete = function (idBook, results) {
   db.query("DELETE FROM book WHERE id =?", idBook, function (err, books) {
     if (err) return err;
