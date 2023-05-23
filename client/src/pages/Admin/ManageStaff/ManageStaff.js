@@ -2,12 +2,12 @@ import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faMobileScreenButton, faPlus, faSignature } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
-import Modal from 'react-modal';
 import { useSpring, animated } from 'react-spring';
 
 import Image from '~/components/Image';
 import Button from '~/components/Button';
 import InputForm from '~/components/InputForm';
+import Popup from '~/components/Popup';
 import styles from './ManageStaff.module.scss';
 
 const cx = classNames.bind(styles);
@@ -27,9 +27,7 @@ function ManageStaff() {
     address: '',
     avatar: '',
   });
-  useEffect(() => {
-    Modal.setAppElement('#root'); // Specify the root element of your React app
-  }, []);
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -54,25 +52,7 @@ function ManageStaff() {
           <span className={cx('name')}>Nguyễn Văn A</span>
         </div>
       </div>
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={closeModal}
-        style={{
-          overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          },
-          content: {
-            width: '600px',
-            height: '600px',
-            margin: 'auto',
-            border: 'none',
-            borderRadius: '5px',
-          },
-        }}
-      >
+      <Popup isOpen={isModalOpen} onRequestClose={() => closeModal()} width={String('600px')} height={'600px'}>
         <animated.div style={modalAnimation}>
           <h2>Thông tin nhân viên</h2>
           <div className={cx('input-field')}>
@@ -127,7 +107,7 @@ function ManageStaff() {
             <Button outline>Thay đổi thông tin nhân viên</Button>
           </div>
         </animated.div>
-      </Modal>
+      </Popup>
     </div>
   );
 }
