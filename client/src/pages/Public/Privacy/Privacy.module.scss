@@ -1,0 +1,17 @@
+.wrapper {
+  background-color: var(--white);
+  border-radius: var(--default-border-radius);
+  padding: 15px;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  font-size: 3rem;
+  color: var(--black);
+  font-weight: 500;
+}
+
+.container {
+  padding: 15px;
+}

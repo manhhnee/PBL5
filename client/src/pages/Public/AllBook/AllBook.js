@@ -2,32 +2,46 @@ import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 
 import styles from './AllBook.module.scss';
-import * as CategoryService from '~/services/categoryServices';
 import BookItem from '~/components/BookItem';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import Button from '~/components/Button/Button';
 
 const cx = classNames.bind(styles);
 
 function AllBook() {
   const [books, setBooks] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [activeButton, setActiveButton] = useState(1);
+  const [page, setPage] = useState(() => {
+    const storedPage = localStorage.getItem('page');
+    return storedPage ? parseInt(storedPage) : 1;
+  });
+  let totalPage = 41;
+  if (totalPage % 10 === 0) {
+    totalPage = totalPage / 10;
+  } else {
+    totalPage = totalPage / 10 + 1;
+  }
+  const pages = Array.from({ length: totalPage }, (_, index) => index + 1);
+  const handleButtonClick = (buttonId) => {
+    setActiveButton(buttonId);
+    setPage(buttonId);
+  };
+
+  useEffect(() => {
+    setActiveButton(page);
+    localStorage.setItem('page', page);
+  }, [page]);
 
   useEffect(() => {
     const fetchApiBooks = async () => {
-      const response = await axios.get(`http://localhost:5000/api/book?limit=40`);
+      const response = await axios.get(`http://localhost:5000/api/book?limit=5`);
       const booksData = await response.data;
       setBooks(booksData);
     };
 
-    const fetchAPICategories = async () => {
-      const response = await CategoryService.showCategory();
-      setCategories(response);
-    };
-
-    fetchAPICategories();
     fetchApiBooks();
   }, []);
   return (
@@ -89,6 +103,19 @@ function AllBook() {
       </div>
       <div className={cx('book-list')}>
         <BookItem key={books.id} items={books} />
+        <ul className={cx('pagination')}>
+          {pages.map((page, index) => {
+            return (
+              <Button
+                className={cx('pagination-item', `${activeButton === page ? 'active' : ''}`)}
+                onClick={() => handleButtonClick(page)}
+                key={index}
+              >
+                {page}
+              </Button>
+            );
+          })}
+        </ul>
       </div>
     </div>
   );

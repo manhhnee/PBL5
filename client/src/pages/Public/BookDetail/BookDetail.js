@@ -82,7 +82,7 @@ function BookDetail() {
         </div>
         <div className={cx('center-content')}>
           <Image className={cx('large-img')} alt="img4" src={mainImage}></Image>
-          <Button outline className={cx('btn')} onClick={() => addToCart(book.id)}>
+          <Button outline className={cx('btn')}>
             <FontAwesomeIcon className={cx('icon')} icon={faCartShopping}></FontAwesomeIcon>
             Thêm vào giỏ hàng
           </Button>
