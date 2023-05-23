@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faMessage, faUser } from '@fortawesome/free-regular-svg-icons';

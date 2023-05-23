@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faMobileScreenButton, faPlus, faSignature } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
+import { useSpring, animated } from 'react-spring';
 
 import Image from '~/components/Image';
 import Button from '~/components/Button';
@@ -13,6 +14,10 @@ const cx = classNames.bind(styles);
 
 function ManageStaff() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const modalAnimation = useSpring({
+    opacity: isModalOpen ? 1 : 0,
+    transform: isModalOpen ? 'translateY(0)' : 'translateY(-100%)',
+  });
   const [payload, setPayload] = useState({
     username: '',
     password: '',
@@ -68,58 +73,60 @@ function ManageStaff() {
           },
         }}
       >
-        <h2>Thông tin nhân viên</h2>
-        <div className={cx('input-field')}>
-          <div className={cx('header')}>Họ và tên</div>
-          <div className={cx('fullname')}>
+        <animated.div style={modalAnimation}>
+          <h2>Thông tin nhân viên</h2>
+          <div className={cx('input-field')}>
+            <div className={cx('header')}>Họ và tên</div>
+            <div className={cx('fullname')}>
+              <InputForm
+                placeholder="Nguyen Duc"
+                type="text"
+                value={payload.firstName}
+                setValue={setPayload}
+                name={'firstName'}
+                className={cx('input')}
+                leftIcon={faSignature}
+              />
+              <InputForm
+                placeholder="Manh"
+                type="text"
+                value={payload.lastName}
+                setValue={setPayload}
+                name={'lastName'}
+                className={cx('input')}
+                leftIcon={faSignature}
+              />
+            </div>
+          </div>
+          <div className={cx('input-field')}>
+            <div className={cx('header')}>Địa chỉ</div>
             <InputForm
-              placeholder="Nguyen Duc"
+              placeholder="Da Nang"
               type="text"
-              value={payload.firstName}
+              value={payload.address}
               setValue={setPayload}
-              name={'firstName'}
+              name={'address'}
               className={cx('input')}
-              leftIcon={faSignature}
-            />
-            <InputForm
-              placeholder="Manh"
-              type="text"
-              value={payload.lastName}
-              setValue={setPayload}
-              name={'lastName'}
-              className={cx('input')}
-              leftIcon={faSignature}
+              leftIcon={faLocationDot}
             />
           </div>
-        </div>
-        <div className={cx('input-field')}>
-          <div className={cx('header')}>Địa chỉ</div>
-          <InputForm
-            placeholder="Da Nang"
-            type="text"
-            value={payload.address}
-            setValue={setPayload}
-            name={'address'}
-            className={cx('input')}
-            leftIcon={faLocationDot}
-          />
-        </div>
-        <div className={cx('input-field')}>
-          <div className={cx('header')}>Số điện thoại</div>
-          <InputForm
-            placeholder="0905111123"
-            type="text"
-            value={payload.phoneNumber}
-            setValue={setPayload}
-            name={'phoneNumber'}
-            className={cx('input')}
-            leftIcon={faMobileScreenButton}
-          />
-        </div>
-        <div className={cx('options')}>
-          <Button primary>Xóa nhân viên</Button>
-          <Button outline>Thay đổi thông tin nhân viên</Button>
-        </div>
+          <div className={cx('input-field')}>
+            <div className={cx('header')}>Số điện thoại</div>
+            <InputForm
+              placeholder="0905111123"
+              type="text"
+              value={payload.phoneNumber}
+              setValue={setPayload}
+              name={'phoneNumber'}
+              className={cx('input')}
+              leftIcon={faMobileScreenButton}
+            />
+          </div>
+          <div className={cx('options')}>
+            <Button primary>Xóa nhân viên</Button>
+            <Button outline>Thay đổi thông tin nhân viên</Button>
+          </div>
+        </animated.div>
       </Modal>
     </div>
   );

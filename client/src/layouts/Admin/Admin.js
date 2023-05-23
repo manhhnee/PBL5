@@ -13,6 +13,14 @@ const cx = classNames.bind(styles);
 
 function Admin({ children }) {
   const [infor, setInfor] = useState({});
+  const [activeButton, setActiveButton] = useState(() => {
+    const storageActive = localStorage.getItem('active');
+    return storageActive ? parseInt(storageActive) : 1;
+  });
+  const handleClick = (buttonId) => {
+    setActiveButton(buttonId);
+    localStorage.setItem('active', buttonId);
+  };
 
   function getJwtFromCookie() {
     //lấy token được lưu trong cookie ra
@@ -61,36 +69,40 @@ function Admin({ children }) {
       <Sidebar>
         <Button
           to={config.routes.adminRecent}
-          leftIcon={<FontAwesomeIcon icon={faHouseChimney}></FontAwesomeIcon>}
-          className={cx('btn')}
+          leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faHouseChimney}></FontAwesomeIcon>}
+          className={cx('btn', `${activeButton === 1 ? 'active' : ''}`)}
+          onClick={() => handleClick(1)}
         >
           Trang chủ
         </Button>
         <Button
           to={config.routes.manageStaff}
-          leftIcon={<FontAwesomeIcon icon={faPerson}></FontAwesomeIcon>}
-          className={cx('btn')}
+          leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faPerson}></FontAwesomeIcon>}
+          className={cx('btn', `${activeButton === 2 ? 'active' : ''}`)}
+          onClick={() => handleClick(2)}
         >
           Nhân viên
         </Button>
         <Button
           to={config.routes.adminRecent}
-          leftIcon={<FontAwesomeIcon icon={faTruck}></FontAwesomeIcon>}
-          className={cx('btn')}
+          leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faTruck}></FontAwesomeIcon>}
+          className={cx('btn', `${activeButton === 3 ? 'active' : ''}`)}
+          onClick={() => handleClick(3)}
         >
           Kho hàng
         </Button>
         <Button
           to={config.routes.adminRecent}
-          leftIcon={<FontAwesomeIcon icon={faChartLine}></FontAwesomeIcon>}
-          className={cx('btn')}
+          leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faChartLine}></FontAwesomeIcon>}
+          className={cx('btn', `${activeButton === 4 ? 'active' : ''}`)}
+          onClick={() => handleClick(4)}
         >
           Doanh thu
         </Button>
 
         <Button
           onClick={Logout}
-          leftIcon={<FontAwesomeIcon icon={faRightFromBracket}></FontAwesomeIcon>}
+          leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faRightFromBracket}></FontAwesomeIcon>}
           className={cx('btn')}
         >
           Đăng xuất
