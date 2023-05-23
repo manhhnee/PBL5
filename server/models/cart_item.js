@@ -1,3 +1,4 @@
+
 const db = require('../config/db/index')
 
 class CartItem {
@@ -9,6 +10,7 @@ class CartItem {
   }
 
   static async createCartItem (bookSupplierId, cartId, quantity) {
+
     return new Promise((resolve, reject) => {
       db.query(
         `INSERT INTO cart_item (id_BookSupplier, id_cart, quantity) VALUES (?, ?, ?)`,
@@ -22,6 +24,7 @@ class CartItem {
               bookSupplierId,
               cartId,
               quantity
+
             )
             resolve(newCartItem)
           }
@@ -31,12 +34,14 @@ class CartItem {
   }
 
   static async updateCartItemQuantity (cartItemId, newQuantity) {
+
     return new Promise((resolve, reject) => {
       db.query(
         `UPDATE cart_item SET quantity = ? WHERE id = ?`,
         [newQuantity, cartItemId],
         (err, res) => {
           if (err) {
+
             reject(err)
           } else {
             resolve(res.affectedRows > 0)
@@ -53,6 +58,7 @@ class CartItem {
         [cartItemId],
         (err, res) => {
           if (err) {
+
             reject(err)
           } else {
             resolve(res.affectedRows > 0)
@@ -78,6 +84,7 @@ class CartItem {
                 id_BookSupplier,
                 id_cart,
                 quantity
+
               )
               resolve(cartItem)
             } else {
@@ -95,6 +102,7 @@ class CartItem {
         `SELECT ci.id, ci.id_BookSupplier, ci.id_cart, ci.quantity, 
         b.Name, b.Author, b.Price, 
         bs.Import_Price, bs.Amount, 
+
         ib.Image, s.Name as Supplier 
         FROM cart_item ci
         INNER JOIN book_supplier bs ON ci.id_BookSupplier = bs.id
@@ -103,6 +111,7 @@ class CartItem {
           SELECT id_Book, Image FROM image_book GROUP BY id_Book
         ) ib ON b.id = ib.id_Book
         INNER JOIN supplier s ON bs.id_Supplier = s.id
+
         WHERE ci.id_cart = ?`,
         [cartId],
         (err, res) => {
@@ -146,3 +155,4 @@ class CartItem {
 }
 
 module.exports = CartItem
+

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+
+    <body>
+        <label for="firstName">First name:</label>
+        <input type="text" id="firstName" name="firstName" value="">
+
+        <label for="lastName">Last name:</label>
+        <input type="text" id="lastName" name="lastName" value="">
+
+        <label for="phoneNumber">Phone number:</label>
+        <input type="text" id="phoneNumber" name="phoneNumber" value="">
+
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address" value="">
+
+        <label for="avatar">Avatar:</label>
+        <input type="file" id="avatar" name="avatar">
+        <img id="image" src="">
+
+        <button id="updateBtn">Update</button>
+        <script>
+        const updateBtn = document.getElementById("updateBtn");
+        function getJwtFromCookie() {
+            const name = 'token='
+            const decodedCookie = decodeURIComponent(document.cookie)
+            const cookieArray = decodedCookie.split(';')
+            for (let i = 0; i < cookieArray.length; i++) {
+                let cookie = cookieArray[i]
+                while (cookie.charAt(0) == ' ') {
+                cookie = cookie.substring(1)
+                }
+                if (cookie.indexOf(name) == 0) {
+                return cookie.substring(name.length, cookie.length)
+                }
+            }
+            return ''
+        }
+        const renderProfile = ()=>{
+            fetch('http://localhost:5000/api/user/profile/customer', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${getJwtFromCookie()}`
+                }
+            })
+           .then(response => response.json())
+           .then(user=>{
+            console.log(user)
+            document.getElementById("firstName").value=user.user.FirstName;
+            document.getElementById("lastName").value=user.user.LastName;
+            document.getElementById("phoneNumber").value=user.user.PhoneNumber
+            document.getElementById("address").value=user.user.Address;
+            document.getElementById("image").src = user.user.Avatar;
+           })
+
+        }
+        renderProfile()
+        updateBtn.addEventListener("click", () => {
+        const firstName = document.getElementById("firstName").value;
+        const lastName = document.getElementById("lastName").value;
+        const phoneNumber = document.getElementById("phoneNumber").value;
+        const address = document.getElementById("address").value;
+        const avatar = document.getElementById("avatar").files[0];
+
+        const formData = new FormData();
+        formData.append("FirstName", firstName);
+        formData.append("LastName", lastName);
+        formData.append("PhoneNumber", phoneNumber);
+        formData.append("Address", address);
+        formData.append("Avatar", avatar);
+
+        fetch("http://localhost:5000/api/user/edit", {
+            method: "PUT",
+            headers: {
+                    'Authorization': `Bearer ${getJwtFromCookie()}`
+                },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+            console.log("Update user successfully");
+            } else {
+            console.log("Failed to update user");
+            }
+        })
+        .catch(error => console.error(error));
+        renderProfile()
+        });
+
+
+
+    </script>
+    </body>
+</html>

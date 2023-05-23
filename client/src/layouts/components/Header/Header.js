@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faClipboard, faUser } from '@fortawesome/free-regular-svg-icons';
 import { faArrowRightFromBracket, faCartArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { useCallback, useEffect, useState } from 'react';
-import removeAccents from 'remove-accents';
 
 import styles from './Header.module.scss';
 import config from '~/config';
@@ -18,12 +17,32 @@ const cx = classNames.bind(styles);
 
 function Header() {
   const [currentUser, setCurrenUser] = useState(false);
-  const [name, setName] = useState('');
+  const [showHeader, setShowHeader] = useState(true);
   const [infor, setInfor] = useState({});
+
   const navigate = useNavigate();
-  const goLogin = useCallback((flag) => {
-    navigate(config.routes.login, { state: { flag } });
-  });
+  const goLogin = useCallback(
+    (flag) => {
+      navigate(config.routes.login, { state: { flag } });
+    },
+    [navigate],
+  );
+
+  useEffect(() => {
+    let prevScroll = window.pageYOffset;
+    const handleScroll = () => {
+      const currentScroll = window.pageYOffset;
+      if (prevScroll >= currentScroll) {
+        setShowHeader(true);
+      } else {
+        setShowHeader(false);
+      }
+      prevScroll = currentScroll;
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   function getJwtFromCookie() {
     //lấy token được lưu trong cookie ra
     const name = 'token=';
@@ -48,7 +67,7 @@ function Header() {
   }
 
   useEffect(() => {
-    fetch('http://localhost:5000/user/profile', {
+    fetch('http://localhost:5000/api/user/profile/customer', {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${getJwtFromCookie()}`, // trả token về server để xử lí
@@ -59,7 +78,6 @@ function Header() {
         if (response.success === true) {
           setCurrenUser(true);
           setInfor(response.user);
-          setName(removeAccents(response.user.FirstName + response.user.LastName));
         } else {
           setInfor({});
           setCurrenUser(false);
@@ -71,7 +89,7 @@ function Header() {
     {
       icon: <FontAwesomeIcon icon={faUser} />,
       title: 'Thông tin cá nhân',
-      to: `/@/${name}/information`,
+      to: `/customer/information/${infor.id}`,
     },
     {
       icon: <FontAwesomeIcon icon={faClipboard} />,
@@ -86,10 +104,10 @@ function Header() {
   ];
 
   return (
-    <header className={cx('wrapper')}>
+    <header className={cx('wrapper', `${showHeader ? 'show' : ''}`)}>
       <div className={cx('inner')}>
         <Link to={config.routes.home} className={cx('logo-link')}>
-          <img src={images.logo1} alt="Fahasa" />
+          <img src={images.logo3} alt="2H&MBookStore" />
         </Link>
 
         {/* Search de cho nay */}
@@ -118,7 +136,7 @@ function Header() {
               <Button onClick={() => goLogin(false)} primary>
                 Đăng nhập
               </Button>
-              <Button onClick={() => goLogin(true)} outline>
+              <Button onClick={() => goLogin(true)} outline className={cx('btn')}>
                 Đăng kí
               </Button>
             </>

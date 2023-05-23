@@ -41,7 +41,7 @@
         renderCategory()
         renderBook()
         function renderCategory() {
-            fetch('http://localhost:5000/category/show', {
+            fetch('http://localhost:5000/api/category', {
                 method: 'GET'
             })
                 .then(response => response.json())
@@ -59,13 +59,13 @@
                 })
         }
         function renderBook() {
-            fetch('http://localhost:5000/book/show', {
+            fetch('http://localhost:5000/api/book', {
                 method: 'GET'
             })
                 .then(response => response.json())
                 .then(books => {
                     const promises = books.map(book => (
-                        fetch(`http://localhost:5000/image/show/${book.id}`, {
+                        fetch(`http://localhost:5000/api/image/${book.id}`, {
                             method: 'GET'
                         })
                             .then(response => response.json())

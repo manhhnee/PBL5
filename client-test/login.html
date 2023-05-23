@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-    </head>
-    <body>
-        Username: <input type="text" id="username"><br>
-        password: <input type="text" id="password"><br>
-        <button onclick="login()">login</button>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    Username: <input type="text" id="username"><br>
+    password: <input type="text" id="password"><br>
+    <button onclick="login()">login</button>
 
-        <p class="message"></p>
-        <script>
+    <p class="message" ></p>
+    <script>
         function setCookie(cname, cvalue, exdays) {
             const d = new Date();
             d.setTime(d.getTime() + (exdays*24*60*60*1000));
@@ -42,7 +42,7 @@
         login = async()=> {
             let usernameInput = username.value.trim();
             let passwordInput = password.value.trim();
-            fetch("http://localhost:5000/api/login",{
+            fetch("http://localhost:5000/api/account/login",{
                 method: 'POST',
                 headers:{
                     'Content-Type':'application/json',
@@ -66,7 +66,7 @@
                     message.style.color = 'green'
                     // setCookie('token',data.token,1)
                     document.cookie = `token=${data.token}`;
-                     location.replace("http://127.0.0.1:5500/client-test/account.html")
+                     location.replace("http://127.0.0.1:5500/client-test/profile.html")
                 }
                 
             })
@@ -76,5 +76,7 @@
 
         
     </script>
-    </body>
+</body>
 </html>
+
+

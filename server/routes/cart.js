@@ -14,14 +14,16 @@ router.patch('/:cartItemId', CartItemController.Update);
 // Route to delete a cart item
 router.delete('/:cartItemId', CartItemController.Delete);
 
+
 router.post('/add',AuthController.verifyToken, CartController.add);
 
 router.get('/items',AuthController.verifyToken, CartController.showAll);
 
 
 
+
 // Cart
 // API endpoint để lấy thông tin cart và cart item cho một account id
-// router.get('/', CartController.getCartByAccountId);
+
 
 module.exports = router;

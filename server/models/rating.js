@@ -7,6 +7,7 @@ const rating = function (rating) {
     (this.star = rating.star),
     (this.commemt = rating.commemt);
 };
+
 rating.add = function (data,id_Account, results) {
   db.query(
     "INSERT INTO rating (id_Book,id_Account, star,comment) VALUES (?, ?, ?, ?)",

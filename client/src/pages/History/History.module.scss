@@ -1,0 +1,16 @@
+.container {
+  padding: 12px;
+  padding-right: 50px;
+  flex: 1 1;
+  padding-left: 12px;
+  padding-top: 12px;
+  background-color: #f5f5fb;
+  max-height: 100vh;
+  overflow-y: auto;
+}
+
+.header {
+  font-size: 3.6rem;
+  font-weight: 500;
+  color: var(--black);
+}
