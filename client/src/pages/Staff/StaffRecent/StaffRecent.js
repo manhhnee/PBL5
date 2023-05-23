@@ -18,6 +18,10 @@ function StaffRecent() {
       <div className={cx('order-list')}>
         <Order />
         <Order />
+        <Order />
+        <Order />
+        <Order />
+        <Order />
       </div>
     </div>
   );

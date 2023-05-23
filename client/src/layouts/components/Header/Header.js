@@ -89,7 +89,7 @@ function Header() {
     {
       icon: <FontAwesomeIcon icon={faUser} />,
       title: 'Thông tin cá nhân',
-      to: `/customer/information/${infor.id}`,
+      to: `/customer/information`,
     },
     {
       icon: <FontAwesomeIcon icon={faClipboard} />,

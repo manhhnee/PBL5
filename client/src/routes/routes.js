@@ -9,6 +9,8 @@ import Cart from '~/pages/Cart';
 import Login from '~/pages/Public/Login';
 import BookDetail from '~/pages/Public/BookDetail';
 import AllBook from '~/pages/Public/AllBook';
+import Introduce from '~/pages/Public/Introduce';
+import Privacy from '~/pages/Public/Privacy';
 //staff
 import StaffRecent from '~/pages/Staff/StaffRecent';
 import StaffWaiting from '~/pages/Staff/StaffWaiting';
@@ -30,6 +32,8 @@ const publicRoutes = [
   { path: config.routes.cart, component: Cart, layout: HeaderOnly },
   { path: config.routes.error, component: Error, layout: null },
   { path: config.routes.allbook, component: AllBook, layout: HeaderAndFooter },
+  { path: config.routes.introduce, component: Introduce, layout: HeaderAndFooter },
+  { path: config.routes.privacy, component: Privacy, layout: HeaderAndFooter },
 ];
 
 const staffRoutes = [

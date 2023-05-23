@@ -34,6 +34,15 @@
   }
 }
 
+.btn.active {
+  color: var(--black);
+  border-right: 3px solid var(--blue);
+}
+
+.icon {
+  color: var(--blue);
+}
+
 .container-left {
   display: flex;
   flex-direction: column;

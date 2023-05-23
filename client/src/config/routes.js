@@ -1,11 +1,18 @@
 const routes = {
+  //header
   home: '/',
   error: '/error',
   search: '/search',
   login: '/login',
+  //footer
+  introduce: '/introduce',
+  privacy: '/privacy',
+  termsofuse: '/termsofuse',
+  returnPolicy: '/returnPolicy',
+  warrantyPolicy: '/warrantyPolicy',
   //profile
-  information: '/customer/information/:id',
-  history: '/customer/history/:id',
+  information: '/customer/information',
+  history: '/customer/history',
   cart: '/cart',
   bookdetail: '/bookdetail/:id',
   allbook: '/allbook',
