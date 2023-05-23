@@ -41,10 +41,18 @@ account.register = function (data, result) {
                     function (err, users) {
                       if (err) return err;
                       else {
-                        result({
-                          success: true,
-                          message: "đăng ký thành công",
-                        });
+                        var today = new Date()
+                        db.query("INSERT INTO cart (id_Account,Created_Date) VALUES (?, ?)",
+                        [user.insertId,today],function(err, cart) {
+                          if (err) return err;
+                          else {
+                            result({
+                              success: true,
+                              message: "đăng ký thành công",
+                            });
+                          }
+                        })
+                        
                       }
                     }
                   );
