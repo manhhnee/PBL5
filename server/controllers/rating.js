@@ -10,7 +10,7 @@ function sumArray(mang) {
 class ratingController {
   add(req, res, next) {
     console.log(req.body);
-    ratingModel.add(req.body, function (data) {
+    ratingModel.add(req.body,req.user.id, function (data) {
       res.json(data);
     });
   }
