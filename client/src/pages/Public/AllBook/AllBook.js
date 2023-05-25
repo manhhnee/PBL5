@@ -37,7 +37,7 @@ function AllBook() {
 
   useEffect(() => {
     const fetchApiBooks = async () => {
-      const response = await axios.get(`http://localhost:5000/api/book?limit=5`);
+      const response = await axios.get(`http://localhost:5000/api/book?limit=40`);
       const booksData = await response.data;
       setBooks(booksData);
     };

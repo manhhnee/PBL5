@@ -54,7 +54,11 @@ function BookDetail() {
   }
 
   function handleIncrement() {
-    setCount(count + 1);
+    if (count >= book.Amount) {
+      setCount(book.Amount);
+    } else {
+      setCount(count + 1);
+    }
   }
 
   function handleDecrement() {
@@ -97,10 +101,10 @@ function BookDetail() {
               ? 0
               : book.Price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '')}
           </span>
-          <span className={cx('supplier')}>Nhà cung cấp: Nhà xuất bản Kim Đồng</span>
+          <span className={cx('supplier')}>Nhà cung cấp: {book.Supplier}</span>
           <span className={cx('publisher')}>Nhà xuất bản: {book.Publisher}</span>
           <span className={cx('author')}>Tác giả: {book.Author}</span>
-          <span className={cx('quantity')}>Số lượng: 10</span>
+          <span className={cx('quantity')}>Số lượng: {book.Amount}</span>
           <div className={cx('buy-field')}>
             <div className={cx('container-input')}>
               <button className={cx('decrement')} onClick={handleDecrement}>

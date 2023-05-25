@@ -100,7 +100,7 @@ function Home() {
       <div className={cx('container')}>
         <div className={cx('title-field')}>
           <FontAwesomeIcon className={cx('icon')} icon={faBook}></FontAwesomeIcon>
-          <span className={cx('title')}>Phổ biến</span>
+          <span className={cx('title')}>Mới nhất</span>
         </div>
         <div className={cx('book-list')}>
           <BookItem key={books.id} items={books} />
