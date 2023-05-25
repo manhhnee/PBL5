@@ -5,7 +5,8 @@ var OrderController = require("../controllers/order");
 
 // router.get('/URL',itemsController.method)
 
-router.post("/add", AuthController.verifyToken, OrderController.add);
+router.post("/add", AuthController.verifyToken, OrderController.OrderAll);
+router.post("/addOneItem", AuthController.verifyToken, OrderController.Order);
 router.get("/detail/:id", AuthController.verifyToken, OrderController.showDetail);
 router.get("/history", AuthController.verifyToken, OrderController.showHistoryOrderList);
 router.get("/pending", AuthController.verifyToken, OrderController.showPendingOrders);

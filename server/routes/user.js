@@ -4,7 +4,12 @@ var AuthController = require("../controllers/auth");
 var InforUserController = require("../controllers/inforUser");
 var upload = require("../config/uploadImage/Avatar");
 // router.get('/URL',itemsController.method)
-
+router.get(
+  "/staffList",
+  AuthController.verifyToken,
+  AuthController.isAdmin,
+  InforUserController.getListStaff
+);
 router.get(
   "/profile/customer",
   AuthController.verifyToken,
