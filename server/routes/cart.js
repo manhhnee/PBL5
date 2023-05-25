@@ -14,6 +14,7 @@ var AuthController = require("../controllers/auth");
 // Route to delete a cart item
 // router.delete('/:cartItemId', CartItemController.Delete);
 
+
 router.post('/add',AuthController.verifyToken, CartController.add);
 
 router.get('/items',AuthController.verifyToken, CartController.showAll);
@@ -21,6 +22,7 @@ router.get('/items',AuthController.verifyToken, CartController.showAll);
 router.put('/quantityUpdate/:idCartItem',AuthController.verifyToken, CartController.updateQuantity)
 
 router.delete('/delete/:idCartItem',AuthController.verifyToken, CartController.delete)
+
 
 
 

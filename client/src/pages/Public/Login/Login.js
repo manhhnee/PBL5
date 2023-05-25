@@ -15,7 +15,14 @@ function Login() {
   const location = useLocation();
 
   const [isSignupMode, setIsSignupMode] = useState(location.state?.flag);
-  const [payload, setPayload] = useState({ username: '', password: '' });
+  const [payload, setPayload] = useState({
+    username: '',
+    password: '',
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    address: '',
+  });
 
   const handleSignupClick = () => setIsSignupMode(true);
   const handleSigninClick = () => setIsSignupMode(false);
@@ -36,7 +43,7 @@ function Login() {
       localStorage.setItem('Role', data.role);
       document.cookie = `token=${data.token}`;
       if (data.role === 'ADMIN') {
-        window.location.replace('/admin');
+        window.location.replace(config.routes.adminRecent);
       } else if (data.role === 'STAFF') {
         window.location.replace(config.routes.staffRecent);
       } else {
@@ -45,6 +52,30 @@ function Login() {
     } else {
       alert('Error');
       window.location.reload();
+    }
+  };
+  const HandleSubmitSignUp = async () => {
+    const response = await fetch('http://localhost:5000/api/account/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        Username: payload.username.trim(),
+        Password: payload.password.trim(),
+        FirstName: payload.firstName.trim(),
+        LastName: payload.lastName.trim(),
+        PhoneNumber: payload.phoneNumber.trim(),
+        Address: payload.address.trim(),
+        id_Role: 3,
+      }),
+    });
+    const data = await response.json();
+    if (data.success === true) {
+      alert(data.message);
+      setIsSignupMode(false);
+    } else {
+      alert(data.message);
     }
   };
   return (
@@ -77,20 +108,28 @@ function Login() {
             <div className={cx('sign-up-form')}>
               <h2 className={cx('title')}>Trang đăng kí</h2>
               <InputForm
-                placeholder="Fullname"
+                placeholder="FirstName"
                 leftIcon={faSignature}
                 type="text"
-                value={payload.fullname}
+                value={payload.firstName}
                 setValue={setPayload}
-                name={'fullname'}
+                name={'firstName'}
               />
               <InputForm
-                placeholder="Phone"
+                placeholder="LastName"
+                leftIcon={faSignature}
+                type="text"
+                value={payload.lastName}
+                setValue={setPayload}
+                name={'lastName'}
+              />
+              <InputForm
+                placeholder="Phone Number"
                 leftIcon={faPhone}
                 type="text"
-                value={payload.phone}
+                value={payload.phoneNumber}
                 setValue={setPayload}
-                name={'phone'}
+                name={'phoneNumber'}
               />
               <InputForm
                 placeholder="Address"
@@ -116,7 +155,7 @@ function Login() {
                 setValue={setPayload}
                 name={'password'}
               />
-              <Button signin_signup className={cx('btn')} onClick={HandleLoginSubmit}>
+              <Button signin_signup className={cx('btn')} onClick={HandleSubmitSignUp}>
                 Đăng kí
               </Button>
             </div>

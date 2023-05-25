@@ -83,9 +83,9 @@ class CartItemController {
   }
   async ShowAll(req, res) {
     try {
+
       const token = req.headers.authorization.split(' ')[1];
       const decoded = jwt.verify(token, 'mk');
-
       const cart = await CartModel.getCartByAccountId(decoded.id);
       const cartId = cart[0].id;
       const cartItems = await CartItemModel.getCartItemsByCartId(cartId);

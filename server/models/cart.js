@@ -84,3 +84,4 @@ cart.deleteCartItems = function(id_Account,idCartItem,results) {
 
 
 module.exports = cart
+

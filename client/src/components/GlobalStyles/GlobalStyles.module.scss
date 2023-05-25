@@ -6,7 +6,7 @@
   --black: #000;
   --white: #fff;
   --yellow: gold;
-  --blue: #aa77ff;
+  --blue: #6c00ff;
   --gray: #ccc;
   --text-color: #646461;
   --background-color: #d9d9d9;
@@ -87,4 +87,19 @@ body {
   .tippy-box[data-placement^='bottom'] > .tippy-arrow:before {
     top: -8px;
   }
+}
+
+input[type='file'] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+input[type='file']::-webkit-file-upload-button {
+  visibility: hidden;
+}
+
+input[type='file']::file-selector-button {
+  visibility: hidden;
+  display: none;
 }

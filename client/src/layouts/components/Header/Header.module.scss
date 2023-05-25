@@ -14,6 +14,12 @@
   background-color: var(--white);
   display: flex;
   justify-content: center;
+  transition: transform 0.3s ease-in-out;
+  transform: translateY(-100%);
+}
+
+.wrapper.show {
+  transform: translateY(0);
 }
 .inner {
   height: 100%;
@@ -25,7 +31,7 @@
 
 .logo-link {
   img {
-    width: 150px;
+    width: 120px;
   }
 }
 
@@ -62,6 +68,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 88px;
+}
+
+.btn {
+  margin-left: 8px;
 }
 
 .more-btn {
