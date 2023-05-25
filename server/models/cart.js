@@ -60,6 +60,27 @@ cart.addItemIntoCart = function(id_Account,data,results) {
     
   })
 }
+cart.updateQuantityCartItems = function (id_Account,idCartItem,quantity,results){
+  if(quantity <= 0){
+    db.query("DELETE FROM cart_item WHERE id = ?",idCartItem,(err,cartItem)=>{
+      if(err) return results({success:false,message:err.message});
+      else return results({success:true,message:"da xoa san pham trong gio hang"});
+    })
+  }
+  else {
+    db.query("UPDATE cart_item SET quantity = ? WHERE id = ?",
+    [quantity,idCartItem],(err,cartItem)=>{
+      if(err) return results({success:false,message:err.message}); 
+      else return results({success:true,message:"update so luong thanh cong"})
+    })
+  }
+}
+cart.deleteCartItems = function(id_Account,idCartItem,results) {
+  db.query("DELETE FROM cart_item WHERE id = ?",idCartItem,(err,cart)=>{
+    if (err) return results({success:false,message:err.message})
+    else return results({success:true,message:"da xoa san pham trong gio hang"})
+  })
+}
 
 
 module.exports = cart
