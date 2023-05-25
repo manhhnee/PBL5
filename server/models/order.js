@@ -1,19 +1,4 @@
 const db = require("../config/db/index"); 
-function getPrice(id_BookSupplier) {
-    return new Promise((resolve, reject) => {
-      db.query(
-        `SELECT book.Price
-        FROM book_supplier
-        JOIN book ON book_supplier.id_Book = book.id 
-        WHERE book_supplier.id = ?`,
-        [id_BookSupplier],
-        (err, result) => {
-          if (err) reject(err);
-          resolve(result[0].Price);
-        }
-      );
-    });
-  }
 
 const order = function (order) {
     (this.id = rating.id),
@@ -23,43 +8,32 @@ const order = function (order) {
     (this.OrderDate = rating.OrderDate);
     (this.OrderAddress = rating.OrderAddress);
 };
-order.CreateOrderWithItems = function(data,id_Account,address,results){ 
+order.CreateOrder = function(id_Account,orderItems,address,results){
     var today = new Date()
     db.query(
         "INSERT INTO make_order (id_Status,id_Account,id_Payment,OrderDate,OrderAddress) VALUES (?, ?, ?, ?, ?)",
         [1, id_Account,1,today,address],
-        function (err, order) {
-            if (err) return err;
-            else {  
-                const orderId = order.insertId;
-                const promises = data.map((orderItem) => {
-                return getPrice(orderItem.bookSupplierId)
-                    .then((price) => {
-                    return {
-                        orderId,
-                        bookSupplierId: orderItem.bookSupplierId,
-                        quantity:orderItem.quantity,
-                        Price: price
-                    }})
-                    .catch((err) => results({success: false,message: err.message}))
-                });
-                
-                Promise.all(promises)
-                .then((orderItems) => {
-                    var totalPrice = 0
-                    orderItems.forEach(orderitem => {
-                        totalPrice+=orderitem.Price*orderitem.quantity
-                        db.query(`INSERT INTO order_item (id_Order,id_BookSupplier,quantity,Fixed_Price) VALUES (?, ?, ?, ?)`,
-                        [orderId,orderitem.bookSupplierId,orderitem.quantity,orderitem.Price*orderitem.quantity],function(err,orderItem){if(err) {return err}})
-                    })
-                    db.query(`UPDATE make_order SET totalPrice =? WHERE id =?`,[totalPrice,orderId],function(err,order){if(err) {return err}})
-                    results({success:true,message:"thêm thành công"})
-                    })
-                .catch(err=>results({success:false,message:err.message}))
-          }
+        function(err,order){
+            if(err) return err
+            else {
+                const orderID = order.insertId
+                var totalPrice = 0
+                orderItems.forEach(orderItem=>{
+                    totalPrice += orderItem.Price*orderItem.quantity                 
+                    db.query(`INSERT INTO order_item (id_Order,id_BookSupplier,quantity,Fixed_Price) VALUES (?, ?, ?, ?)`,
+                        [orderID,orderItem.id_BookSupplier,orderItem.quantity,orderItem.Price*orderItem.quantity]
+                        ,function(err,orderItem){if(err) {return err}})
+                })
+                db.query(`UPDATE make_order SET totalPrice =? WHERE id =?`,[totalPrice,orderID],
+                    function(err,order){
+                        if(err) return err
+                        else return results({success:true,message:"thêm thành công"})
+                })               
+            }
         }
-      );
+    )
 }
+
 order.GetOrderDetailsbyOrderId = function(id_Order,results){
     const query1 = `SELECT mo.*,s.Status,p.Payment_Method 
                 FROM make_order mo
