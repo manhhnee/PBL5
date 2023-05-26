@@ -10,7 +10,7 @@ const book = function (book) {
     (this.Publication_Date = book.Publication_Date),
     (this.Publisher = book.Publisher);
 };
-book.add = function (data, results) {
+book.add = function (data,BookPath, results) {
   db.query(
     "INSERT INTO book (id_Category, Name, Price, Author, Description,Publication_Date,Publisher) VALUES (?, ?, ?, ?, ?, ?, ?)",
     [
@@ -22,10 +22,17 @@ book.add = function (data, results) {
       data.Publication_Date,
       data.Publisher,
     ],
-    function (err) {
+    function (err,book) {
       if (err) return err;
+      else if(BookPath == null) return results({success:true,message:"thêm thành công(without Images)"})
       else {
-        results({ success: true, message: "thêm thành công" });
+        db.query("INSERT INTO image_book (id_Book, Image) VALUES (?, ?)",
+          [book.insertId,BookPath], function (err, images) {
+            if (err) return err
+            else {
+             return results({ success: true, message: 'thêm thành công' })
+          }
+        })
       }
     }
   );
@@ -33,10 +40,12 @@ book.add = function (data, results) {
 book.find = function (data, results) {
   if (!data.id) {
     const offset = (data.page - 1) * data.limit;
-    let query = `SELECT b.id, b.id_Category, b.Name, b.Author, b.Price, b.Description, i.Image  
-            FROM book b LEFT JOIN ( SELECT id_Book, MIN(id) AS min_id FROM image_book GROUP BY id_Book ) m 
-            ON b.id = m.id_Book LEFT JOIN image_book i ON m.min_id = i.id 
-            WHERE Name LIKE '%${data.search}%'`;
+    let query = `SELECT b.id, b.id_Category, b.Name, b.Author, b.Price, b.Description, i.Image,c.Name AS category
+                  FROM book b LEFT JOIN ( SELECT id_Book, MIN(id) AS min_id FROM image_book GROUP BY id_Book ) m 
+                  ON b.id = m.id_Book 
+                  LEFT JOIN image_book i ON m.min_id = i.id 
+                  INNER JOIN category c ON c.id = b.id_Category
+                  WHERE b.Name LIKE '%${data.search}%'`                 
     if (data.category) {
       query += ` AND id_Category = ${data.category}`;
     }
@@ -61,15 +70,15 @@ book.find = function (data, results) {
     var images = [];
     var ratings = [];
     var book = {};
-    var query = `SELECT b.*,bs.id as id_BookSupplier, bs.Import_Price, bs.Amount, s.Name as Supplier
+    var query = `SELECT b.*,bs.id as id_BookSupplier, bs.Import_Price, bs.Amount, s.Name as Supplier,c.Name AS category
                   FROM book b
                   INNER JOIN book_supplier bs ON bs.id_Book = b.id
                   INNER JOIN supplier s ON s.id = bs.id_Supplier
+                  INNER JOIN category c ON c.id = b.id_Category
                   WHERE b.id = ? ORDER BY bs.Import_Price ASC LIMIT 1`
     db.query(query, data.id, function (err, books) {
       if (err) {
-        console.log(err);
-        return;
+        return err;
       }
       book = books[0];
 
