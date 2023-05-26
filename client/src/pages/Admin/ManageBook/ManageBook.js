@@ -25,15 +25,11 @@ function ManageBook() {
     {
       name: 'Tên truyện',
       selector: (row) => row.Name,
-      styles: {
-        header: {
-          fontSize: '1.5rem',
-        },
-      },
+      sortable: true,
     },
     {
       name: 'Thể loại',
-      selector: (row) => row.id_Category,
+      selector: (row) => row.category,
     },
     {
       name: 'Tác giả',
@@ -42,6 +38,7 @@ function ManageBook() {
     {
       name: 'Giá bán',
       selector: (row) => row.Price,
+      sortable: true,
     },
     {
       name: 'Hành động',
