@@ -303,8 +303,9 @@ order.changeStatus = function(id_Order,results){
     })
 }
 // xem doanh thu
-var today = new Date()
+
 order.Revenue = function(data,results){
+    var today = new Date()
     var query = `SELECT mo.*,i.id_Account,i.FirstName,i.LastName,i.PhoneNumber,i.Avatar,i.Address
                 FROM make_order mo
                 INNER JOIN inforuser i ON i.id_Account = mo.id_Account
