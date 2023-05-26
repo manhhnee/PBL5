@@ -8,6 +8,8 @@ const order = function (order) {
     (this.OrderDate = rating.OrderDate);
     (this.OrderAddress = rating.OrderAddress);
 };
+
+// tao don hang cho toan bo cart
 order.CreateOrderAllCart = function(id_Account,address,results){
     var today = new Date()
     db.query("SELECT * FROM cart WHERE id_Account =?",id_Account,function(err,cart){
@@ -82,6 +84,7 @@ order.CreateOrderAllCart = function(id_Account,address,results){
         }
       })
 }
+// tạo don hang cho 1 item
 order.CreateOrder = function(id_Account,orderItem,address,results){
     var today = new Date()
     if(orderItem.quantity>orderItem.Amount) return results({success:false,message:"số lượng đặt vượt quá sản phẩm trong kho"})
@@ -124,6 +127,28 @@ order.CreateOrder = function(id_Account,orderItem,address,results){
         )
     }
 }
+
+//huy don hang
+order.cancelOrder = function(id_Order,results){
+    db.query(`SELECT * FROM make_order WHERE id= ? `,[id_Order],function(err,orders){
+        if(err) throw err
+        else{
+            if(orders[0].id_Status>=2){
+                return results({message:"can not cancel order anymore"})
+            }
+            else {                
+                db.query("UPDATE make_order SET id_Status =? WHERE id =?",[4,id_Order],
+                function(err, order){
+                    if(err){return results({success:false,message:err.message})}
+                    else {
+                        results({success:true,message:"update status thành công"})
+                    } 
+                })
+            }
+        }
+    })
+}
+// xem chi tiet don hang
 order.GetOrderDetailsbyOrderId = function(id_Order,results){
     const query1 = `SELECT mo.*,s.Status,p.Payment_Method 
                 FROM make_order mo
@@ -153,6 +178,7 @@ order.GetOrderDetailsbyOrderId = function(id_Order,results){
                 })      
     })            
 }
+// xem lich su don hang cua 1 tai khoan
 order.getHistoryOrderList = function(id_Account,results){
     const query = `SELECT mo.*,s.Status,p.Payment_Method
                     FROM make_order mo
@@ -164,6 +190,51 @@ order.getHistoryOrderList = function(id_Account,results){
         results({orderList:Orders})
     })
 }
+order.getHistorySuccessOrderList = function(id_Account,results){
+    const query = `SELECT mo.*,s.Status,p.Payment_Method
+                    FROM make_order mo
+                    INNER JOIN status s ON mo.id_Status = s.id
+                    INNER JOIN payment p ON mo.id_Payment = p.id
+                    WHERE mo.id_Account = ? AND mo.id_Status = 3 
+                    GROUP BY mo.id DESC`
+    db.query(query,[id_Account],function(err,Orders){
+        results({SuccessOrderList:Orders})
+    })
+}
+order.getHistoryPendingOrderList = function(id_Account,results){
+    const query = `SELECT mo.*,s.Status,p.Payment_Method
+                    FROM make_order mo
+                    INNER JOIN status s ON mo.id_Status = s.id
+                    INNER JOIN payment p ON mo.id_Payment = p.id
+                    WHERE mo.id_Account = ? AND mo.id_Status = 1 
+                    GROUP BY mo.id DESC`
+    db.query(query,[id_Account],function(err,Orders){
+        results({SuccessOrderList:Orders})
+    })
+}
+order.getHistoryDeliveringOrderList = function(id_Account,results){
+    const query = `SELECT mo.*,s.Status,p.Payment_Method
+                    FROM make_order mo
+                    INNER JOIN status s ON mo.id_Status = s.id
+                    INNER JOIN payment p ON mo.id_Payment = p.id
+                    WHERE mo.id_Account = ? AND mo.id_Status = 2 
+                    GROUP BY mo.id DESC`
+    db.query(query,[id_Account],function(err,Orders){
+        results({SuccessOrderList:Orders})
+    })
+}
+order.getHistoryCancelOrderList = function(id_Account,results){
+    const query = `SELECT mo.*,s.Status,p.Payment_Method
+                    FROM make_order mo
+                    INNER JOIN status s ON mo.id_Status = s.id
+                    INNER JOIN payment p ON mo.id_Payment = p.id
+                    WHERE mo.id_Account = ? AND mo.id_Status = 4
+                    GROUP BY mo.id DESC`
+    db.query(query,[id_Account],function(err,Orders){
+        results({SuccessOrderList:Orders})
+    })
+}
+//xem lich su don hang nhieu tai khoan
 order.getPending = function(results){
     const query = `SELECT mo.*,i.id_Account,i.FirstName,i.LastName,i.PhoneNumber,i.Avatar,i.Address
                     FROM make_order mo
@@ -231,23 +302,31 @@ order.changeStatus = function(id_Order,results){
         }
     })
 }
-order.cancelOrder = function(id_Order,results){
-    db.query(`SELECT * FROM make_order WHERE id= ? `,[id_Order],function(err,orders){
-        if(err) throw err
-        else{
-            if(orders[0].id_Status>=2){
-                return results({message:"can not cancel order anymore"})
-            }
-            else {                
-                db.query("UPDATE make_order SET id_Status =? WHERE id =?",[4,id_Order],
-                function(err, order){
-                    if(err){return results({success:false,message:err.message})}
-                    else {
-                        results({success:true,message:"update status thành công"})
-                    } 
-                })
-            }
+// xem doanh thu
+var today = new Date()
+order.Revenue = function(data,results){
+    var query = `SELECT mo.*,i.id_Account,i.FirstName,i.LastName,i.PhoneNumber,i.Avatar,i.Address
+                FROM make_order mo
+                INNER JOIN inforuser i ON i.id_Account = mo.id_Account
+                WHERE mo.id_Status = 3 `
+    if(data.dateMin && data.dateMax)
+    {
+        query+= `AND DATE(mo.OrderDate) >= '${data.dateMin}'
+                    AND DATE(mo.OrderDate) <= '${data.dateMax}'`
+    }
+    else 
+    {
+        query+= `AND DATE(mo.OrderDate) >= '${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}'
+                    AND DATE(mo.OrderDate) <= '${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}'`
+    }
+    query+=`GROUP BY mo.id DESC`
+    db.query(query,[],(err,successOrder)=>{
+        if (err) return results({success:false,message:err.message})
+        var revenue = 0
+        for(var i = 0; i<successOrder.length; i++){
+            revenue += parseInt(successOrder[i].totalPrice)
         }
+        return results({revenue:revenue,order:successOrder})
     })
 }
          
