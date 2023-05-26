@@ -51,8 +51,32 @@ function ManageStaff() {
           />
           <span className={cx('name')}>Nguyễn Văn A</span>
         </div>
+        <div className={cx('staff')} onClick={openModal}>
+          <Image
+            src="https://upload.wikimedia.org/wikipedia/en/9/94/NarutoCoverTankobon1.jpg"
+            alt="staff"
+            className={cx('image')}
+          />
+          <span className={cx('name')}>Nguyễn Văn A</span>
+        </div>
+        <div className={cx('staff')} onClick={openModal}>
+          <Image
+            src="https://upload.wikimedia.org/wikipedia/en/9/94/NarutoCoverTankobon1.jpg"
+            alt="staff"
+            className={cx('image')}
+          />
+          <span className={cx('name')}>Nguyễn Văn A</span>
+        </div>
+        <div className={cx('staff')} onClick={openModal}>
+          <Image
+            src="https://upload.wikimedia.org/wikipedia/en/9/94/NarutoCoverTankobon1.jpg"
+            alt="staff"
+            className={cx('image')}
+          />
+          <span className={cx('name')}>Nguyễn Văn A</span>
+        </div>
       </div>
-      <Popup isOpen={isModalOpen} onRequestClose={() => closeModal()} width={String('600px')} height={'600px'}>
+      <Popup isOpen={isModalOpen} onRequestClose={() => closeModal()} width={String('600px')} height={'520px'}>
         <animated.div style={modalAnimation}>
           <h2>Thông tin nhân viên</h2>
           <div className={cx('input-field')}>

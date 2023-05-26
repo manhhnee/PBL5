@@ -22,6 +22,7 @@ import AdminWaiting from '~/pages/Admin/AdminWaiting';
 import AdminDelivering from '~/pages/Admin/AdminDelivering';
 import AdminSuccess from '~/pages/Admin/AdminSuccess';
 import ManageStaff from '~/pages/Admin/ManageStaff';
+import ManageCategory from '~/pages/Admin/ManageCategory';
 
 const publicRoutes = [
   { path: config.routes.login, component: Login, layout: null },
@@ -49,6 +50,7 @@ const adminRoutes = [
   { path: config.routes.adminDelivering, component: AdminDelivering, layout: Admin },
   { path: config.routes.adminSuccess, component: AdminSuccess, layout: Admin },
   { path: config.routes.manageStaff, component: ManageStaff, layout: Admin },
+  { path: config.routes.manageCategory, component: ManageCategory, layout: Admin },
 ];
 
 export { publicRoutes, staffRoutes, adminRoutes };

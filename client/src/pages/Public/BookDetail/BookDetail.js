@@ -24,6 +24,23 @@ function BookDetail() {
 
   const { id } = useParams();
 
+  function getJwtFromCookie() {
+    //lấy token được lưu trong cookie ra
+    const name = 'token=';
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const cookieArray = decodedCookie.split(';');
+    for (let i = 0; i < cookieArray.length; i++) {
+      let cookie = cookieArray[i];
+      while (cookie.charAt(0) === ' ') {
+        cookie = cookie.substring(1);
+      }
+      if (cookie.indexOf(name) === 0) {
+        return cookie.substring(name.length, cookie.length);
+      }
+    }
+    return '';
+  }
+
   useEffect(() => {
     const fetchAPIBooks = async () => {
       const response = await axios.get(`http://localhost:5000/api/book/detail/${id}`);
@@ -38,20 +55,28 @@ function BookDetail() {
     fetchAPIBooks();
   }, [book, id]);
 
-  function addToCart(bookId) {
-    axios
-      .post('http://localhost:5000/api/cart', {
-        bookId: bookId,
-        quantity: 1,
-      })
+  const handleAddToCart = async (id_BookSupplier, quantity) => {
+    await axios
+      .post(
+        'http://localhost:5000/api/cart/add',
+        {
+          id_BookSupplier: id_BookSupplier,
+          quantity: quantity,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${getJwtFromCookie()}`,
+          },
+        },
+      )
       .then((response) => {
-        console.log(response);
-        // Update the state of the cart in your React component
+        alert(response.data.message);
       })
       .catch((error) => {
-        console.log(error);
+        alert('Something went wrong', error);
       });
-  }
+  };
 
   function handleIncrement() {
     if (count >= book.Amount) {
@@ -86,7 +111,7 @@ function BookDetail() {
         </div>
         <div className={cx('center-content')}>
           <Image className={cx('large-img')} alt="img4" src={mainImage}></Image>
-          <Button outline className={cx('btn')}>
+          <Button onClick={() => handleAddToCart(book.id_BookSupplier, count)} outline className={cx('btn')}>
             <FontAwesomeIcon className={cx('icon')} icon={faCartShopping}></FontAwesomeIcon>
             Thêm vào giỏ hàng
           </Button>

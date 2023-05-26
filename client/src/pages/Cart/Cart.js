@@ -9,16 +9,34 @@ const cx = classNames.bind(styles);
 
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
+  function getJwtFromCookie() {
+    //lấy token được lưu trong cookie ra
+    const name = 'token=';
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const cookieArray = decodedCookie.split(';');
+    for (let i = 0; i < cookieArray.length; i++) {
+      let cookie = cookieArray[i];
+      while (cookie.charAt(0) === ' ') {
+        cookie = cookie.substring(1);
+      }
+      if (cookie.indexOf(name) === 0) {
+        return cookie.substring(name.length, cookie.length);
+      }
+    }
+    return '';
+  }
 
   useEffect(() => {
-    axios
-      .get('http://localhost:5000/api/cart/items', { withCredentials: true })
-      .then((response) => {
-        setCartItems(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
+    const fetchApiCarts = async () => {
+      const response = await axios.get(`http://localhost:5000/api/cart/items`, {
+        headers: {
+          Authorization: `Bearer ${getJwtFromCookie()}`,
+        },
       });
+      const cartsData = await response.data;
+      setCartItems(cartsData.cartItem);
+    };
+    fetchApiCarts();
   }, []);
 
   return (
