@@ -20,6 +20,26 @@ class OrderController {
             res.json(data)
         })
     }
+    showHistorySuccessOrderList(req,res,next){
+        OrderModel.getHistorySuccessOrderList(req.user.id,function (data) {
+            res.json(data)
+        })
+    }
+    showHistoryPendingOrderList(req,res,next){
+        OrderModel.getHistoryPendingOrderList(req.user.id,function (data) {
+            res.json(data)
+        })
+    }
+    showHistoryDeliveringOrderList(req,res,next){
+        OrderModel.getHistoryDeliveringOrderList(req.user.id,function (data) {
+            res.json(data)
+        })
+    }
+    showHistoryCanceledOrderList(req,res,next){
+        OrderModel.getHistoryCancelOrderList(req.user.id,function (data) {
+            res.json(data)
+        })
+    }
     showPendingOrders(req,res,next){
         OrderModel.getPending(function(data) {
             res.json(data)
@@ -47,6 +67,11 @@ class OrderController {
     }
     cancelOrder(req,res,next){
         OrderModel.cancelOrder(req.params.id,function(data){
+            res.json(data)
+        })
+    }
+    revenue(req,res,next){
+        OrderModel.Revenue(req.body,function(data){
             res.json(data)
         })
     }

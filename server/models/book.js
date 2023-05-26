@@ -72,8 +72,8 @@ book.find = function (data, results) {
     var book = {};
     var query = `SELECT b.*,bs.id as id_BookSupplier, bs.Import_Price, bs.Amount, s.Name as Supplier,c.Name AS category
                   FROM book b
-                  INNER JOIN book_supplier bs ON bs.id_Book = b.id
-                  INNER JOIN supplier s ON s.id = bs.id_Supplier
+                  LEFT JOIN book_supplier bs ON bs.id_Book = b.id
+                  LEFT JOIN supplier s ON s.id = bs.id_Supplier
                   INNER JOIN category c ON c.id = b.id_Category
                   WHERE b.id = ? ORDER BY bs.Import_Price ASC LIMIT 1`
     db.query(query, data.id, function (err, books) {
