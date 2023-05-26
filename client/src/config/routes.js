@@ -28,6 +28,7 @@ const routes = {
   adminSuccess: '/admin/successOrders',
   manageStaff: '/admin/manageStaff',
   manageCategory: '/admin/manageCategory',
+  manageBook: '/admin/manageBook',
   revenue: '/admin/revenue',
 };
 

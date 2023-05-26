@@ -108,7 +108,7 @@ function Admin({ children }) {
           Quản lý thể loại
         </Button>
         <Button
-          to={config.routes.adminRecent}
+          to={config.routes.manageBook}
           leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faBook}></FontAwesomeIcon>}
           className={cx('btn', `${activeButton === 5 ? 'active' : ''}`)}
           onClick={() => handleClick(5)}
