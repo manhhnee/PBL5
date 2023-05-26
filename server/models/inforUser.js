@@ -61,4 +61,15 @@ inforUser.update = function (idAccount, avatarPath, data, results) {
     );
   }
 };
-module.exports = inforUser;
+
+inforUser.getListStaff = function(results){
+  db.query(`SELECT a.Username,i.* FROM account a
+              INNER JOIN inforuser i on  a.id = i.id_Account
+              WHERE id_Role = 2`,[],function(err,staff){
+                if(err) return results({success:false,message:err.message})
+                else {
+                  results({success:true,staff:staff})
+                }
+  })
+}
+module.exports = inforUser

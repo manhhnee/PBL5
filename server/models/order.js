@@ -1,19 +1,4 @@
 const db = require("../config/db/index"); 
-function getPrice(id_BookSupplier) {
-    return new Promise((resolve, reject) => {
-      db.query(
-        `SELECT book.Price
-        FROM book_supplier
-        JOIN book ON book_supplier.id_Book = book.id 
-        WHERE book_supplier.id = ?`,
-        [id_BookSupplier],
-        (err, result) => {
-          if (err) reject(err);
-          resolve(result[0].Price);
-        }
-      );
-    });
-  }
 
 const order = function (order) {
     (this.id = rating.id),
@@ -23,42 +8,121 @@ const order = function (order) {
     (this.OrderDate = rating.OrderDate);
     (this.OrderAddress = rating.OrderAddress);
 };
-order.CreateOrderWithItems = function(data,id_Account,address,results){ 
+order.CreateOrderAllCart = function(id_Account,address,results){
     var today = new Date()
-    db.query(
-        "INSERT INTO make_order (id_Status,id_Account,id_Payment,OrderDate,OrderAddress) VALUES (?, ?, ?, ?, ?)",
-        [1, id_Account,1,today,address],
-        function (err, order) {
-            if (err) return err;
-            else {  
-                const orderId = order.insertId;
-                const promises = data.map((orderItem) => {
-                return getPrice(orderItem.bookSupplierId)
-                    .then((price) => {
-                    return {
-                        orderId,
-                        bookSupplierId: orderItem.bookSupplierId,
-                        quantity:orderItem.quantity,
-                        Price: price
-                    }})
-                    .catch((err) => results({success: false,message: err.message}))
-                });
-                
-                Promise.all(promises)
-                .then((orderItems) => {
-                    var totalPrice = 0
-                    orderItems.forEach(orderitem => {
-                        totalPrice+=orderitem.Price*orderitem.quantity
-                        db.query(`INSERT INTO order_item (id_Order,id_BookSupplier,quantity,Fixed_Price) VALUES (?, ?, ?, ?)`,
-                        [orderId,orderitem.bookSupplierId,orderitem.quantity,orderitem.Price*orderitem.quantity],function(err,orderItem){if(err) {return err}})
-                    })
-                    db.query(`UPDATE make_order SET totalPrice =? WHERE id =?`,[totalPrice,orderId],function(err,order){if(err) {return err}})
-                    results({success:true,message:"thêm thành công"})
-                    })
-                .catch(err=>results({success:false,message:err.message}))
-          }
+    db.query("SELECT * FROM cart WHERE id_Account =?",id_Account,function(err,cart){
+        if(err) return results({message:err.message})
+        else {
+          var cartID  = cart[0].id
+          const query = `SELECT  ci.id_BookSupplier,ci.quantity,b.Price,bs.Amount            
+                          FROM cart_item ci
+                          INNER JOIN book_supplier bs ON ci.id_BookSupplier = bs.id
+                          INNER JOIN book b ON bs.id_Book = b.id
+                          INNER JOIN (
+                            SELECT id_Book, Image FROM image_book GROUP BY id_Book
+                          ) ib ON b.id = ib.id_Book
+                          WHERE ci.id_cart = ?`
+          db.query(query,cartID,function(err,orderItems){
+            for(var i = 0;i < orderItems.length;i++){
+                if(orderItems[i].quantity>orderItems[i].Amount)
+                    return results({success:false,message:"số lượng đặt vượt quá sản phẩm trong kho"})
+            }
+            if(err) return results({success:false,message:err.message})     
+            else {
+                console.log(orderItems)
+                db.query(
+                    "INSERT INTO make_order (id_Status,id_Account,id_Payment,OrderDate,OrderAddress) VALUES (?, ?, ?, ?, ?)",
+                    [1, id_Account,1,today,address],
+                    function(err,order){
+                        if(err) return err
+                        else {
+                            const orderID = order.insertId
+                            var totalPrice = 0
+                            orderItems.forEach(orderItem=>{
+                                totalPrice += orderItem.Price*orderItem.quantity                 
+                                db.query(`INSERT INTO order_item (id_Order,id_BookSupplier,quantity,Fixed_Price) VALUES (?, ?, ?, ?)`,
+                                    [orderID,orderItem.id_BookSupplier,orderItem.quantity,orderItem.Price*orderItem.quantity]
+                                    ,function(err,orderitem){
+                                        if(err) return err
+                                        else {
+                                            db.query("SELECT * FROM book_supplier WHERE id = ?",orderItem.id_BookSupplier,(err,book_supplier)=>{
+                                                if(err) return err
+                                                else {
+                                                    db.query("UPDATE book_supplier SET Amount =? WHERE id = ?",
+                                                    [parseInt(book_supplier[0].Amount)-parseInt(orderItem.quantity),book_supplier[0].id],
+                                                    (err,book_suppliers)=>{
+                                                        if(err) return err
+                                                        else {
+                                                            db.query("SELECT * FROM cart WHERE id_Account = ?",id_Account,(err,cart)=>{
+                                                                if(err) return err
+                                                                else {
+                                                                    db.query("DELETE FROM cart_item WHERE id_Cart = ?",cart[0].id,(err,cartitem)=>{
+                                                                        if(err) return err
+                                                                    })
+                                                                }
+                                                            })
+                                                        }
+                                                    })
+                                                }
+                                            })
+                                            
+                                        }
+                                    })
+                            })
+                            db.query(`UPDATE make_order SET totalPrice =? WHERE id =?`,[totalPrice,orderID],
+                                function(err,order){
+                                    if(err) return err
+                                    else return results({success:true,message:"thêm thành công"})
+                            })               
+                        }
+                    }
+                )
+            }
+          })
         }
-      );
+      })
+}
+order.CreateOrder = function(id_Account,orderItem,address,results){
+    var today = new Date()
+    if(orderItem.quantity>orderItem.Amount) return results({success:false,message:"số lượng đặt vượt quá sản phẩm trong kho"})
+    else {
+        console.log("1")
+        db.query(
+            "INSERT INTO make_order (id_Status,id_Account,id_Payment,OrderDate,OrderAddress) VALUES (?, ?, ?, ?, ?)",
+            [1, id_Account,1,today,address],
+            function(err,order){
+                if(err) return err
+                else {
+                    const orderID = order.insertId
+                    var totalPrice = 0              
+                    totalPrice += orderItem.Price*orderItem.quantity                 
+                    db.query(`INSERT INTO order_item (id_Order,id_BookSupplier,quantity,Fixed_Price) VALUES (?, ?, ?, ?)`,
+                        [orderID,orderItem.id_BookSupplier,orderItem.quantity,orderItem.Price*orderItem.quantity]
+                        ,function(err,orderitem){
+                            if(err) return err
+                            else {
+                                db.query("SELECT * FROM book_supplier WHERE id = ?",orderItem.id_BookSupplier,(err,book_supplier)=>{
+                                    if(err) return err
+                                    else {
+                                        console.log(book_supplier)
+                                        db.query("UPDATE book_supplier SET Amount =? WHERE id = ?",
+                                        [parseInt(book_supplier[0].Amount)-parseInt(orderItem.quantity),book_supplier[0].id],
+                                        (err,book_suppliers)=>{
+                                            if(err) return err                                       
+                                            })
+                                        }
+                                })                               
+                            }
+                    })               
+                    db.query(`UPDATE make_order SET totalPrice =? WHERE id =?`,[totalPrice,orderID],
+                        function(err,order){
+                            if(err) return err
+                            else return results({success:true,message:"thêm thành công"})
+                    })               
+                }
+            }
+        )
+    }
 }
 order.GetOrderDetailsbyOrderId = function(id_Order,results){
     const query1 = `SELECT mo.*,s.Status,p.Payment_Method 
