@@ -11,12 +11,13 @@ cart.getCartDetailsbyIdAccount = function(id_Account,results)
     else {
       var cartID  = cart[0].id
       const query = `SELECT ci.id, ci.id_BookSupplier, ci.id_cart, ci.quantity, 
-                      b.Name, b.Author, b.Price, 
+                      b.Name, b.Author, b.Price, c.Name as Category,
                       bs.Import_Price, bs.Amount, 
                       ib.Image, s.Name as Supplier 
                       FROM cart_item ci
                       INNER JOIN book_supplier bs ON ci.id_BookSupplier = bs.id
                       INNER JOIN book b ON bs.id_Book = b.id
+                      INNER JOIN category c ON c.id = b.id_Category
                       INNER JOIN (
                         SELECT id_Book, Image FROM image_book GROUP BY id_Book
                       ) ib ON b.id = ib.id_Book
