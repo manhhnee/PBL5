@@ -1,18 +1,18 @@
 const db = require("../config/db/index");
 
 const book = function (book) {
-    (this.id = book.id),
+  (this.id = book.id),
     (this.id_Category = book.id_Category),
     (this.Name = book.Name),
     (this.Price = book.Price),
     (this.Author = book.Author),
     (this.Description = book.Description);
-    (this.Publication_Date = book.Publication_Date),
+  (this.Publication_Date = book.Publication_Date),
     (this.Publisher = book.Publisher);
 };
-book.add = function (data,BookPath, results) {
+book.add = function (data, BookPath, results) {
   db.query(
-    "INSERT INTO book (id_Category, Name, Price, Author, Description,Publication_Date,Publisher) VALUES (?, ?, ?, ?, ?, ?, ?)",
+    "INSERT INTO book (id_Category, Name, Price, Author, Description, Publication_Date, Publisher) VALUES (?, ?, ?, ?, ?, ?, ?)",
     [
       data.id_Category,
       data.Name,
@@ -22,17 +22,24 @@ book.add = function (data,BookPath, results) {
       data.Publication_Date,
       data.Publisher,
     ],
-    function (err,book) {
+    function (err, book) {
       if (err) return err;
-      else if(BookPath == null) return results({success:true,message:"thêm thành công(without Images)"})
+      else if (BookPath == null)
+        return results({
+          success: true,
+          message: "thêm thành công(without Images)",
+        });
       else {
-        db.query("INSERT INTO image_book (id_Book, Image) VALUES (?, ?)",
-          [book.insertId,BookPath], function (err, images) {
-            if (err) return err
+        db.query(
+          "INSERT INTO image_book (id_Book, Image) VALUES (?, ?)",
+          [book.insertId, BookPath],
+          function (err, images) {
+            if (err) return err;
             else {
-             return results({ success: true, message: 'thêm thành công' })
+              return results({ success: true, message: "thêm thành công" });
+            }
           }
-        })
+        );
       }
     }
   );
@@ -45,7 +52,7 @@ book.find = function (data, results) {
                   ON b.id = m.id_Book 
                   LEFT JOIN image_book i ON m.min_id = i.id 
                   INNER JOIN category c ON c.id = b.id_Category
-                  WHERE b.Name LIKE '%${data.search}%'`                 
+                  WHERE b.Name LIKE '%${data.search}%'`;
     if (data.category) {
       query += ` AND id_Category = ${data.category}`;
     }
@@ -75,7 +82,7 @@ book.find = function (data, results) {
                   LEFT JOIN book_supplier bs ON bs.id_Book = b.id
                   LEFT JOIN supplier s ON s.id = bs.id_Supplier
                   INNER JOIN category c ON c.id = b.id_Category
-                  WHERE b.id = ? ORDER BY bs.Import_Price ASC LIMIT 1`
+                  WHERE b.id = ? ORDER BY bs.Import_Price ASC LIMIT 1`;
     db.query(query, data.id, function (err, books) {
       if (err) {
         return err;
@@ -96,28 +103,32 @@ book.find = function (data, results) {
                     FROM rating
                     INNER JOIN inforuser 
                     ON rating.id_Account = inforuser.id_Account 
-                    WHERE rating.id_Book = ?`, books[0].id, function (err, rating) {
-                    if (err) {
-                        console.log(err);
-                        return;
-                    }
-                    ratings = rating;
+                    WHERE rating.id_Book = ?`,
+            books[0].id,
+            function (err, rating) {
+              if (err) {
+                console.log(err);
+                return;
+              }
+              ratings = rating;
 
-                    var stars = 0
-                    for (let i = 0; i < ratings.length; i++) {
-                        stars += ratings[i].star
-                    }
-                    stars = Math.round(stars / ratings.length)
-                    if (isNaN(stars)) stars = 0
-                    book.stars = stars
-                    // Thực hiện các thao tác cần thiết với ratings ở đây
-                    results({ book: book, images: images, ratings: ratings })
-                    // Thực hiện các thao tác cần thiết với book, images, ratings ở đây
-                });
-            });
-        });
-    }
-}
+              var stars = 0;
+              for (let i = 0; i < ratings.length; i++) {
+                stars += ratings[i].star;
+              }
+              stars = Math.round(stars / ratings.length);
+              if (isNaN(stars)) stars = 0;
+              book.stars = stars;
+              // Thực hiện các thao tác cần thiết với ratings ở đây
+              results({ book: book, images: images, ratings: ratings });
+              // Thực hiện các thao tác cần thiết với book, images, ratings ở đây
+            }
+          );
+        }
+      );
+    });
+  }
+};
 
 book.delete = function (idBook, results) {
   db.query("DELETE FROM book WHERE id =?", idBook, function (err, books) {
