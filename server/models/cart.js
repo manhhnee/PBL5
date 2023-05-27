@@ -34,6 +34,7 @@ cart.addItemIntoCart = function(id_Account,data,results) {
   db.query("SELECT * FROM cart WHERE id_Account =?",id_Account,function(err,cart){
     if(err) return results({message:err.message})
     else {
+      if(data.id_BookSupplier==null) return results({success:false,message:"sản phẩm đã hết hàng"})
       db.query("SELECT * FROM cart_item WHERE id_BookSupplier = ? AND id_cart = ?",[data.id_BookSupplier,cart[0].id],
       function(err,cartItems){
         if(err) return results({message:err.message})
