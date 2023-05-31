@@ -72,4 +72,10 @@ inforUser.getListStaff = function(results){
                 }
   })
 }
+inforUser.deleteStaff = function(idAccount,results){
+  db.query("DELETE FROM account WHERE id = ? ",idAccount,(err,staff)=>{
+    if(err) return results({success:false,message:err.message})
+    else return results({success:true,message:"xóa thành công nhân viên"})
+  })
+}
 module.exports = inforUser

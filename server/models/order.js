@@ -326,7 +326,7 @@ order.Revenue = function(data,results){
         var revenue = 0
         for(var i = 0; i<successOrder.length; i++){
             revenue += parseInt(successOrder[i].totalPrice)
-        }
+        } 
         return results({revenue:revenue,order:successOrder})
     })
 }

@@ -30,6 +30,23 @@ book_supplier.add = function(data,results){
     })
     
 }
+book_supplier.delete = function(id_BookSupplier,results){
+    db.query("DELETE FROM book_supplier WHERE id = ?",id_BookSupplier,(err,book_supplier)=>{
+        if(err) return results({success:false,message:err.message})
+        else return results({success:true,message:"xóa sản phẩm trong kho thành công"})
+    })
+}
+book_supplier.show = function(results){
+    var query = `SELECT bs.*, b.Name,b.Price,s.Name as Supplier 
+                    FROM book_supplier bs
+                    INNER JOIN book b ON b.id = bs.id_Book
+                    INNER JOIN supplier s ON s.id = bs.id_Supplier
+                    ORDER BY bs.id DESC`
+    db.query(query,[],(err,bookSuppliers)=>{
+        if(err) return results({success:false,message:err.message})
+        else return results(bookSuppliers)
+    });
+}
 
 
 

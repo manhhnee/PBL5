@@ -5,5 +5,15 @@ class bookSupplierController {
             res.json(data);
         })
     }
+    delete(req,res,next){
+        bookSupplierModel.delete(req.params.id_BookSupplier,function(data){
+            res.json(data)
+        })
+    }
+    show(req,res,next){
+           bookSupplierModel.show(function(data){
+            res.json(data)
+           }) 
+    }
 }
 module.exports = new bookSupplierController()
