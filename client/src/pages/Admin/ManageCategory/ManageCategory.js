@@ -16,9 +16,13 @@ const cx = classNames.bind(styles);
 
 function ManageCategory() {
   const [listCategory, setListCategory] = useState([]);
-  const [selectedStaffId, setSelectedStaffId] = useState();
+  const [selectedCategoryId, setSelectedCategoryId] = useState();
   const [isModalOpen1, setIsModalOpen1] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
+  const [payload, setPayload] = useState({
+    name: '',
+    image: '',
+  });
 
   function getJwtFromCookie() {
     //lấy token được lưu trong cookie ra
@@ -71,13 +75,14 @@ function ManageCategory() {
       .catch((error) => {
         alert('Something went wrong', error);
       });
+
     window.location.reload();
   };
 
   const handleUpdateCategory = async (name, image) => {
     axios
       .put(
-        `http://localhost:5000/api/category/update/${selectedStaffId}`,
+        `http://localhost:5000/api/category/update/${selectedCategoryId}`,
         {
           Name: name,
           Image: image,
@@ -98,7 +103,7 @@ function ManageCategory() {
 
   const handleDeleteCategory = async () => {
     await axios
-      .delete(`http://localhost:5000/api/category/delete/${selectedStaffId}`)
+      .delete(`http://localhost:5000/api/category/delete/${selectedCategoryId}`)
       .then((res) => {
         alert(res.data.message);
       })
@@ -116,14 +121,15 @@ function ManageCategory() {
     opacity: isModalOpen2 ? 1 : 0,
     transform: isModalOpen2 ? 'translateY(0)' : 'translateY(-100%)',
   });
-  const [payload, setPayload] = useState({
-    name: '',
-    image: '',
-  });
 
-  const openModal1 = (staffId) => {
-    setSelectedStaffId(staffId);
+  const openModal1 = (categoryId, categoryName, imgUrl) => {
+    setSelectedCategoryId(categoryId);
     setIsModalOpen1(true);
+    setPayload((prevState) => ({
+      ...prevState,
+      name: categoryName,
+      image: imgUrl,
+    }));
   };
 
   const closeModal1 = () => {
@@ -184,7 +190,11 @@ function ManageCategory() {
       <div className={cx('category-list')}>
         {listCategory.map((category) => {
           return (
-            <div className={cx('category')} onClick={() => openModal1(category.id)} key={category.id}>
+            <div
+              className={cx('category')}
+              onClick={() => openModal1(category.id, category.Name, category.Image)}
+              key={category.id}
+            >
               <Image src={category.Image} alt="category" className={cx('image')} />
               <span className={cx('name')}>{category.Name}</span>
             </div>

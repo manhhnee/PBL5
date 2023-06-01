@@ -92,12 +92,12 @@ function Admin({ children }) {
           Quản lý Nhân viên
         </Button>
         <Button
-          to={config.routes.adminRecent}
+          to={config.routes.manageSupplier}
           leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faTruck}></FontAwesomeIcon>}
           className={cx('btn', `${activeButton === 3 ? 'active' : ''}`)}
           onClick={() => handleClick(3)}
         >
-          Quản lý nhà xuất bản
+          Quản lý nhà cung cấp
         </Button>
         <Button
           to={config.routes.manageCategory}
@@ -116,10 +116,18 @@ function Admin({ children }) {
           Quản lý sách
         </Button>
         <Button
-          to={config.routes.adminRecent}
-          leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faChartLine}></FontAwesomeIcon>}
+          to={config.routes.manageStore}
+          leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faBook}></FontAwesomeIcon>}
           className={cx('btn', `${activeButton === 6 ? 'active' : ''}`)}
           onClick={() => handleClick(6)}
+        >
+          Quản lý kho hàng
+        </Button>
+        <Button
+          to={config.routes.revenue}
+          leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faChartLine}></FontAwesomeIcon>}
+          className={cx('btn', `${activeButton === 7 ? 'active' : ''}`)}
+          onClick={() => handleClick(7)}
         >
           Doanh thu
         </Button>

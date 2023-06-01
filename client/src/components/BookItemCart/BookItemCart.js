@@ -47,7 +47,7 @@ function BookItemCart({ data }) {
       </div>
       <div className={cx('content-center')}>
         <span className={cx('book-name')}>{data.Name}</span>
-        {/* <span className={cx('book-category')}>Thể loại: {data.Category_Name}</span> */}
+        <span className={cx('book-category')}>Thể loại: {data.Category}</span>
         <span className={cx('book-price')}>
           {data.Price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '')}
         </span>
@@ -55,9 +55,6 @@ function BookItemCart({ data }) {
       </div>
       <div className={cx('content-right')}>
         <div className={cx('options')}>
-          <Button primary className={cx('btn')}>
-            Thanh toán
-          </Button>
           <Button onClick={() => HandleDeteteCart()} outline className={cx('btn')}>
             Xóa
           </Button>

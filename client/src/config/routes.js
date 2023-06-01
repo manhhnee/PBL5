@@ -29,6 +29,8 @@ const routes = {
   manageStaff: '/admin/manageStaff',
   manageCategory: '/admin/manageCategory',
   manageBook: '/admin/manageBook',
+  manageStore: '/admin/manageStore',
+  manageSupplier: '/admin/manageSupplier',
   revenue: '/admin/revenue',
 };
 

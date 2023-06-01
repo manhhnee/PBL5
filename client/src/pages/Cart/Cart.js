@@ -4,6 +4,7 @@ import classNames from 'classnames/bind';
 
 import BookItemCart from '~/components/BookItemCart/BookItemCart';
 import styles from './Cart.module.scss';
+import Button from '~/components/Button/Button';
 
 const cx = classNames.bind(styles);
 
@@ -48,6 +49,9 @@ function Cart() {
           return <BookItemCart data={cartItem} key={cartItem.id} />;
         })
       )}
+      <div className={cx('options')}>
+        <Button primary>Thanh toán tất cả</Button>
+      </div>
     </div>
   );
 }

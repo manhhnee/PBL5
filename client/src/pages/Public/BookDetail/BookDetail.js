@@ -53,7 +53,7 @@ function BookDetail() {
     };
 
     fetchAPIBooks();
-  }, [book, id]);
+  }, [id]);
 
   const handleAddToCart = async (id_BookSupplier, quantity) => {
     await axios
@@ -62,6 +62,32 @@ function BookDetail() {
         {
           id_BookSupplier: id_BookSupplier,
           quantity: quantity,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${getJwtFromCookie()}`,
+          },
+        },
+      )
+      .then((response) => {
+        alert(response.data.message);
+      })
+      .catch((error) => {
+        alert('Something went wrong', error);
+      });
+  };
+
+  const handleCreateOneOrder = async (id_BookSupplier, quantity, Price, Amount, address) => {
+    await axios
+      .post(
+        'http://localhost:5000/api/order/addOneItem',
+        {
+          id_BookSupplier: id_BookSupplier,
+          quantity: quantity,
+          Price: Price,
+          Amount: Amount,
+          address: address,
         },
         {
           headers: {
@@ -126,10 +152,12 @@ function BookDetail() {
               ? 0
               : book.Price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '')}
           </span>
-          <span className={cx('supplier')}>Nhà cung cấp: {book.Supplier}</span>
+          <span className={cx('supplier')}>
+            Nhà cung cấp: {book.Supplier ? book.Supplier : 'Không có nhà cung cấp'}
+          </span>
           <span className={cx('publisher')}>Nhà xuất bản: {book.Publisher}</span>
           <span className={cx('author')}>Tác giả: {book.Author}</span>
-          <span className={cx('quantity')}>Số lượng: {book.Amount}</span>
+          <span className={cx('quantity')}>Số lượng: {book.Amount ? book.Amount : 'Hết hàng'}</span>
           <div className={cx('buy-field')}>
             <div className={cx('container-input')}>
               <button className={cx('decrement')} onClick={handleDecrement}>
@@ -142,7 +170,11 @@ function BookDetail() {
                 +{' '}
               </button>
             </div>
-            <Button primary className={cx('btn')}>
+            <Button
+              onClick={() => handleCreateOneOrder(book.id_BookSupplier, count, book.Price, book.Amount)}
+              primary
+              className={cx('btn')}
+            >
               Mua ngay
             </Button>
           </div>
