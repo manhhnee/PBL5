@@ -38,85 +38,89 @@ book.add = function (data,BookPath, results) {
   );
 };
 book.find = function (data, results) {
-  if (!data.id) {
-    const offset = (data.page - 1) * data.limit;
-    let query = `SELECT b.id, b.id_Category, b.Name, b.Author, b.Price, b.Description, i.Image,c.Name AS category
-                  FROM book b LEFT JOIN ( SELECT id_Book, MIN(id) AS min_id FROM image_book GROUP BY id_Book ) m 
-                  ON b.id = m.id_Book 
-                  LEFT JOIN image_book i ON m.min_id = i.id 
-                  INNER JOIN category c ON c.id = b.id_Category
-                  WHERE b.Name LIKE '%${data.search}%'`                 
-    if (data.category) {
-      query += ` AND id_Category = ${data.category}`;
-    }
-    if (data.minPrice) {
-      query += ` AND Price >= ${data.minPrice}`;
-    }
-
-    if (data.maxPrice) {
-      query += ` AND Price <= ${data.maxPrice}`;
-    }
-    if (data.author) {
-      query += ` AND Author = ${data.author}`;
-    }
-    query += ` ORDER BY b.id DESC LIMIT ${data.limit} OFFSET ${offset}`;
-    db.query(query, function (err, books) {
-      if (err) return err;
-      else {
-        results(books);
+  db.query("SELECT * FROM book",[],(err,books) => {
+    if (!data.id) {
+      var totalPage = parseInt(books.length/data.limit)+1
+      const offset = (data.page - 1) * data.limit;
+      let query = `SELECT b.id, b.id_Category, b.Name, b.Author, b.Price, b.Description, i.Image,c.Name AS category
+                    FROM book b LEFT JOIN ( SELECT id_Book, MIN(id) AS min_id FROM image_book GROUP BY id_Book ) m 
+                    ON b.id = m.id_Book 
+                    LEFT JOIN image_book i ON m.min_id = i.id 
+                    INNER JOIN category c ON c.id = b.id_Category
+                    WHERE b.Name LIKE '%${data.search}%'`                 
+      if (data.category) {
+        query += ` AND id_Category = ${data.category}`;
       }
-    });
-  } else {
-    var images = [];
-    var ratings = [];
-    var book = {};
-    var query = `SELECT b.*,bs.id as id_BookSupplier, bs.Import_Price, bs.Amount, s.Name as Supplier,c.Name AS category
-                  FROM book b
-                  LEFT JOIN book_supplier bs ON bs.id_Book = b.id
-                  LEFT JOIN supplier s ON s.id = bs.id_Supplier
-                  INNER JOIN category c ON c.id = b.id_Category
-                  WHERE b.id = ? ORDER BY bs.Import_Price ASC LIMIT 1`
-    db.query(query, data.id, function (err, books) {
-      if (err) {
-        return err;
+      if (data.minPrice) {
+        query += ` AND Price >= ${data.minPrice}`;
       }
-      book = books[0];
-
-      db.query(
-        "SELECT * FROM image_book WHERE id_Book = ?",
-        books[0].id,
-        function (err, image) {
-          if (err) {
-            console.log(err);
-            return;
-          }
-          images = image;
-          db.query(
-            `SELECT rating.id,rating.id_Account,rating.comment,rating.star, inforuser.FirstName,inforuser.LastName,inforuser.Avatar
-                    FROM rating
-                    INNER JOIN inforuser 
-                    ON rating.id_Account = inforuser.id_Account 
-                    WHERE rating.id_Book = ?`, books[0].id, function (err, rating) {
-                    if (err) {
-                        console.log(err);
-                        return;
-                    }
-                    ratings = rating;
-
-                    var stars = 0
-                    for (let i = 0; i < ratings.length; i++) {
-                        stars += ratings[i].star
-                    }
-                    stars = Math.round(stars / ratings.length)
-                    if (isNaN(stars)) stars = 0
-                    book.stars = stars
-                    // Thực hiện các thao tác cần thiết với ratings ở đây
-                    results({ book: book, images: images, ratings: ratings })
-                    // Thực hiện các thao tác cần thiết với book, images, ratings ở đây
-                });
-            });
-        });
-    }
+  
+      if (data.maxPrice) {
+        query += ` AND Price <= ${data.maxPrice}`;
+      }
+      if (data.author) {
+        query += ` AND Author = ${data.author}`;
+      }
+      query += ` ORDER BY b.id DESC LIMIT ${data.limit} OFFSET ${offset}`;
+      db.query(query, function (err, books) {
+        if (err) return err;
+        else {
+          results({books:books,totalPage:totalPage});
+        }
+      });
+    } 
+    else {
+      var images = [];
+      var ratings = [];
+      var book = {};
+      var query = `SELECT b.*,bs.id as id_BookSupplier, bs.Import_Price, bs.Amount, s.Name as Supplier,c.Name AS category
+                    FROM book b
+                    LEFT JOIN book_supplier bs ON bs.id_Book = b.id
+                    LEFT JOIN supplier s ON s.id = bs.id_Supplier
+                    INNER JOIN category c ON c.id = b.id_Category
+                    WHERE b.id = ? ORDER BY bs.Import_Price ASC LIMIT 1`
+      db.query(query, data.id, function (err, books) {
+        if (err) {
+          return err;
+        }
+        book = books[0];
+  
+        db.query(
+          "SELECT * FROM image_book WHERE id_Book = ?",
+          books[0].id,
+          function (err, image) {
+            if (err) {
+              console.log(err);
+              return;
+            }
+            images = image;
+            db.query(
+              `SELECT rating.id,rating.id_Account,rating.comment,rating.star, inforuser.FirstName,inforuser.LastName,inforuser.Avatar
+                      FROM rating
+                      INNER JOIN inforuser 
+                      ON rating.id_Account = inforuser.id_Account 
+                      WHERE rating.id_Book = ?`, books[0].id, function (err, rating) {
+                      if (err) {
+                          console.log(err);
+                          return;
+                      }
+                      ratings = rating;
+  
+                      var stars = 0
+                      for (let i = 0; i < ratings.length; i++) {
+                          stars += ratings[i].star
+                      }
+                      stars = Math.round(stars / ratings.length)
+                      if (isNaN(stars)) stars = 0
+                      book.stars = stars
+                      // Thực hiện các thao tác cần thiết với ratings ở đây
+                      results({ book: book, images: images, ratings: ratings })
+                      // Thực hiện các thao tác cần thiết với book, images, ratings ở đây
+                  });
+              });
+          });
+      }
+  })
 }
 
 book.delete = function (idBook, results) {
