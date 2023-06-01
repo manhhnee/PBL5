@@ -11,6 +11,16 @@ class InforUserController {
       res.json(data);
     });
   }
+  deleteStaff(req, res, next) {
+    InforUserModel.deleteStaff(req.params.idAccount, function (data) {
+      res.json(data);
+    });
+  }
+  addStaff(req, res, next) {
+    InforUserModel.addStaff(req.body, function (data) {
+      res.json(data);
+    });
+  }
   FindInforUser(req, res, next) {
     InforUserModel.findWithAccountId(req.params.id, function (data) {
       res.json(data);
