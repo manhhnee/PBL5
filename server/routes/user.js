@@ -10,6 +10,18 @@ router.get(
   AuthController.isAdmin,
   InforUserController.getListStaff
 );
+router.delete(
+  "/deleteStaff/:idAccount",
+  AuthController.verifyToken,
+  AuthController.isAdmin,
+  InforUserController.deleteStaff)
+  router.post(
+    "/addStaff",
+    AuthController.verifyToken,
+    AuthController.isAdmin,
+    InforUserController.addStaff
+  )
+  ////////////////////////////////////////////////////////////////////////
 router.get(
   "/profile/customer",
   AuthController.verifyToken,
@@ -37,5 +49,6 @@ router.put(
   upload.single("Avatar"),
   InforUserController.update
 );
+
 
 module.exports = router;
