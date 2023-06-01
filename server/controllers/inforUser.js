@@ -17,6 +17,11 @@ class InforUserController{
             res.json(data)
         })
     }
+    addStaff(req,res,next){
+        InforUserModel.addStaff(req.body,function(data){
+            res.json(data)
+        })
+    }
     FindInforUser(req,res,next){
         InforUserModel.findWithAccountId(req.params.id,function(data){
             res.json(data)
