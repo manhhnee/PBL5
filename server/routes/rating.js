@@ -7,7 +7,7 @@ var authController = require("../controllers/auth");
 router.post("/add",authController.verifyToken, ratingController.add);
 router.get("/totalstar/:idBook", ratingController.show);
 router.get("/detail/:idBook/", ratingController.showOne);
-router.delete("/delete/:id", ratingController.delete);
-router.put("/update/:id", ratingController.update);
+router.delete("/delete/:id",authController.verifyToken, ratingController.delete);
+router.put("/update/:id",authController.verifyToken, ratingController.update);
 
 module.exports = router;

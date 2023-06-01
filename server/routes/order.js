@@ -14,6 +14,7 @@ router.get("/history/delivering", AuthController.verifyToken, OrderController.sh
 router.get("/history/success", AuthController.verifyToken, OrderController.showHistorySuccessOrderList);
 router.get("/history/cancel", AuthController.verifyToken, OrderController.showHistoryCanceledOrderList);
 router.get("/revenue", AuthController.verifyToken, OrderController.revenue);
+router.get("/orderList", OrderController.showOrderList);
 router.get("/pending", AuthController.verifyToken, OrderController.showPendingOrders);
 router.get("/delivering", AuthController.verifyToken, OrderController.showDeliveringOrders);
 router.get("/success", AuthController.verifyToken, OrderController.showSuccessOrders);
