@@ -264,7 +264,7 @@ function ManageStaff() {
               <InputForm
                 placeholder=""
                 type="text"
-                value=""
+                value={payload.firstName}
                 setValue={setPayload}
                 name={'firstName'}
                 className={cx('input')}
@@ -273,7 +273,7 @@ function ManageStaff() {
               <InputForm
                 placeholder=""
                 type="text"
-                value=""
+                value={payload.lastName}
                 setValue={setPayload}
                 name={'lastName'}
                 className={cx('input')}
@@ -286,7 +286,7 @@ function ManageStaff() {
             <InputForm
               placeholder=""
               type="text"
-              value=""
+              value={payload.address}
               setValue={setPayload}
               name={'address'}
               className={cx('input')}
@@ -298,7 +298,7 @@ function ManageStaff() {
             <InputForm
               placeholder=""
               type="text"
-              value=""
+              value={payload.phoneNumber}
               setValue={setPayload}
               name={'phoneNumber'}
               className={cx('input')}

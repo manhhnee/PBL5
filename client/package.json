@@ -18,6 +18,7 @@
     "formik": "^2.2.9",
     "hero-slider": "^3.1.0",
     "js-cookie": "^3.0.5",
+    "moment": "^2.29.4",
     "normalize.css": "^8.0.1",
     "prop-types": "^15.8.1",
     "query-string": "^8.1.0",

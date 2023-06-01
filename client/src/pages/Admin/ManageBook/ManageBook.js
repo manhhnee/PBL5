@@ -52,8 +52,8 @@ function ManageBook() {
   const getBooks = async () => {
     try {
       const response = await axios.get('http://localhost:5000/api/book');
-      setBooks(response.data);
-      setFilteredBooks(response.data);
+      setBooks(response.data.books);
+      setFilteredBooks(response.data.books);
     } catch (e) {
       console.log(e);
     }
@@ -99,8 +99,10 @@ function ManageBook() {
           Publisher: publisher,
         },
         {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${getJwtFromCookie}`,
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${getJwtFromCookie}`,
+          },
         },
       )
       .then((res) => {

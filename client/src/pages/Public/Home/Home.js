@@ -72,8 +72,8 @@ function Home() {
 
   useEffect(() => {
     const fetchApiBooks = async () => {
-      const response = await BookService.showBook();
-      setBooks(response);
+      const response = await axios.get('http://localhost:5000/api/book');
+      setBooks(response.data.books);
     };
     const fetchAPICategories = async () => {
       const response = await axios.get('http://localhost:5000/api/category');

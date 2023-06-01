@@ -24,13 +24,8 @@ function AllBook() {
     const storedPage = localStorage.getItem('page');
     return storedPage ? parseInt(storedPage) : 1;
   });
+  let [totalPage, setTotalPage] = useState();
 
-  let totalPage = books.length;
-  if (totalPage % 10 === 0) {
-    totalPage = totalPage / 10;
-  } else {
-    totalPage = totalPage / 10 + 1;
-  }
   const pages = Array.from({ length: totalPage }, (_, index) => index + 1);
   const handlePageClick = (buttonId) => {
     setActiveButton(buttonId);
@@ -47,9 +42,10 @@ function AllBook() {
 
   useEffect(() => {
     const fetchApiBooks = async () => {
-      const response = await axios.get(`http://localhost:5000/api/book?limit=40&category=${idCategory}&page=${page}`);
-      const booksData = await response.dat;
+      const response = await axios.get(`http://localhost:5000/api/book?limit=100&category=${idCategory}&page=${page}`);
+      const booksData = await response.data.books;
       setBooks(booksData);
+      setTotalPage(response.data.totalPage);
     };
 
     const fetchApiCategories = async () => {
@@ -59,7 +55,7 @@ function AllBook() {
     };
     fetchApiCategories();
     fetchApiBooks();
-  }, [idCategory, page]);
+  }, [idCategory, totalPage, page]);
 
   return (
     <div className={cx('wrapper')}>

@@ -1,12 +1,12 @@
 import classNames from 'classnames/bind';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTruck } from '@fortawesome/free-solid-svg-icons';
+import { faCircleQuestion } from '@fortawesome/free-regular-svg-icons';
 
 import Image from '~/components/Image';
 import Star from '~/components/Star';
 import Button from '~/components/Button';
 import styles from './BookItemHistory.module.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTruck } from '@fortawesome/free-solid-svg-icons';
-import { faCircleQuestion } from '@fortawesome/free-regular-svg-icons';
 
 const cx = classNames.bind(styles);
 
