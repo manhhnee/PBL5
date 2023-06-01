@@ -40,6 +40,11 @@ class OrderController {
             res.json(data)
         })
     }
+    showOrderList(req,res,next){
+        OrderModel.getOrderList(function (data) {
+            res.json(data)
+        })
+    }
     showPendingOrders(req,res,next){
         OrderModel.getPending(function(data) {
             res.json(data)
