@@ -187,7 +187,7 @@ order.getHistoryOrderList = function(id_Account,results){
                     WHERE mo.id_Account = ? 
                     GROUP BY mo.id DESC`
     db.query(query,[id_Account],function(err,Orders){
-        results({orderList:Orders})
+        results({OrderList:Orders})
     })
 }
 order.getHistorySuccessOrderList = function(id_Account,results){
@@ -198,7 +198,7 @@ order.getHistorySuccessOrderList = function(id_Account,results){
                     WHERE mo.id_Account = ? AND mo.id_Status = 3 
                     GROUP BY mo.id DESC`
     db.query(query,[id_Account],function(err,Orders){
-        results({SuccessOrderList:Orders})
+        results({OrderList:Orders})
     })
 }
 order.getHistoryPendingOrderList = function(id_Account,results){
@@ -209,7 +209,7 @@ order.getHistoryPendingOrderList = function(id_Account,results){
                     WHERE mo.id_Account = ? AND mo.id_Status = 1 
                     GROUP BY mo.id DESC`
     db.query(query,[id_Account],function(err,Orders){
-        results({SuccessOrderList:Orders})
+        results({OrderList:Orders})
     })
 }
 order.getHistoryDeliveringOrderList = function(id_Account,results){
@@ -220,7 +220,7 @@ order.getHistoryDeliveringOrderList = function(id_Account,results){
                     WHERE mo.id_Account = ? AND mo.id_Status = 2 
                     GROUP BY mo.id DESC`
     db.query(query,[id_Account],function(err,Orders){
-        results({SuccessOrderList:Orders})
+        results({OrderList:Orders})
     })
 }
 order.getHistoryCancelOrderList = function(id_Account,results){
@@ -231,10 +231,23 @@ order.getHistoryCancelOrderList = function(id_Account,results){
                     WHERE mo.id_Account = ? AND mo.id_Status = 4
                     GROUP BY mo.id DESC`
     db.query(query,[id_Account],function(err,Orders){
-        results({SuccessOrderList:Orders})
+        results({OrderList:Orders})
     })
 }
 //xem lich su don hang nhieu tai khoan
+
+order.getOrderList = function(results){
+    const query = `SELECT mo.*,i.id_Account,i.FirstName,i.LastName,i.PhoneNumber,i.Avatar,i.Address
+                    FROM make_order mo
+                    INNER JOIN inforuser i ON i.id_Account = mo.id_Account
+                    GROUP BY mo.id DESC`
+    db.query(query,[],function(err, orders){
+        if(err) return err
+        else {
+            results(orders)
+        }
+    })
+}
 order.getPending = function(results){
     const query = `SELECT mo.*,i.id_Account,i.FirstName,i.LastName,i.PhoneNumber,i.Avatar,i.Address
                     FROM make_order mo
@@ -255,7 +268,7 @@ order.getDelivering = function(results){
     db.query(query,[],function(err, orders){
         if(err) return err
         else {
-            results({orders})
+            results(orders)
         }
     })
 }
@@ -267,7 +280,7 @@ order.getSuccess = function(results){
     db.query(query,[],function(err, orders){
         if(err) return err
         else {
-            results({orders})
+            results(orders)
         }
     })
 }
@@ -279,7 +292,7 @@ order.getCanceled = function(results){
     db.query(query,[],function(err, orders){
         if(err) return err
         else {
-            results({orders})
+            results(orders)
         }
     })
 }
