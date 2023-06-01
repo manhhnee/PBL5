@@ -178,3 +178,21 @@
 .content {
   padding: 0 100px 50px;
 }
+
+.header {
+  font-size: 2rem;
+  color: var(--black);
+  font-weight: 500;
+  margin-top: 18px;
+}
+
+.input {
+  display: grid;
+  grid-template-columns: 10% 80%;
+}
+
+.options {
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-evenly;
+}

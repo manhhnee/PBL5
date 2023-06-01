@@ -15,11 +15,16 @@ const cx = classNames.bind(styles);
 
 function ManageStaff() {
   const [listStaff, setListStaff] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen1, setIsModalOpen1] = useState(false);
+  const [isModalOpen2, setIsModalOpen2] = useState(false);
   const [selectedStaffId, setSelectedStaffId] = useState();
-  const modalAnimation = useSpring({
-    opacity: isModalOpen ? 1 : 0,
-    transform: isModalOpen ? 'translateY(0)' : 'translateY(-100%)',
+  const modalAnimation1 = useSpring({
+    opacity: isModalOpen1 ? 1 : 0,
+    transform: isModalOpen1 ? 'translateY(0)' : 'translateY(-100%)',
+  });
+  const modalAnimation2 = useSpring({
+    opacity: isModalOpen2 ? 1 : 0,
+    transform: isModalOpen2 ? 'translateY(0)' : 'translateY(-100%)',
   });
   const [payload, setPayload] = useState({
     username: '',
@@ -48,6 +53,52 @@ function ManageStaff() {
     return '';
   }
 
+  const handleAddStaff = async (username, password, fisrtname, lastname, phone, address) => {
+    await axios
+      .post(
+        'http://localhost:5000/api/user/addStaff',
+        {
+          Username: username,
+          Password: password,
+          FirstName: fisrtname,
+          LastName: lastname,
+          PhoneNumber: phone,
+          Address: address,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${getJwtFromCookie()}`,
+          },
+        },
+      )
+      .then((res) => {
+        alert(res.data.message);
+        window.location.reload();
+      })
+      .catch((e) => {
+        alert(e);
+      });
+  };
+
+  const handleDeleteStaff = async (id) => {
+    await axios
+      .delete(`http://localhost:5000/api/user/deleteStaff/${id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getJwtFromCookie()}`,
+        },
+      })
+
+      .then((res) => {
+        alert(res.data.message);
+        window.location.reload();
+      })
+      .catch((e) => {
+        alert(e);
+      });
+  };
+
   useEffect(() => {
     const getApiStaffs = async () => {
       try {
@@ -65,9 +116,9 @@ function ManageStaff() {
     getApiStaffs();
   }, []);
 
-  const openModal = (staffID, firstName, lastName, address, phone) => {
+  const openModal1 = (staffID, firstName, lastName, address, phone) => {
     setSelectedStaffId(staffID);
-    setIsModalOpen(true);
+    setIsModalOpen1(true);
     setPayload((prevState) => ({
       ...prevState,
       firstName: firstName,
@@ -77,13 +128,28 @@ function ManageStaff() {
     }));
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const closeModal1 = () => {
+    setIsModalOpen1(false);
   };
+
+  const openModal2 = () => {
+    setIsModalOpen2(true);
+  };
+
+  const closeModal2 = () => {
+    setIsModalOpen2(false);
+  };
+
   return (
     <div className={cx('wrapper')}>
       <div className={cx('btn')}>
-        <Button blue leftIcon={<FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>}>
+        <Button
+          onClick={() => {
+            openModal2();
+          }}
+          blue
+          leftIcon={<FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>}
+        >
           Thêm nhân viên
         </Button>
       </div>
@@ -93,8 +159,9 @@ function ManageStaff() {
             <div
               className={cx('staff')}
               onClick={() =>
-                openModal(selectedStaffId, staff.FirstName, staff.LastName, staff.Address, staff.PhoneNumber)
+                openModal1(staff.id_Account, staff.FirstName, staff.LastName, staff.Address, staff.PhoneNumber)
               }
+              key={staff.id}
             >
               <Image src={staff.Avatar} alt="staff" className={cx('image')} />
               <span className={cx('name')}>{staff.FirstName + ' ' + staff.LastName}</span>
@@ -102,8 +169,8 @@ function ManageStaff() {
           );
         })}
       </div>
-      <Popup isOpen={isModalOpen} onRequestClose={() => closeModal()} width={String('600px')} height={'520px'}>
-        <animated.div style={modalAnimation}>
+      <Popup isOpen={isModalOpen1} onRequestClose={() => closeModal1()} width={String('600px')} height={'520px'}>
+        <animated.div style={modalAnimation1}>
           <h2>Thông tin nhân viên</h2>
           <div className={cx('input-field')}>
             <div className={cx('header')}>Họ và tên</div>
@@ -153,8 +220,107 @@ function ManageStaff() {
             />
           </div>
           <div className={cx('options')}>
-            <Button primary>Xóa nhân viên</Button>
+            <Button onClick={() => handleDeleteStaff(selectedStaffId)} primary>
+              Xóa nhân viên
+            </Button>
             <Button outline>Thay đổi thông tin nhân viên</Button>
+          </div>
+        </animated.div>
+      </Popup>
+      <Popup isOpen={isModalOpen2} onRequestClose={() => closeModal2()} width={String('600px')} height={'520px'}>
+        <animated.div style={modalAnimation2}>
+          <h2>Thêm nhân viên</h2>
+          <div className={cx('input-field')}>
+            <div className={cx('header')}>Tên đăng nhập</div>
+            <div className={cx('fullname')}>
+              <InputForm
+                placeholder=""
+                type="text"
+                value={payload.username}
+                setValue={setPayload}
+                name={'username'}
+                className={cx('input')}
+                leftIcon={faSignature}
+              />
+            </div>
+          </div>
+          <div className={cx('input-field')}>
+            <div className={cx('header')}>Mật khẩu</div>
+            <div className={cx('fullname')}>
+              <InputForm
+                placeholder=""
+                type="text"
+                value={payload.password}
+                setValue={setPayload}
+                name={'password'}
+                className={cx('input')}
+                leftIcon={faSignature}
+              />
+            </div>
+          </div>
+          <div className={cx('input-field')}>
+            <div className={cx('header')}>Họ và tên</div>
+            <div className={cx('fullname')}>
+              <InputForm
+                placeholder=""
+                type="text"
+                value=""
+                setValue={setPayload}
+                name={'firstName'}
+                className={cx('input')}
+                leftIcon={faSignature}
+              />
+              <InputForm
+                placeholder=""
+                type="text"
+                value=""
+                setValue={setPayload}
+                name={'lastName'}
+                className={cx('input')}
+                leftIcon={faSignature}
+              />
+            </div>
+          </div>
+          <div className={cx('input-field')}>
+            <div className={cx('header')}>Địa chỉ</div>
+            <InputForm
+              placeholder=""
+              type="text"
+              value=""
+              setValue={setPayload}
+              name={'address'}
+              className={cx('input')}
+              leftIcon={faLocationDot}
+            />
+          </div>
+          <div className={cx('input-field')}>
+            <div className={cx('header')}>Số điện thoại</div>
+            <InputForm
+              placeholder=""
+              type="text"
+              value=""
+              setValue={setPayload}
+              name={'phoneNumber'}
+              className={cx('input')}
+              leftIcon={faMobileScreenButton}
+            />
+          </div>
+          <div className={cx('options')}>
+            <Button
+              onClick={() =>
+                handleAddStaff(
+                  payload.username,
+                  payload.password,
+                  payload.firstName,
+                  payload.lastName,
+                  payload.phoneNumber,
+                  payload.address,
+                )
+              }
+              outline
+            >
+              Xác nhận
+            </Button>
           </div>
         </animated.div>
       </Popup>

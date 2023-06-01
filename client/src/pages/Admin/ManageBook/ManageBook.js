@@ -197,9 +197,8 @@ function ManageBook() {
         title="Danh sách truyện"
         columns={columns}
         data={filteredBooks}
-        pagination
         fixedHeader
-        fixedHeaderScrollHeight="400px"
+        fixedHeaderScrollHeight="500px"
         pointerOnHover
         highlightOnHover
         className={cx('fixed-header')}

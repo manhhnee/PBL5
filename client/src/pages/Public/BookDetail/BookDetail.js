@@ -2,14 +2,17 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping, faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { useSpring, animated } from 'react-spring';
+import { useParams } from 'react-router-dom';
 
-import styles from './BookDetail.module.scss';
 import Image from '~/components/Image/Image';
+import Popup from '~/components/Popup';
 import Button from '~/components/Button/Button';
 import Rate from '~/components/Rate';
 import Star from '~/components/Star';
-import { useParams } from 'react-router-dom';
+import styles from './BookDetail.module.scss';
+import InputForm from '~/components/InputForm/InputForm';
 
 const cx = classNames.bind(styles);
 
@@ -21,8 +24,15 @@ function BookDetail() {
   const [imageList, setImageList] = useState([]);
   const [mainImage, setMainImage] = useState();
   const [ratings, setRatings] = useState([]);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [payload, setPayload] = useState({
+    address: '',
+  });
+  const modalAnimation = useSpring({
+    opacity: isModalOpen ? 1 : 0,
+  });
   const { id } = useParams();
+  console.log(book);
 
   function getJwtFromCookie() {
     //lấy token được lưu trong cookie ra
@@ -79,6 +89,7 @@ function BookDetail() {
   };
 
   const handleCreateOneOrder = async (id_BookSupplier, quantity, Price, Amount, address) => {
+    console.log(id_BookSupplier, quantity, Price, Amount, address);
     await axios
       .post(
         'http://localhost:5000/api/order/addOneItem',
@@ -98,6 +109,7 @@ function BookDetail() {
       )
       .then((response) => {
         alert(response.data.message);
+        window.location.reload();
       })
       .catch((error) => {
         alert('Something went wrong', error);
@@ -122,6 +134,13 @@ function BookDetail() {
   };
   const handleClick2 = () => {
     setIsActive(true);
+  };
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
   return (
     <>
@@ -170,16 +189,39 @@ function BookDetail() {
                 +{' '}
               </button>
             </div>
-            <Button
-              onClick={() => handleCreateOneOrder(book.id_BookSupplier, count, book.Price, book.Amount)}
-              primary
-              className={cx('btn')}
-            >
+            <Button onClick={() => openModal()} primary className={cx('btn')}>
               Mua ngay
             </Button>
           </div>
         </div>
       </div>
+      <Popup isOpen={isModalOpen} onRequestClose={() => closeModal()} width={String('500px')} height={'300px'}>
+        <animated.div style={modalAnimation}>
+          <h2>Xác nhận thanh toán</h2>
+          <div className={cx('input-field')}>
+            <div className={cx('header')}>Nhà sản xuất</div>
+            <InputForm
+              placeholder=""
+              type="text"
+              value={payload.address}
+              setValue={setPayload}
+              name={'address'}
+              className={cx('input')}
+              leftIcon={faLocationDot}
+            />
+          </div>
+          <div className={cx('options')}>
+            <Button
+              onClick={() =>
+                handleCreateOneOrder(book.id_BookSupplier, count, book.Price, book.Amount, payload.address)
+              }
+              outline
+            >
+              Xác nhận
+            </Button>
+          </div>
+        </animated.div>
+      </Popup>
       <div className={cx('extra-detail')}>
         <div className={cx('header-field', `${isActive ? 'active' : ''}`)}>
           <span className={cx('header-description')} onClick={handleClick1}>
