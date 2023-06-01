@@ -22,6 +22,15 @@ class InforUserController{
             res.json(data)
         })
     }
+    updateStaff(req,res,next){
+        const id_Account = req.params.id_Account
+        const avatarPath = req.file ? `http://localhost:5000/${req.file.path}` : null;
+        const data = req.body
+        InforUserModel.update(id_Account, avatarPath,data,function(data){
+            res.json(data)
+        })
+
+    }
     FindInforUser(req,res,next){
         InforUserModel.findWithAccountId(req.params.id,function(data){
             res.json(data)

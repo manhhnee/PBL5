@@ -21,6 +21,13 @@ router.delete(
     AuthController.isAdmin,
     InforUserController.addStaff
   )
+  router.put(
+    "/updateStaff/:id_Account",
+    AuthController.verifyToken,
+    AuthController.isAdmin,
+    upload.single("Avatar"),
+    InforUserController.updateStaff
+  );
   ////////////////////////////////////////////////////////////////////////
 router.get(
   "/profile/customer",
