@@ -1,4 +1,6 @@
 const db = require("../config/db/index");
+const bcrypt = require("bcrypt");
+var salt = bcrypt.genSaltSync();
 
 const inforUser = function(inforUser){
     this.id = inforUser.id,
@@ -73,9 +75,56 @@ inforUser.getListStaff = function(results){
   })
 }
 inforUser.deleteStaff = function(idAccount,results){
-  db.query("DELETE FROM account WHERE id = ? ",idAccount,(err,staff)=>{
+  db.query("DELETE FROM account WHERE id = ? AND id_Role = 2",idAccount,(err,staff)=>{
     if(err) return results({success:false,message:err.message})
     else return results({success:true,message:"xóa thành công nhân viên"})
   })
+}
+inforUser.addStaff = function(data,results){
+  console.log(data)
+  db.query(
+    "SELECT * FROM account WHERE Username = ?",
+    [data.Username],
+    (err, users) => {
+      if (err) return results({ success: false, message: err.message });
+      else if (users.length > 0)
+        return results({ success: false, message: "username da duoc su dung" });
+      else {
+        bcrypt.hash(data.Password, salt, (err, hash) => {
+          if (err) return results({ success: false, message: err.message });
+          else {
+            db.query(
+              "INSERT INTO account (Username, Password, id_Role) VALUES (?, ?, ?)",
+              [data.Username, hash, 2],
+              function (err, user) {
+                if (err) return results({ success: false, message: err.message });
+                else {
+                  db.query(
+                    "INSERT INTO inforuser (id_Account,FirstName,LastName,PhoneNumber,Address) VALUES (?, ?, ?, ?, ?)",
+                    [
+                      user.insertId,
+                      data.FirstName,
+                      data.LastName,
+                      data.PhoneNumber,
+                      data.Address,
+                    ],
+                    function (err, users) {
+                      if (err) return results({ success: false, message: err.message });
+                      else {
+                        return results({
+                          success: true,
+                          message: "tạo tài khoản nhân viên thành công",
+                        });
+                      }
+                    }
+                  );
+                }
+              }
+            );
+          }
+        });
+      }
+    }
+  ); 
 }
 module.exports = inforUser

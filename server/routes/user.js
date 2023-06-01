@@ -15,6 +15,12 @@ router.delete(
   AuthController.verifyToken,
   AuthController.isAdmin,
   InforUserController.deleteStaff)
+  router.post(
+    "/addStaff",
+    AuthController.verifyToken,
+    AuthController.isAdmin,
+    InforUserController.addStaff
+  )
   ////////////////////////////////////////////////////////////////////////
 router.get(
   "/profile/customer",
