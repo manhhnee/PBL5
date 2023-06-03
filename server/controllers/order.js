@@ -20,23 +20,8 @@ class OrderController {
             res.json(data)
         })
     }
-    showHistorySuccessOrderList(req,res,next){
-        OrderModel.getHistorySuccessOrderList(req.user.id,function (data) {
-            res.json(data)
-        })
-    }
-    showHistoryPendingOrderList(req,res,next){
-        OrderModel.getHistoryPendingOrderList(req.user.id,function (data) {
-            res.json(data)
-        })
-    }
-    showHistoryDeliveringOrderList(req,res,next){
-        OrderModel.getHistoryDeliveringOrderList(req.user.id,function (data) {
-            res.json(data)
-        })
-    }
-    showHistoryCanceledOrderList(req,res,next){
-        OrderModel.getHistoryCancelOrderList(req.user.id,function (data) {
+    showHistoryStatusOrderList(req,res,next){
+        OrderModel.getHistoryStatusOrderList(req.user.id,req.params.id_status,function (data) {
             res.json(data)
         })
     }
@@ -45,23 +30,8 @@ class OrderController {
             res.json(data)
         })
     }
-    showPendingOrders(req,res,next){
-        OrderModel.getPending(function(data) {
-            res.json(data)
-        })
-    }
-    showDeliveringOrders(req,res,next){
-        OrderModel.getDelivering(function(data) {
-            res.json(data)
-        })
-    }
-    showSuccessOrders(req,res,next){
-        OrderModel.getSuccess(function(data) {
-            res.json(data)
-        })
-    }
-    showCanceledOrders(req,res,next){
-        OrderModel.getCanceled(function(data) {
+    showStatusOrders(req,res,next){
+        OrderModel.getStatusOrder(req.params.id_status,function(data) {
             res.json(data)
         })
     }
