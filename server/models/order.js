@@ -190,47 +190,14 @@ order.getHistoryOrderList = function(id_Account,results){
         results({OrderList:Orders})
     })
 }
-order.getHistorySuccessOrderList = function(id_Account,results){
+order.getHistoryStatusOrderList = function(id_Account,id_status,results){
     const query = `SELECT mo.*,s.Status,p.Payment_Method
                     FROM make_order mo
                     INNER JOIN status s ON mo.id_Status = s.id
                     INNER JOIN payment p ON mo.id_Payment = p.id
-                    WHERE mo.id_Account = ? AND mo.id_Status = 3 
+                    WHERE mo.id_Account = ? AND mo.id_Status = ? 
                     GROUP BY mo.id DESC`
-    db.query(query,[id_Account],function(err,Orders){
-        results({OrderList:Orders})
-    })
-}
-order.getHistoryPendingOrderList = function(id_Account,results){
-    const query = `SELECT mo.*,s.Status,p.Payment_Method
-                    FROM make_order mo
-                    INNER JOIN status s ON mo.id_Status = s.id
-                    INNER JOIN payment p ON mo.id_Payment = p.id
-                    WHERE mo.id_Account = ? AND mo.id_Status = 1 
-                    GROUP BY mo.id DESC`
-    db.query(query,[id_Account],function(err,Orders){
-        results({OrderList:Orders})
-    })
-}
-order.getHistoryDeliveringOrderList = function(id_Account,results){
-    const query = `SELECT mo.*,s.Status,p.Payment_Method
-                    FROM make_order mo
-                    INNER JOIN status s ON mo.id_Status = s.id
-                    INNER JOIN payment p ON mo.id_Payment = p.id
-                    WHERE mo.id_Account = ? AND mo.id_Status = 2 
-                    GROUP BY mo.id DESC`
-    db.query(query,[id_Account],function(err,Orders){
-        results({OrderList:Orders})
-    })
-}
-order.getHistoryCancelOrderList = function(id_Account,results){
-    const query = `SELECT mo.*,s.Status,p.Payment_Method
-                    FROM make_order mo
-                    INNER JOIN status s ON mo.id_Status = s.id
-                    INNER JOIN payment p ON mo.id_Payment = p.id
-                    WHERE mo.id_Account = ? AND mo.id_Status = 4
-                    GROUP BY mo.id DESC`
-    db.query(query,[id_Account],function(err,Orders){
+    db.query(query,[id_Account,id_status],function(err,Orders){
         results({OrderList:Orders})
     })
 }
@@ -248,48 +215,12 @@ order.getOrderList = function(results){
         }
     })
 }
-order.getPending = function(results){
+order.getStatusOrder = function(id_status,results){
     const query = `SELECT mo.*,i.id_Account,i.FirstName,i.LastName,i.PhoneNumber,i.Avatar,i.Address
                     FROM make_order mo
                     INNER JOIN inforuser i ON i.id_Account = mo.id_Account
-                    WHERE mo.id_Status = 1 GROUP BY mo.id DESC`
-    db.query(query,[],function(err, orders){
-        if(err) return err
-        else {
-            results(orders)
-        }
-    })
-}
-order.getDelivering = function(results){
-    query = `SELECT mo.*,i.id_Account,i.FirstName,i.LastName,i.PhoneNumber,i.Avatar,i.Address
-                FROM make_order mo
-                INNER JOIN inforuser i ON i.id_Account = mo.id_Account
-                WHERE mo.id_Status = 2 GROUP BY mo.id DESC`
-    db.query(query,[],function(err, orders){
-        if(err) return err
-        else {
-            results(orders)
-        }
-    })
-}
-order.getSuccess = function(results){
-    query = `SELECT mo.*,i.id_Account,i.FirstName,i.LastName,i.PhoneNumber,i.Avatar,i.Address
-                FROM make_order mo
-                INNER JOIN inforuser i ON i.id_Account = mo.id_Account
-                WHERE mo.id_Status = 3 GROUP BY mo.id DESC`
-    db.query(query,[],function(err, orders){
-        if(err) return err
-        else {
-            results(orders)
-        }
-    })
-}
-order.getCanceled = function(results){
-    query = `SELECT mo.*,i.id_Account,i.FirstName,i.LastName,i.PhoneNumber,i.Avatar,i.Address
-                FROM make_order mo
-                INNER JOIN inforuser i ON i.id_Account = mo.id_Account
-                WHERE mo.id_Status = 4 GROUP BY mo.id DESC`
-    db.query(query,[],function(err, orders){
+                    WHERE mo.id_Status = ? GROUP BY mo.id DESC`
+    db.query(query,[id_status],function(err, orders){
         if(err) return err
         else {
             results(orders)
