@@ -105,7 +105,6 @@ book.find = function (data, results) {
                       FROM rating
                       INNER JOIN inforuser 
                       ON rating.id_Account = inforuser.id_Account 
-<<<<<<< HEAD
                       WHERE rating.id_Book = ?`,
               books[0].id,
               function (err, rating) {
@@ -133,31 +132,6 @@ book.find = function (data, results) {
     }
   });
 };
-=======
-                      WHERE rating.id_Book = ?`, books[0].id, function (err, rating) {
-                      if (err) {
-                          console.log(err);
-                          return;
-                      }
-                      ratings = rating;
-  
-                      var stars = 0
-                      for (let i = 0; i < ratings.length; i++) {
-                          stars += ratings[i].star
-                      }
-                      stars = Math.round(stars / ratings.length)
-                      if (isNaN(stars)) stars = 0
-                      book.stars = stars
-                      // Thực hiện các thao tác cần thiết với ratings ở đây
-                      results({ book: book, images: images, ratings: ratings })
-                      // Thực hiện các thao tác cần thiết với book, images, ratings ở đây
-                  });
-              });
-          });
-    }
-  })
-}
->>>>>>> master
 
 book.delete = function (idBook, results) {
   db.query("DELETE FROM book WHERE id =?", idBook, function (err, books) {

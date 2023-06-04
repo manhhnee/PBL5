@@ -51,7 +51,7 @@ function ManageBook() {
 
   const getBooks = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/book');
+      const response = await axios.get('http://localhost:5000/api/book?limit=10000');
       setBooks(response.data.books);
       setFilteredBooks(response.data.books);
     } catch (e) {
@@ -101,7 +101,7 @@ function ManageBook() {
         {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${getJwtFromCookie}`,
+            Authorization: `Bearer ${getJwtFromCookie()}`,
           },
         },
       )
@@ -117,7 +117,7 @@ function ManageBook() {
     await axios
       .delete(`http://localhost:5000/api/book/delete/${id}`, {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${getJwtFromCookie}`,
+        Authorization: `Bearer ${getJwtFromCookie()}`,
       })
       .then((res) => {
         alert(res.data.message);
@@ -140,9 +140,8 @@ function ManageBook() {
 
     setFilteredBooks(result);
   }, [search, books]);
-  const modalAnimation2 = useSpring({
+  const modalAnimation = useSpring({
     opacity: isModalOpen ? 1 : 0,
-    transform: isModalOpen ? 'translateY(0)' : 'translateY(-100%)',
   });
 
   const closeModal = () => {
@@ -168,55 +167,43 @@ function ManageBook() {
       selector: (row) => row.Price,
       sortable: true,
     },
-    {
-      name: 'Hành động',
-      cell: (row) => (
-        <Button onClick={() => handleDeleteBook(row.id)} className={cx('btn')} primary>
-          Xóa
-        </Button>
-      ),
-    },
-    {
-      name: 'Hành động',
-      cell: (row) => (
-        <Button
-          onClick={() => {
-            getDetailBook(row.id);
-            setBookId(row.id);
-          }}
-          className={cx('btn')}
-          blue
-        >
-          Sửa
-        </Button>
-      ),
-    },
   ];
+
+  const handleRowClick = (row) => {
+    const bookId = row.id;
+    getDetailBook(bookId);
+    setBookId(bookId);
+  };
 
   return (
     <div className={cx('wrapper')}>
-      <DataTable
-        title="Danh sách truyện"
-        columns={columns}
-        data={filteredBooks}
-        fixedHeader
-        fixedHeaderScrollHeight="500px"
-        pointerOnHover
-        highlightOnHover
-        className={cx('fixed-header')}
-        subHeader
-        subHeaderComponent={
-          <input
-            type="text"
-            placeholder="Tìm kiếm sách ở đây"
-            className={cx('search')}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          ></input>
-        }
-      />
+      <div style={{ maxWidth: '100%' }}>
+        <DataTable
+          title="Danh sách truyện"
+          columns={columns}
+          data={filteredBooks}
+          fixedHeader
+          fixedHeaderScrollHeight="500px"
+          pointerOnHover
+          highlightOnHover
+          className={cx('fixed-header')}
+          subHeader
+          subHeaderComponent={
+            <input
+              type="text"
+              placeholder="Tìm kiếm sách ở đây"
+              className={cx('search')}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            ></input>
+          }
+          onRowClicked={(row) => {
+            handleRowClick(row);
+          }}
+        />
+      </div>
       <Popup isOpen={isModalOpen} onRequestClose={() => closeModal()} width={'700px'} height={'700px'}>
-        <animated.div style={modalAnimation2}>
+        <animated.div style={modalAnimation}>
           <h2>Thông tin sách</h2>
           <div className={cx('input-field')}>
             <div className={cx('header')}>Tên sách</div>
@@ -311,7 +298,10 @@ function ManageBook() {
               }
               outline
             >
-              Xác nhận
+              Thay đổi thông tin
+            </Button>
+            <Button onClick={() => handleDeleteBook(bookId)} primary>
+              Xóa
             </Button>
           </div>
         </animated.div>

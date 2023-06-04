@@ -2,23 +2,24 @@ import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import queryString from 'query-string';
 
-import styles from './AllBook.module.scss';
-import BookItem from '~/components/BookItem';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import BookItem from '~/components/BookItem';
+import axios from 'axios';
 import Button from '~/components/Button/Button';
 import config from '~/config';
+import styles from './AllBook.module.scss';
 
 const cx = classNames.bind(styles);
 
 function AllBook() {
-  const search = window.location.search;
-  const { id } = queryString.parse(search);
+  const location = useLocation();
+  const { id, search } = queryString.parse(location.search);
   const [books, setBooks] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [idCategory, setIDCategory] = useState(id ? id : '');
+  const [idCategory, setIDCategory] = useState(id || '');
+  const [searchValue, setSearchValue] = useState(search || '');
   const [activeButton, setActiveButton] = useState(1);
   const [page, setPage] = useState(() => {
     const storedPage = localStorage.getItem('page');
@@ -27,12 +28,17 @@ function AllBook() {
   let [totalPage, setTotalPage] = useState();
 
   const pages = Array.from({ length: totalPage }, (_, index) => index + 1);
+
   const handlePageClick = (buttonId) => {
     setActiveButton(buttonId);
     setPage(buttonId);
   };
+
   const handleCategoryClick = (buttonId) => {
-    setIDCategory(buttonId);
+    const search = window.location.search;
+    const { search: searchValue } = queryString.parse(search);
+    const url = `/allbook?id=${buttonId}&search=${encodeURIComponent(searchValue)}`;
+    window.location.href = url;
   };
 
   useEffect(() => {
@@ -42,7 +48,9 @@ function AllBook() {
 
   useEffect(() => {
     const fetchApiBooks = async () => {
-      const response = await axios.get(`http://localhost:5000/api/book?limit=100&category=${idCategory}&page=${page}`);
+      const response = await axios.get(
+        `http://localhost:5000/api/book?limit=100&category=${idCategory}&page=${page}&search=${searchValue}`,
+      );
       const booksData = await response.data.books;
       setBooks(booksData);
       setTotalPage(response.data.totalPage);
@@ -55,7 +63,7 @@ function AllBook() {
     };
     fetchApiCategories();
     fetchApiBooks();
-  }, [idCategory, totalPage, page]);
+  }, [idCategory, totalPage, page, searchValue]);
 
   return (
     <div className={cx('wrapper')}>
@@ -85,7 +93,7 @@ function AllBook() {
               return (
                 <li className={cx('select-input__item')} key={category.id}>
                   <Link
-                    to={`${config.routes.allbook}?id=${idCategory}`}
+                    to={`${config.routes.allbook}?id=${category.id}&search=${encodeURIComponent(searchValue)}`}
                     onClick={() => handleCategoryClick(category.id)}
                     className={cx('select-input__link')}
                   >

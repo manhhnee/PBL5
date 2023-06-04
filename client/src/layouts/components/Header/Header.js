@@ -91,11 +91,11 @@ function Header() {
       title: 'Thông tin cá nhân',
       to: `/customer/information`,
     },
-    {
-      icon: <FontAwesomeIcon icon={faClipboard} />,
-      title: 'Đơn hàng yêu thích',
-      to: '/profile',
-    },
+    // {
+    //   icon: <FontAwesomeIcon icon={faClipboard} />,
+    //   title: 'Đơn hàng yêu thích',
+    //   to: '/profile',
+    // },
     {
       icon: <FontAwesomeIcon icon={faArrowRightFromBracket} />,
       title: 'Đăng xuất',
@@ -116,14 +116,14 @@ function Header() {
         <div className={cx('actions')}>
           {currentUser ? (
             <>
-              <HeadlessTippy delay={[0, 50]}>
+              {/* <HeadlessTippy delay={[0, 50]}>
                 <div className={cx('action-box')}>
                   <Link className={cx('action-btn')}>
                     <FontAwesomeIcon icon={faBell} />
                   </Link>
                   <span className={cx('action-note')}>Thông báo</span>
                 </div>
-              </HeadlessTippy>
+              </HeadlessTippy> */}
               <div className={cx('action-box')}>
                 <Link to="/cart" className={cx('action-btn')}>
                   <FontAwesomeIcon icon={faCartArrowDown} />

@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { useSpring, animated } from 'react-spring';
 import { useParams } from 'react-router-dom';
+import { Flip, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Image from '~/components/Image/Image';
 import Popup from '~/components/Popup';
@@ -32,7 +34,6 @@ function BookDetail() {
     opacity: isModalOpen ? 1 : 0,
   });
   const { id } = useParams();
-  console.log(book);
 
   function getJwtFromCookie() {
     //lấy token được lưu trong cookie ra
@@ -66,54 +67,61 @@ function BookDetail() {
   }, [id]);
 
   const handleAddToCart = async (id_BookSupplier, quantity) => {
-    await axios
-      .post(
-        'http://localhost:5000/api/cart/add',
-        {
-          id_BookSupplier: id_BookSupplier,
-          quantity: quantity,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${getJwtFromCookie()}`,
+    if (!getJwtFromCookie()) {
+      toast.warning('Vui lòng đăng nhập để thêm vào giỏ hàng');
+    } else {
+      await axios
+        .post(
+          'http://localhost:5000/api/cart/add',
+          {
+            id_BookSupplier: id_BookSupplier,
+            quantity: quantity,
           },
-        },
-      )
-      .then((response) => {
-        alert(response.data.message);
-      })
-      .catch((error) => {
-        alert('Something went wrong', error);
-      });
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${getJwtFromCookie()}`,
+            },
+          },
+        )
+        .then((response) => {
+          toast.success(response.data.message);
+        })
+        .catch((error) => {
+          alert('Something went wrong', error);
+        });
+    }
   };
 
   const handleCreateOneOrder = async (id_BookSupplier, quantity, Price, Amount, address) => {
-    console.log(id_BookSupplier, quantity, Price, Amount, address);
-    await axios
-      .post(
-        'http://localhost:5000/api/order/addOneItem',
-        {
-          id_BookSupplier: id_BookSupplier,
-          quantity: quantity,
-          Price: Price,
-          Amount: Amount,
-          address: address,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${getJwtFromCookie()}`,
+    if (!getJwtFromCookie()) {
+      toast.warning('Vui lòng đăng nhập để mua hàng');
+    } else {
+      await axios
+        .post(
+          'http://localhost:5000/api/order/addOneItem',
+          {
+            id_BookSupplier: id_BookSupplier,
+            quantity: quantity,
+            Price: Price,
+            Amount: Amount,
+            address: address,
           },
-        },
-      )
-      .then((response) => {
-        alert(response.data.message);
-        window.location.reload();
-      })
-      .catch((error) => {
-        alert('Something went wrong', error);
-      });
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${getJwtFromCookie()}`,
+            },
+          },
+        )
+        .then((res) => {
+          toast.success(res.data.message);
+          window.location.reload();
+        })
+        .catch((error) => {
+          alert('Something went wrong', error);
+        });
+    }
   };
 
   function handleIncrement() {
@@ -144,9 +152,22 @@ function BookDetail() {
   };
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        transition={Flip}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className={cx('main-detail')}>
         <div className={cx('left-content')}>
-          {imageList.map((image, index) => {
+          {imageList.slice(0, 5).map((image, index) => {
             return (
               <div className={cx('thumbnail')} key={index}>
                 <Image className={cx('small-img')} src={image.Image} alt="img1"></Image>{' '}
@@ -171,9 +192,7 @@ function BookDetail() {
               ? 0
               : book.Price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '')}
           </span>
-          <span className={cx('supplier')}>
-            Nhà cung cấp: {book.Supplier ? book.Supplier : 'Không có nhà cung cấp'}
-          </span>
+          <span className={cx('supplier')}>Nhà cung cấp: {book.Supplier ? book.Supplier : ' '}</span>
           <span className={cx('publisher')}>Nhà xuất bản: {book.Publisher}</span>
           <span className={cx('author')}>Tác giả: {book.Author}</span>
           <span className={cx('quantity')}>Số lượng: {book.Amount ? book.Amount : 'Hết hàng'}</span>

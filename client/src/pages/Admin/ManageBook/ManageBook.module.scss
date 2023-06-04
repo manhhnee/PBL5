@@ -39,3 +39,33 @@
   top: 0;
   z-index: 0;
 }
+
+select {
+  appearance: none;
+  padding: 0.5rem;
+  font-size: 1.4rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  width: 50%;
+  margin-top: 12px;
+}
+
+select option {
+  padding: 0.5rem;
+  font-size: 1.6rem;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+select::after {
+  content: '▼';
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+  /* Add any other desired styles for the dropdown arrow */
+}

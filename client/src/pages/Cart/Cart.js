@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import classNames from 'classnames/bind';
 import { useSpring, animated } from 'react-spring';
+import { Flip, ToastContainer, toast } from 'react-toastify';
 
 import BookItemCart from '~/components/BookItemCart/BookItemCart';
 import Button from '~/components/Button/Button';
@@ -84,18 +85,36 @@ function Cart() {
 
   return (
     <div className={cx('container')}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        transition={Flip}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       {cartItems.length === 0 ? (
         <p className={cx('cart-item-null')}>Không có sản phẩm nào trong giỏ hàng của bạn.</p>
       ) : (
         cartItems.map((cartItem) => {
-          return <BookItemCart data={cartItem} key={cartItem.id} />;
+          return (
+            <>
+              <BookItemCart data={cartItem} key={cartItem.id} />
+              <div className={cx('options')}>
+                <Button onClick={() => openModal()} primary>
+                  Thanh toán
+                </Button>
+              </div>
+            </>
+          );
         })
       )}
-      <div className={cx('options')}>
-        <Button onClick={() => openModal()} primary>
-          Thanh toán tất cả
-        </Button>
-      </div>
+
       <Popup isOpen={isModalOpen} onRequestClose={() => closeModal()} width={String('500px')} height={'300px'}>
         <animated.div style={modalAnimation}>
           <h2>Xác nhận thanh toán</h2>

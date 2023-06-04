@@ -32,7 +32,7 @@ function AdminDelivering() {
       const response = await axios.get('http://localhost:5000/api/order/delivering', {
         headers: { Authorization: `Bearer ${getJwtFromCookie()}` },
       });
-      setOrderList(response.data.orders);
+      setOrderList(response.data);
     };
     getApiOrderPending();
   }, []);

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
+import { Flip, ToastContainer, toast } from 'react-toastify';
 
 import Image from '~/components/Image';
 import Button from '~/components/Button';
@@ -32,7 +33,7 @@ function BookItemCart({ data }) {
         headers: { Authorization: `Bearer ${getJwtFromCookie()}` },
       })
       .then((response) => {
-        alert(response.data.message);
+        toast.success(response.data.message);
       })
       .catch((err) => {
         alert('Sth wrong', err);
@@ -42,6 +43,19 @@ function BookItemCart({ data }) {
 
   return (
     <div className={cx('wrapper')}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        transition={Flip}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className={cx('content-left')}>
         <Image className={cx('img')} src={data.Image}></Image>
       </div>
