@@ -254,6 +254,7 @@ order.getHistoryOrderList = function (id_Account, results) {
                     INNER JOIN status s ON mo.id_Status = s.id
                     INNER JOIN payment p ON mo.id_Payment = p.id
                     WHERE mo.id_Account = ? 
+<<<<<<< HEAD
                     GROUP BY mo.id DESC`;
   db.query(query, [id_Account], function (err, Orders) {
     results({ OrderList: Orders });
@@ -303,12 +304,31 @@ order.getHistoryCancelOrderList = function (id_Account, results) {
     results({ OrderList: Orders });
   });
 };
+=======
+                    GROUP BY mo.id DESC`
+    db.query(query,[id_Account],function(err,Orders){
+        results({OrderList:Orders})
+    })
+}
+order.getHistoryStatusOrderList = function(id_Account,id_status,results){
+    const query = `SELECT mo.*,s.Status,p.Payment_Method
+                    FROM make_order mo
+                    INNER JOIN status s ON mo.id_Status = s.id
+                    INNER JOIN payment p ON mo.id_Payment = p.id
+                    WHERE mo.id_Account = ? AND mo.id_Status = ? 
+                    GROUP BY mo.id DESC`
+    db.query(query,[id_Account,id_status],function(err,Orders){
+        results({OrderList:Orders})
+    })
+}
+>>>>>>> master
 //xem lich su don hang nhieu tai khoan
 
 order.getOrderList = function (results) {
   const query = `SELECT mo.*,i.id_Account,i.FirstName,i.LastName,i.PhoneNumber,i.Avatar,i.Address
                     FROM make_order mo
                     INNER JOIN inforuser i ON i.id_Account = mo.id_Account
+<<<<<<< HEAD
                     GROUP BY mo.id DESC`;
   db.query(query, [], function (err, orders) {
     if (err) return err;
@@ -384,6 +404,43 @@ order.changeStatus = function (id_Order, results) {
               } else {
                 results({ success: true, message: "update status thành công" });
               }
+=======
+                    GROUP BY mo.id DESC`
+    db.query(query,[],function(err, orders){
+        if(err) return err
+        else {
+            results(orders)
+        }
+    })
+}
+order.getStatusOrder = function(id_status,results){
+    const query = `SELECT mo.*,i.id_Account,i.FirstName,i.LastName,i.PhoneNumber,i.Avatar,i.Address
+                    FROM make_order mo
+                    INNER JOIN inforuser i ON i.id_Account = mo.id_Account
+                    WHERE mo.id_Status = ? GROUP BY mo.id DESC`
+    db.query(query,[id_status],function(err, orders){
+        if(err) return err
+        else {
+            results(orders)
+        }
+    })
+}
+order.changeStatus = function(id_Order,results){
+    db.query(`SELECT * FROM make_order WHERE id= ? `,[id_Order],function(err,orders){
+        if(err) throw err
+        else{
+            if(orders[0].id_Status==3||orders[0].id_Status==4){
+                return results({message:"can not change status anymore"})
+            }
+            else {                
+                db.query("UPDATE make_order SET id_Status =? WHERE id =?",[orders[0].id_Status+1,id_Order],
+                function(err, order){
+                    if(err){return results({message:err.message})}
+                    else {
+                        results({success:true,message:"update status thành công"})
+                    } 
+                })
+>>>>>>> master
             }
           );
         }
