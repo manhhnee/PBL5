@@ -20,7 +20,7 @@ cart.getCartDetailsbyIdAccount = function (id_Account, results) {
                       INNER JOIN book_supplier bs ON ci.id_BookSupplier = bs.id
                       INNER JOIN book b ON bs.id_Book = b.id
                       INNER JOIN category c ON c.id = b.id_Category
-                      INNER JOIN (
+                      LEFT JOIN (
                         SELECT id_Book, Image FROM image_book GROUP BY id_Book
                       ) ib ON b.id = ib.id_Book
                       INNER JOIN supplier s ON bs.id_Supplier = s.id
