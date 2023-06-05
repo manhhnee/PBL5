@@ -18,7 +18,8 @@ class InforUserController{
         })
     }
     addStaff(req,res,next){
-        InforUserModel.addStaff(req.body,function(data){
+        const avatarPath = req.file ? `http://localhost:5000/${req.file.path}` : null;
+        InforUserModel.addStaff(req.body,avatarPath,function(data){
             res.json(data)
         })
     }
