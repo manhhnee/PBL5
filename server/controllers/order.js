@@ -1,7 +1,7 @@
 const OrderModel = require("../models/order");
 class OrderController {
     OrderAll(req, res, next) {
-        OrderModel.CreateOrderAllCart(req.user.id,req.body.address, function (data) {
+        OrderModel.CreateOrderAllCart(req.user.id,req.body.OrderItems,req.body.address, function (data) {
             res.json(data)
         })
     }
