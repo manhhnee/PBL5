@@ -188,18 +188,19 @@ function ManageCategory() {
       </Popup>
 
       <div className={cx('category-list')}>
-        {listCategory.map((category) => {
-          return (
-            <div
-              className={cx('category')}
-              onClick={() => openModal1(category.id, category.Name, category.Image)}
-              key={category.id}
-            >
-              <Image src={category.Image} alt="category" className={cx('image')} />
-              <span className={cx('name')}>{category.Name}</span>
-            </div>
-          );
-        })}
+        {listCategory &&
+          listCategory.map((category) => {
+            return (
+              <div
+                className={cx('category')}
+                onClick={() => openModal1(category.id, category.Name, category.Image)}
+                key={category.id}
+              >
+                <Image src={category.Image} alt="category" className={cx('image')} />
+                <span className={cx('name')}>{category.Name}</span>
+              </div>
+            );
+          })}
       </div>
 
       <Popup isOpen={isModalOpen1} onRequestClose={() => closeModal1()} width={'450px'} height={'450px'}>

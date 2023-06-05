@@ -3,18 +3,21 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { faImage } from '@fortawesome/free-regular-svg-icons';
-import { faBook } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faPlus, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { useSpring, animated } from 'react-spring';
 
 import Button from '~/components/Button/Button';
 import Popup from '~/components/Popup/Popup';
 import InputForm from '~/components/InputForm/InputForm';
 import styles from './ManageBook.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const cx = classNames.bind(styles);
 
 function ManageBook() {
   const [books, setBooks] = useState([]);
+  const [avatar, setAvatar] = useState([]);
+  const [image, setImage] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState('1');
   const [bookId, setBookId] = useState();
@@ -30,7 +33,8 @@ function ManageBook() {
     id_Category: '',
     date: '',
   });
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen1, setIsModalOpen1] = useState(false);
+  const [isModalOpen2, setIsModalOpen2] = useState(false);
 
   function getJwtFromCookie() {
     //lấy token được lưu trong cookie ra
@@ -58,12 +62,13 @@ function ManageBook() {
       console.log(e);
     }
   };
-  const getDetailBook = async (id) => {
+  const fetchApiDetailBook = async (id) => {
     try {
-      setIsModalOpen(true);
+      setIsModalOpen1(true);
       const response = await axios.get(`http://localhost:5000/api/book/detail/${id}`);
 
       const { book } = response.data;
+      console.log(book);
       setPayload((prevPayload) => ({
         ...prevPayload,
         name: book.Name,
@@ -79,10 +84,39 @@ function ManageBook() {
     }
   };
 
-  const getCategories = async () => {
+  const fetchApiCategories = async () => {
     const response = await axios.get('http://localhost:5000/api/category');
     const categoriesData = await response.data;
     setCategories(categoriesData);
+  };
+
+  const handleAddBook = async (idCategory, name, price, author, description, date, publisher, image) => {
+    await axios
+      .post(
+        'http://localhost:5000/api/book/add',
+        {
+          id_Category: idCategory,
+          Name: name,
+          Price: price,
+          Author: author,
+          Description: description,
+          Publication_Date: date,
+          Image: image,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${getJwtFromCookie()}`,
+          },
+        },
+      )
+      .then((res) => {
+        alert(res.data.message);
+        window.location.reload();
+      })
+      .catch((err) => {
+        alert(err);
+      });
   };
 
   const handleUpdateBook = async (id, idCategory, name, price, author, description, date, publisher) => {
@@ -130,7 +164,7 @@ function ManageBook() {
 
   useEffect(() => {
     getBooks();
-    getCategories();
+    fetchApiCategories();
   }, []);
 
   useEffect(() => {
@@ -140,12 +174,24 @@ function ManageBook() {
 
     setFilteredBooks(result);
   }, [search, books]);
-  const modalAnimation = useSpring({
-    opacity: isModalOpen ? 1 : 0,
+  const modalAnimation1 = useSpring({
+    opacity: isModalOpen1 ? 1 : 0,
+  });
+  const modalAnimation2 = useSpring({
+    opacity: isModalOpen2 ? 1 : 0,
   });
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const closeModal1 = () => {
+    setIsModalOpen1(false);
+  };
+
+  const openModal2 = () => {
+    setIsModalOpen2(true);
+    setPayload({});
+  };
+
+  const closeModal2 = () => {
+    setIsModalOpen2(false);
   };
 
   const columns = [
@@ -171,24 +217,39 @@ function ManageBook() {
 
   const handleRowClick = (row) => {
     const bookId = row.id;
-    getDetailBook(bookId);
+    fetchApiDetailBook(bookId);
     setBookId(bookId);
+  };
+
+  const handleImgChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setImage(e.target.result);
+    };
+
+    reader.readAsDataURL(file);
+    setAvatar(e.target.files[0]);
   };
 
   return (
     <div className={cx('wrapper')}>
-      <div style={{ maxWidth: '100%' }}>
-        <DataTable
-          title="Danh sách truyện"
-          columns={columns}
-          data={filteredBooks}
-          fixedHeader
-          fixedHeaderScrollHeight="500px"
-          pointerOnHover
-          highlightOnHover
-          className={cx('fixed-header')}
-          subHeader
-          subHeaderComponent={
+      <DataTable
+        title="Danh sách truyện"
+        columns={columns}
+        data={filteredBooks}
+        fixedHeader
+        fixedHeaderScrollHeight="500px"
+        pointerOnHover
+        highlightOnHover
+        pagination
+        className={cx('fixed-header')}
+        subHeader
+        subHeaderComponent={
+          <div className={cx('wrapper-header')}>
+            <Button onClick={openModal2} leftIcon={<FontAwesomeIcon icon={faPlus} />} blue>
+              Thêm sách
+            </Button>
             <input
               type="text"
               placeholder="Tìm kiếm sách ở đây"
@@ -196,14 +257,15 @@ function ManageBook() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             ></input>
-          }
-          onRowClicked={(row) => {
-            handleRowClick(row);
-          }}
-        />
-      </div>
-      <Popup isOpen={isModalOpen} onRequestClose={() => closeModal()} width={'700px'} height={'700px'}>
-        <animated.div style={modalAnimation}>
+          </div>
+        }
+        onRowClicked={(row) => {
+          handleRowClick(row);
+        }}
+      />
+
+      <Popup isOpen={isModalOpen1} onRequestClose={() => closeModal1()} width={'700px'} height={'700px'}>
+        <animated.div style={modalAnimation1}>
           <h2>Thông tin sách</h2>
           <div className={cx('input-field')}>
             <div className={cx('header')}>Tên sách</div>
@@ -268,20 +330,23 @@ function ManageBook() {
           <div className={cx('input-field')}>
             <div className={cx('header')}>Thể loại</div>
             <select
+              className={cx('input-select')}
               value={selectedCategoryId}
               onChange={(e) => {
                 setSelectedCategoryId(e.target.value);
               }}
             >
-              {categories.map((category) => {
-                return (
-                  <option key={category.id} value={category.id}>
-                    {category.Name}
-                  </option>
-                );
-              })}
+              {categories &&
+                categories.map((category) => {
+                  return (
+                    <option key={category.id} value={category.id}>
+                      {category.Name}
+                    </option>
+                  );
+                })}
             </select>
           </div>
+
           <div className={cx('options')}>
             <Button
               onClick={() =>
@@ -302,6 +367,118 @@ function ManageBook() {
             </Button>
             <Button onClick={() => handleDeleteBook(bookId)} primary>
               Xóa
+            </Button>
+          </div>
+        </animated.div>
+      </Popup>
+      <Popup isOpen={isModalOpen2} onRequestClose={() => closeModal2()} width={'700px'} height={'700px'}>
+        <animated.div style={modalAnimation2}>
+          <h2>Thông tin sách</h2>
+          <div className={cx('input-field')}>
+            <div className={cx('header')}>Tên sách</div>
+            <InputForm
+              placeholder=""
+              type="text"
+              value={payload.name}
+              setValue={setPayload}
+              name={'name'}
+              className={cx('input')}
+              leftIcon={faBook}
+            />
+          </div>
+          <div className={cx('input-field')}>
+            <div className={cx('header')}>Tác giả</div>
+            <InputForm
+              placeholder=""
+              type="text"
+              value={payload.author}
+              setValue={setPayload}
+              name={'author'}
+              className={cx('input')}
+              leftIcon={faImage}
+            />
+          </div>
+          <div className={cx('input-field')}>
+            <div className={cx('header')}>Nhà sản xuất</div>
+            <InputForm
+              placeholder=""
+              type="text"
+              value={payload.publisher}
+              setValue={setPayload}
+              name={'publisher'}
+              className={cx('input')}
+              leftIcon={faImage}
+            />
+          </div>
+          <div className={cx('input-field')}>
+            <div className={cx('header')}>Giá</div>
+            <InputForm
+              placeholder=""
+              type="text"
+              value={payload.price}
+              setValue={setPayload}
+              name={'price'}
+              className={cx('input')}
+              leftIcon={faImage}
+            />
+          </div>
+          <div className={cx('input-field')}>
+            <div className={cx('header')}>Mô tả</div>
+            <InputForm
+              placeholder=""
+              type="text"
+              value={payload.description}
+              setValue={setPayload}
+              name={'description'}
+              className={cx('input')}
+              leftIcon={faImage}
+            />
+          </div>
+          <div className={cx('input-field')}>
+            <div className={cx('header')}>Thể loại</div>
+            <select
+              className={cx('input-select')}
+              value={selectedCategoryId}
+              onChange={(e) => {
+                setSelectedCategoryId(e.target.value);
+              }}
+            >
+              {categories.map((category) => {
+                return (
+                  <option key={category.id} value={category.id}>
+                    {category.Name}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          <div className={cx('input-field')}>
+            <div className={cx('header')}>Ảnh của sách</div>
+            <div className={cx('upload-field')}>
+              {avatar && <img src={image} className={cx('image')} alt="Avatar" />}
+              <label htmlFor="file-upload" className={cx('upload-btn')}>
+                <FontAwesomeIcon icon={faUpload}></FontAwesomeIcon>
+                <input id="file-upload" type="file" onChange={handleImgChange}></input>
+              </label>
+            </div>
+          </div>
+          <div className={cx('options')}>
+            <Button
+              onClick={() =>
+                handleAddBook(
+                  selectedCategoryId,
+                  payload.name,
+                  payload.price,
+                  payload.author,
+                  payload.description,
+                  new Date().toString(),
+                  payload.publisher,
+                  image,
+                )
+              }
+              outline
+            >
+              Xác nhận
             </Button>
           </div>
         </animated.div>

@@ -165,6 +165,7 @@ function Information() {
             <div className={cx('header')}>Tài khoản</div>
             <div className={cx('input-field')}>
               <InputForm
+                readOnly
                 placeholder="Enter Username..."
                 type="text"
                 value={payload.username}

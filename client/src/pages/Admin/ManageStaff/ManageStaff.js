@@ -154,20 +154,21 @@ function ManageStaff() {
         </Button>
       </div>
       <div className={cx('staff-list')}>
-        {listStaff.map((staff) => {
-          return (
-            <div
-              className={cx('staff')}
-              onClick={() =>
-                openModal1(staff.id_Account, staff.FirstName, staff.LastName, staff.Address, staff.PhoneNumber)
-              }
-              key={staff.id}
-            >
-              <Image src={staff.Avatar} alt="staff" className={cx('image')} />
-              <span className={cx('name')}>{staff.FirstName + ' ' + staff.LastName}</span>
-            </div>
-          );
-        })}
+        {listStaff &&
+          listStaff.map((staff) => {
+            return (
+              <div
+                className={cx('staff')}
+                onClick={() =>
+                  openModal1(staff.id_Account, staff.FirstName, staff.LastName, staff.Address, staff.PhoneNumber)
+                }
+                key={staff.id}
+              >
+                <Image src={staff.Avatar} alt="staff" className={cx('image')} />
+                <span className={cx('name')}>{staff.FirstName + ' ' + staff.LastName}</span>
+              </div>
+            );
+          })}
       </div>
       <Popup isOpen={isModalOpen1} onRequestClose={() => closeModal1()} width={String('600px')} height={'520px'}>
         <animated.div style={modalAnimation1}>

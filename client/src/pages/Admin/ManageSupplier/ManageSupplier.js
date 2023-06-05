@@ -154,7 +154,7 @@ function ManageSupplier() {
           columns={columns}
           data={suppliers}
           fixedHeader
-          fixedHeaderScrollHeight="500px"
+          fixedHeaderScrollHeight="600px"
           pointerOnHover
           highlightOnHover
           className={cx('fixed-header')}
