@@ -4,7 +4,8 @@ import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { useSpring, animated } from 'react-spring';
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 import { Flip, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -33,7 +34,9 @@ function BookDetail() {
   const modalAnimation = useSpring({
     opacity: isModalOpen ? 1 : 0,
   });
-  const { id } = useParams();
+  const location = useLocation();
+  const { id } = queryString.parse(location.search);
+  console.log(id);
 
   function getJwtFromCookie() {
     //lấy token được lưu trong cookie ra
@@ -116,7 +119,9 @@ function BookDetail() {
         )
         .then((res) => {
           toast.success(res.data.message);
-          window.location.reload();
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
         })
         .catch((error) => {
           alert('Something went wrong', error);

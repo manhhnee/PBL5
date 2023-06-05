@@ -34,11 +34,14 @@ function BookItemCart({ data }) {
       })
       .then((response) => {
         toast.success(response.data.message);
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
       })
       .catch((err) => {
         alert('Sth wrong', err);
       });
-    window.location.reload();
   };
 
   return (

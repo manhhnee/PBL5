@@ -13,8 +13,9 @@ const routes = {
   //profile
   information: '/customer/information',
   history: '/customer/history',
+  historydetails: '/customer/historydetails',
   cart: '/cart',
-  bookdetail: '/bookdetail/:id',
+  bookdetail: '/bookdetail',
   allbook: '/allbook',
   //staff
   staffRecent: '/staff/recentOrders',

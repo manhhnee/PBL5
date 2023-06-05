@@ -54,7 +54,7 @@ function Cart() {
         },
       )
       .then((res) => {
-        alert(res.data.message);
+        toast.success(res.data.message);
         window.location.reload();
       })
       .catch((e) => {
@@ -102,19 +102,17 @@ function Cart() {
         <p className={cx('cart-item-null')}>Không có sản phẩm nào trong giỏ hàng của bạn.</p>
       ) : (
         cartItems.map((cartItem) => {
-          return (
-            <>
-              <BookItemCart data={cartItem} key={cartItem.id} />
-              <div className={cx('options')}>
-                <Button onClick={() => openModal()} primary>
-                  Thanh toán
-                </Button>
-              </div>
-            </>
-          );
+          return <BookItemCart data={cartItem} key={cartItem.id} />;
         })
       )}
-
+      {cartItems.length > 0 && (
+        <div className={cx('options')}>
+          <Button onClick={() => openModal()} primary>
+            Thanh toán
+          </Button>
+        </div>
+      )}
+      ,
       <Popup isOpen={isModalOpen} onRequestClose={() => closeModal()} width={String('500px')} height={'300px'}>
         <animated.div style={modalAnimation}>
           <h2>Xác nhận thanh toán</h2>

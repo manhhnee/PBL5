@@ -30,7 +30,7 @@ function StaffDelivering() {
   }
   useEffect(() => {
     const getApiOrderPending = async () => {
-      const response = await axios.get('http://localhost:5000/api/order/delivering', {
+      const response = await axios.get('http://localhost:5000/api/order/2', {
         headers: { Authorization: `Bearer ${getJwtFromCookie()}` },
       });
       setOrderList(response.data);

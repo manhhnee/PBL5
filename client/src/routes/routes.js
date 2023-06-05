@@ -5,6 +5,7 @@ import Home from '~/pages/Public/Home';
 import Error from '~/pages/Public/Error';
 import Information from '~/pages/Information';
 import History from '~/pages/History';
+import BookItemHistory from '~/pages/BookItemHistory';
 import Cart from '~/pages/Cart';
 import Login from '~/pages/Public/Login';
 import BookDetail from '~/pages/Public/BookDetail';
@@ -34,6 +35,7 @@ const publicRoutes = [
   { path: config.routes.bookdetail, component: BookDetail, layout: HeaderAndFooter },
   { path: config.routes.information, component: Information, layout: HeaderOnly },
   { path: config.routes.history, component: History, layout: HeaderOnly },
+  { path: config.routes.historydetails, component: BookItemHistory, layout: HeaderOnly },
   { path: config.routes.cart, component: Cart, layout: HeaderOnly },
   { path: config.routes.error, component: Error, layout: null },
   { path: config.routes.allbook, component: AllBook, layout: HeaderAndFooter },
