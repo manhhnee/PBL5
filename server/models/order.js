@@ -127,7 +127,6 @@ order.CreateOrder = function(id_Account,orderItem,address,results){
         )
     }
 }
-
 //huy don hang
 order.cancelOrder = function(id_Order,results){
     db.query(`SELECT * FROM make_order WHERE id= ? `,[id_Order],function(err,orders){
