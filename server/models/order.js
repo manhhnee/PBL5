@@ -65,7 +65,6 @@ order.CreateOrder = function (id_Account, orderItem, address, results) {
     var today = new Date()
     if (orderItem.quantity > orderItem.Amount) return results({ success: false, message: "số lượng đặt vượt quá sản phẩm trong kho" })
     else {
-        console.log("1")
         db.query(
             "INSERT INTO make_order (id_Status,id_Account,id_Payment,OrderDate,OrderAddress) VALUES (?, ?, ?, ?, ?)",
             [1, id_Account, 1, today, address],
@@ -140,7 +139,7 @@ order.GetOrderDetailsbyOrderId = function (id_Order, results) {
                     FROM order_item oi
                     INNER JOIN book_supplier bs ON oi.id_BookSupplier = bs.id
                     INNER JOIN book b ON bs.id_Book = b.id
-                    INNER JOIN (
+                    LEFT JOIN (
                     SELECT id_Book, Image FROM image_book GROUP BY id_Book
                     ) ib ON b.id = ib.id_Book
                     INNER JOIN supplier s ON bs.id_Supplier = s.id
