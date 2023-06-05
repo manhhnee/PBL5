@@ -1,0 +1,41 @@
+.wrapper {
+  margin-top: 20px;
+}
+
+.btn {
+  min-width: 80px;
+}
+.search {
+  width: 40%;
+  height: 46px;
+  background-color: rgba(22, 24, 35, 0.06);
+  border-radius: 92px;
+  display: flex;
+  border: 1.5px solid transparent;
+  padding: 0 18px;
+  font-size: 1.5rem;
+}
+
+.header {
+  font-size: 2rem;
+  color: var(--black);
+  font-weight: 500;
+  margin-top: 18px;
+}
+
+.input {
+  display: grid;
+  grid-template-columns: 10% 80%;
+}
+
+.options {
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.fixed-header {
+  position: sticky;
+  top: 0;
+  z-index: 0;
+}

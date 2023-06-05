@@ -1,6 +1,16 @@
+.container {
+  min-height: 100vh;
+}
+
 .cart-item-null {
   height: calc(100vh - 70px);
   width: 100%;
   text-align: center;
   padding: 20px 0;
+}
+
+.options {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
 }

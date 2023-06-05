@@ -99,7 +99,7 @@ order.CreateOrder = function (id_Account, orderItem, address, results) {
                         })
                 }
             }
-        )
+        );
     }
 }
 //huy don hang
@@ -120,7 +120,7 @@ order.cancelOrder = function (id_Order, results) {
                     })
             }
         }
-    })
+    });
 }
 // xem chi tiet don hang
 order.GetOrderDetailsbyOrderId = function (id_Order, results) {
@@ -128,7 +128,7 @@ order.GetOrderDetailsbyOrderId = function (id_Order, results) {
                 FROM make_order mo
                 INNER JOIN status s ON mo.id_Status = s.id
                 INNER JOIN payment p ON mo.id_Payment = p.id
-                WHERE mo.id = ?`
+                WHERE mo.id = ?`;
 
     db.query(query1, [id_Order],
         function (err, orderInfor) {
@@ -218,7 +218,7 @@ order.changeStatus = function (id_Order, results) {
                     })
             }
         }
-    })
+    });
 }
 // xem doanh thu
 

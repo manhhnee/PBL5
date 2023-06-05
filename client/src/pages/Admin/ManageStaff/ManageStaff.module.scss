@@ -48,8 +48,8 @@
   display: flex;
 }
 
-.input {
-  margin: 12px;
+.input + .input {
+  margin-left: 10px;
 }
 
 .options {

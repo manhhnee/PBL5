@@ -9,7 +9,7 @@
   padding-left: 12px;
   padding-top: 12px;
   background-color: #f5f5fb;
-  max-height: 100vh;
+  height: 100vh;
   overflow-y: auto;
 }
 
@@ -32,6 +32,11 @@
   &:first-child {
     margin-top: 60px;
   }
+}
+
+.btn.active {
+  color: var(--blue);
+  border-right: 3px solid var(--blue);
 }
 
 .line {

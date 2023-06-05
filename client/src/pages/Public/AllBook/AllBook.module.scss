@@ -80,6 +80,7 @@
   text-decoration: none;
   display: block;
   padding: 8px 0;
+  cursor: pointer;
 }
 
 .select-input__link:hover {
@@ -91,4 +92,38 @@
   &:hover {
     background-color: aliceblue;
   }
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+  padding: 12px 0;
+}
+
+.pagination-item {
+  margin: 0 12px;
+  text-decoration: none;
+  font-weight: 300;
+  font-size: 2rem;
+  color: #939393;
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    border-radius: 5px;
+    background-color: var(--gray);
+    color: var(--white);
+  }
+}
+
+.pagination-item.active {
+  background-color: var(--primary);
+  color: var(--white);
 }

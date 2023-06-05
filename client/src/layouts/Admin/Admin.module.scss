@@ -21,7 +21,7 @@
   width: 100%;
   height: 56px;
   justify-content: left;
-  color: var(--black);
+  color: var(--text-color);
   font-size: 1.6rem;
   margin-top: 15px;
 
@@ -32,6 +32,15 @@
   &:first-child {
     margin-top: 60px;
   }
+}
+
+.btn.active {
+  color: var(--blue);
+  border-right: 3px solid var(--blue);
+}
+
+.icon {
+  color: var(--blue);
 }
 
 .container-left {

@@ -1,11 +1,12 @@
 import classNames from 'classnames/bind';
-
-import styles from './Footer.module.scss';
-import images from '~/assets/images';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faInstagram, faPinterest, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
+
+import images from '~/assets/images';
+import config from '~/config';
+import styles from './Footer.module.scss';
 
 const cx = classNames.bind(styles);
 
@@ -42,9 +43,12 @@ function Footer() {
               <h3>TÌM HIỂU THÊM</h3>
             </div>
             <div className={cx('contents')}>
-              <Link className={cx('content-item')}>Giới thiệu 2H&M</Link>
-              <Link className={cx('content-item')}>Chính sách bảo mật</Link>
-              <Link className={cx('content-item')}>Điều khoản sử dụng</Link>
+              <Link to={config.routes.introduce} className={cx('content-item')}>
+                Giới thiệu 2H&M
+              </Link>
+              <Link to={config.routes.privacy} className={cx('content-item')}>
+                Chính sách bảo mật
+              </Link>
             </div>
           </div>
           <div className={cx('static')}>

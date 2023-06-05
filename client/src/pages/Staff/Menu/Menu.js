@@ -14,7 +14,7 @@ function Menu() {
       <Button
         className={cx('btn-state1')}
         leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faRectangleList} />}
-        to={config.routes.adminWaiting}
+        to={config.routes.staffWaiting}
       >
         <span className={cx('number')}>4</span>
         <span className={cx('state')}>Đơn hàng đang chờ</span>
@@ -22,7 +22,7 @@ function Menu() {
       <Button
         className={cx('btn-state2')}
         leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faRectangleList} />}
-        to={config.routes.adminDelivering}
+        to={config.routes.staffDelivering}
       >
         <span className={cx('number')}>4</span>
         <span className={cx('state')}>Đang vận chuyển</span>
@@ -30,7 +30,7 @@ function Menu() {
       <Button
         className={cx('btn-state3')}
         leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faRectangleList} />}
-        to={config.routes.adminSuccess}
+        to={config.routes.staffSuccess}
       >
         <span className={cx('number')}>4</span>
         <span className={cx('state')}>Giao thành công</span>

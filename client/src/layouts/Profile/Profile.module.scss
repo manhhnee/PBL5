@@ -11,7 +11,7 @@
   width: 100%;
   height: 56px;
   justify-content: left;
-  color: var(--text-color);
+  color: var(--black);
   font-size: 1.6rem;
   margin-top: 15px;
 
@@ -25,6 +25,6 @@
 }
 
 .btn.active {
-  color: var(--black);
+  color: var(--blue);
   border-right: 3px solid var(--blue);
 }
