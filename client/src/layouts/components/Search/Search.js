@@ -30,7 +30,7 @@ function Search() {
     const fetchApi = async () => {
       setLoading(true);
       const results = await searchServices.search(debounced);
-      setSearchResult(results);
+      setSearchResult(results.books);
       setLoading(false);
     };
 
@@ -52,6 +52,12 @@ function Search() {
 
     if (!searchValue.startsWith(' ')) {
       setSearchValue(searchValue);
+    }
+  };
+
+  const handleSearch = () => {
+    if (searchValue.trim() !== '') {
+      window.location.href = `/allbook?search=${encodeURIComponent(searchValue)}`;
     }
   };
 
@@ -97,7 +103,7 @@ function Search() {
           )}
           {loading && <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
 
-          <button className={cx('search-btn')} onMouseDown={(e) => e.preventDefault()}>
+          <button className={cx('search-btn')} onClick={handleSearch} onMouseDown={(e) => e.preventDefault()}>
             <FontAwesomeIcon icon={faSearch} />
           </button>
         </div>

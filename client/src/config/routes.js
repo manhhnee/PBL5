@@ -1,13 +1,21 @@
 const routes = {
+  //header
   home: '/',
   error: '/error',
   search: '/search',
   login: '/login',
+  //footer
+  introduce: '/introduce',
+  privacy: '/privacy',
+  termsofuse: '/termsofuse',
+  returnPolicy: '/returnPolicy',
+  warrantyPolicy: '/warrantyPolicy',
   //profile
-  information: '/customer/information/:id',
-  history: '/customer/history/:id',
+  information: '/customer/information',
+  history: '/customer/history',
+  historydetails: '/customer/historydetails',
   cart: '/cart',
-  bookdetail: '/bookdetail/:id',
+  bookdetail: '/bookdetail',
   allbook: '/allbook',
   //staff
   staffRecent: '/staff/recentOrders',
@@ -20,6 +28,10 @@ const routes = {
   adminDelivering: '/admin/deliveringOrders',
   adminSuccess: '/admin/successOrders',
   manageStaff: '/admin/manageStaff',
+  manageCategory: '/admin/manageCategory',
+  manageBook: '/admin/manageBook',
+  manageStore: '/admin/manageStore',
+  manageSupplier: '/admin/manageSupplier',
   revenue: '/admin/revenue',
 };
 

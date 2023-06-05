@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRectangleList, faHouseChimney } from '@fortawesome/free-solid-svg-icons';
+import { faHouseChimney, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
 
 import styles from './Staff.module.scss';
@@ -14,6 +14,14 @@ const cx = classNames.bind(styles);
 
 function Staff({ children }) {
   const [infor, setInfor] = useState({});
+  const [activeButton, setActiveButton] = useState(() => {
+    const storageActive = localStorage.getItem('active');
+    return storageActive ? parseInt(storageActive) : 1;
+  });
+  const handleClick = (buttonId) => {
+    setActiveButton(buttonId);
+    localStorage.setItem('active', buttonId);
+  };
 
   function getJwtFromCookie() {
     //lấy token được lưu trong cookie ra
@@ -63,13 +71,14 @@ function Staff({ children }) {
         <Button
           to={config.routes.staffRecent}
           leftIcon={<FontAwesomeIcon icon={faHouseChimney}></FontAwesomeIcon>}
-          className={cx('btn')}
+          className={cx('btn', `${activeButton === 1 ? 'active' : ''}`)}
+          onClick={() => handleClick(1)}
         >
           Home
         </Button>
         <Button
           onClick={Logout}
-          leftIcon={<FontAwesomeIcon icon={faHouseChimney}></FontAwesomeIcon>}
+          leftIcon={<FontAwesomeIcon icon={faRightFromBracket}></FontAwesomeIcon>}
           className={cx('btn')}
         >
           Đăng xuất
@@ -82,32 +91,6 @@ function Staff({ children }) {
             {currentDate.getDay() + 1}
           </span>
           <span className={cx('name')}>Xin chào, {infor.FirstName + ' ' + infor.LastName}</span>
-          <div className={cx('states')}>
-            <Button
-              className={cx('btn-state1')}
-              leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faRectangleList} />}
-              to={config.routes.staffWaiting}
-            >
-              <span className={cx('number')}>4</span>
-              <span className={cx('state')}>Đơn hàng đang chờ</span>
-            </Button>
-            <Button
-              className={cx('btn-state2')}
-              leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faRectangleList} />}
-              to={config.routes.staffDelivering}
-            >
-              <span className={cx('number')}>4</span>
-              <span className={cx('state')}>Đang vận chuyển</span>
-            </Button>
-            <Button
-              className={cx('btn-state3')}
-              leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faRectangleList} />}
-              to={config.routes.staffSuccess}
-            >
-              <span className={cx('number')}>4</span>
-              <span className={cx('state')}>Giao thành công</span>
-            </Button>
-          </div>
         </div>
         {children}
       </div>
