@@ -1,9 +1,8 @@
 import classNames from 'classnames/bind';
 import { Link, useNavigate } from 'react-router-dom';
-import HeadlessTippy from '@tippyjs/react/headless';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faClipboard, faUser } from '@fortawesome/free-regular-svg-icons';
-import { faArrowRightFromBracket, faCartArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-regular-svg-icons';
+import { faArrowRightFromBracket, faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import { useCallback, useEffect, useState } from 'react';
 
 import styles from './Header.module.scss';
@@ -12,6 +11,7 @@ import images from '~/assets/images';
 import Search from '~/layouts/components/Search';
 import Menu from '~/components/Popper/Menu';
 import Button from '~/components/Button';
+import axios from 'axios';
 
 const cx = classNames.bind(styles);
 
@@ -19,6 +19,7 @@ function Header() {
   const [currentUser, setCurrenUser] = useState(false);
   const [showHeader, setShowHeader] = useState(true);
   const [infor, setInfor] = useState({});
+  const [countCart, setCountCart] = useState(null);
 
   const navigate = useNavigate();
   const goLogin = useCallback(
@@ -67,22 +68,31 @@ function Header() {
   }
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/user/profile/customer', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${getJwtFromCookie()}`, // trả token về server để xử lí
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        if (response.success === true) {
-          setCurrenUser(true);
-          setInfor(response.user);
-        } else {
-          setInfor({});
-          setCurrenUser(false);
-        }
+    const getApiProfileCustomer = async () => {
+      const response = await axios.get('http://localhost:5000/api/user/profile/customer', {
+        headers: {
+          Authorization: `Bearer ${getJwtFromCookie()}`,
+        },
       });
+      if (response.data.success === true) {
+        setCurrenUser(true);
+        setInfor(response.data.user);
+      } else {
+        setCurrenUser(false);
+        setInfor({});
+      }
+    };
+
+    const getApiCountCart = async () => {
+      const response = await axios.get('http://localhost:5000/api/cart/items', {
+        headers: {
+          Authorization: `Bearer ${getJwtFromCookie()}`,
+        },
+      });
+      setCountCart(response.data.cartItem.length);
+    };
+    getApiCountCart();
+    getApiProfileCustomer();
   }, []);
 
   const user_items = [
@@ -91,11 +101,11 @@ function Header() {
       title: 'Thông tin cá nhân',
       to: `/customer/information`,
     },
-    {
-      icon: <FontAwesomeIcon icon={faClipboard} />,
-      title: 'Đơn hàng yêu thích',
-      to: '/profile',
-    },
+    // {
+    //   icon: <FontAwesomeIcon icon={faClipboard} />,
+    //   title: 'Đơn hàng yêu thích',
+    //   to: '/profile',
+    // },
     {
       icon: <FontAwesomeIcon icon={faArrowRightFromBracket} />,
       title: 'Đăng xuất',
@@ -116,17 +126,10 @@ function Header() {
         <div className={cx('actions')}>
           {currentUser ? (
             <>
-              <HeadlessTippy delay={[0, 50]}>
-                <div className={cx('action-box')}>
-                  <Link className={cx('action-btn')}>
-                    <FontAwesomeIcon icon={faBell} />
-                  </Link>
-                  <span className={cx('action-note')}>Thông báo</span>
-                </div>
-              </HeadlessTippy>
               <div className={cx('action-box')}>
                 <Link to="/cart" className={cx('action-btn')}>
-                  <FontAwesomeIcon icon={faCartArrowDown} />
+                  <FontAwesomeIcon icon={faCartShopping} />
+                  <span className={cx('notice')}>{countCart}</span>
                 </Link>
                 <span className={cx('action-note')}>Giỏ hàng</span>
               </div>

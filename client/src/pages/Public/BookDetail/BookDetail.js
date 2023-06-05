@@ -2,14 +2,20 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping, faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { useSpring, animated } from 'react-spring';
+import { useLocation } from 'react-router-dom';
+import queryString from 'query-string';
+import { Flip, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-import styles from './BookDetail.module.scss';
 import Image from '~/components/Image/Image';
+import Popup from '~/components/Popup';
 import Button from '~/components/Button/Button';
 import Rate from '~/components/Rate';
 import Star from '~/components/Star';
-import { useParams } from 'react-router-dom';
+import styles from './BookDetail.module.scss';
+import InputForm from '~/components/InputForm/InputForm';
 
 const cx = classNames.bind(styles);
 
@@ -21,8 +27,33 @@ function BookDetail() {
   const [imageList, setImageList] = useState([]);
   const [mainImage, setMainImage] = useState();
   const [ratings, setRatings] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [payload, setPayload] = useState({
+    address: '',
+  });
+  const modalAnimation = useSpring({
+    opacity: isModalOpen ? 1 : 0,
+  });
+  const location = useLocation();
+  const { id } = queryString.parse(location.search);
+  console.log(id);
 
-  const { id } = useParams();
+  function getJwtFromCookie() {
+    //lấy token được lưu trong cookie ra
+    const name = 'token=';
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const cookieArray = decodedCookie.split(';');
+    for (let i = 0; i < cookieArray.length; i++) {
+      let cookie = cookieArray[i];
+      while (cookie.charAt(0) === ' ') {
+        cookie = cookie.substring(1);
+      }
+      if (cookie.indexOf(name) === 0) {
+        return cookie.substring(name.length, cookie.length);
+      }
+    }
+    return '';
+  }
 
   useEffect(() => {
     const fetchAPIBooks = async () => {
@@ -36,25 +67,74 @@ function BookDetail() {
     };
 
     fetchAPIBooks();
-  }, [book, id]);
+  }, [id]);
 
-  function addToCart(bookId) {
-    axios
-      .post('http://localhost:5000/api/cart', {
-        bookId: bookId,
-        quantity: 1,
-      })
-      .then((response) => {
-        console.log(response);
-        // Update the state of the cart in your React component
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+  const handleAddToCart = async (id_BookSupplier, quantity) => {
+    if (!getJwtFromCookie()) {
+      toast.warning('Vui lòng đăng nhập để thêm vào giỏ hàng');
+    } else {
+      await axios
+        .post(
+          'http://localhost:5000/api/cart/add',
+          {
+            id_BookSupplier: id_BookSupplier,
+            quantity: quantity,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${getJwtFromCookie()}`,
+            },
+          },
+        )
+        .then((response) => {
+          toast.success(response.data.message);
+        })
+        .catch((error) => {
+          alert('Something went wrong', error);
+        });
+    }
+  };
+
+  const handleCreateOneOrder = async (id_BookSupplier, quantity, Price, Amount, address) => {
+    if (!getJwtFromCookie()) {
+      toast.warning('Vui lòng đăng nhập để mua hàng');
+    } else {
+      await axios
+        .post(
+          'http://localhost:5000/api/order/addOneItem',
+          {
+            id_BookSupplier: id_BookSupplier,
+            quantity: quantity,
+            Price: Price,
+            Amount: Amount,
+            address: address,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${getJwtFromCookie()}`,
+            },
+          },
+        )
+        .then((res) => {
+          toast.success(res.data.message);
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        })
+        .catch((error) => {
+          alert('Something went wrong', error);
+        });
+    }
+  };
 
   function handleIncrement() {
-    setCount(count + 1);
+    if (count >= book.Amount) {
+      setCount(book.Amount);
+    } else {
+      setCount(count + 1);
+    }
   }
 
   function handleDecrement() {
@@ -68,11 +148,31 @@ function BookDetail() {
   const handleClick2 = () => {
     setIsActive(true);
   };
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        transition={Flip}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className={cx('main-detail')}>
         <div className={cx('left-content')}>
-          {imageList.map((image, index) => {
+          {imageList.slice(0, 5).map((image, index) => {
             return (
               <div className={cx('thumbnail')} key={index}>
                 <Image className={cx('small-img')} src={image.Image} alt="img1"></Image>{' '}
@@ -82,7 +182,7 @@ function BookDetail() {
         </div>
         <div className={cx('center-content')}>
           <Image className={cx('large-img')} alt="img4" src={mainImage}></Image>
-          <Button outline className={cx('btn')}>
+          <Button onClick={() => handleAddToCart(book.id_BookSupplier, count)} outline className={cx('btn')}>
             <FontAwesomeIcon className={cx('icon')} icon={faCartShopping}></FontAwesomeIcon>
             Thêm vào giỏ hàng
           </Button>
@@ -97,10 +197,10 @@ function BookDetail() {
               ? 0
               : book.Price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '')}
           </span>
-          <span className={cx('supplier')}>Nhà cung cấp: Nhà xuất bản Kim Đồng</span>
+          <span className={cx('supplier')}>Nhà cung cấp: {book.Supplier ? book.Supplier : ' '}</span>
           <span className={cx('publisher')}>Nhà xuất bản: {book.Publisher}</span>
           <span className={cx('author')}>Tác giả: {book.Author}</span>
-          <span className={cx('quantity')}>Số lượng: 10</span>
+          <span className={cx('quantity')}>Số lượng: {book.Amount ? book.Amount : 'Hết hàng'}</span>
           <div className={cx('buy-field')}>
             <div className={cx('container-input')}>
               <button className={cx('decrement')} onClick={handleDecrement}>
@@ -113,12 +213,39 @@ function BookDetail() {
                 +{' '}
               </button>
             </div>
-            <Button primary className={cx('btn')}>
+            <Button onClick={() => openModal()} primary className={cx('btn')}>
               Mua ngay
             </Button>
           </div>
         </div>
       </div>
+      <Popup isOpen={isModalOpen} onRequestClose={() => closeModal()} width={String('500px')} height={'300px'}>
+        <animated.div style={modalAnimation}>
+          <h2>Xác nhận thanh toán</h2>
+          <div className={cx('input-field')}>
+            <div className={cx('header')}>Nhà sản xuất</div>
+            <InputForm
+              placeholder=""
+              type="text"
+              value={payload.address}
+              setValue={setPayload}
+              name={'address'}
+              className={cx('input')}
+              leftIcon={faLocationDot}
+            />
+          </div>
+          <div className={cx('options')}>
+            <Button
+              onClick={() =>
+                handleCreateOneOrder(book.id_BookSupplier, count, book.Price, book.Amount, payload.address)
+              }
+              outline
+            >
+              Xác nhận
+            </Button>
+          </div>
+        </animated.div>
+      </Popup>
       <div className={cx('extra-detail')}>
         <div className={cx('header-field', `${isActive ? 'active' : ''}`)}>
           <span className={cx('header-description')} onClick={handleClick1}>

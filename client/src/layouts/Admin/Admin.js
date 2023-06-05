@@ -1,13 +1,21 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartLine, faHouseChimney, faPerson, faRightFromBracket, faTruck } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBook,
+  faBookOpen,
+  faChartLine,
+  faHouseChimney,
+  faPerson,
+  faRightFromBracket,
+  faTruck,
+} from '@fortawesome/free-solid-svg-icons';
+import { useEffect, useState } from 'react';
 
 import Sidebar from '~/components/Sidebar/Sidebar';
 import Button from '~/components/Button/Button';
 import config from '~/config';
 import styles from './Admin.module.scss';
-import { useEffect, useState } from 'react';
 
 const cx = classNames.bind(styles);
 
@@ -81,21 +89,45 @@ function Admin({ children }) {
           className={cx('btn', `${activeButton === 2 ? 'active' : ''}`)}
           onClick={() => handleClick(2)}
         >
-          Nhân viên
+          Quản lý Nhân viên
         </Button>
         <Button
-          to={config.routes.adminRecent}
+          to={config.routes.manageSupplier}
           leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faTruck}></FontAwesomeIcon>}
           className={cx('btn', `${activeButton === 3 ? 'active' : ''}`)}
           onClick={() => handleClick(3)}
         >
-          Kho hàng
+          Quản lý nhà cung cấp
         </Button>
         <Button
-          to={config.routes.adminRecent}
-          leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faChartLine}></FontAwesomeIcon>}
+          to={config.routes.manageCategory}
+          leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faBookOpen}></FontAwesomeIcon>}
           className={cx('btn', `${activeButton === 4 ? 'active' : ''}`)}
           onClick={() => handleClick(4)}
+        >
+          Quản lý thể loại
+        </Button>
+        <Button
+          to={config.routes.manageBook}
+          leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faBook}></FontAwesomeIcon>}
+          className={cx('btn', `${activeButton === 5 ? 'active' : ''}`)}
+          onClick={() => handleClick(5)}
+        >
+          Quản lý sách
+        </Button>
+        <Button
+          to={config.routes.manageStore}
+          leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faBook}></FontAwesomeIcon>}
+          className={cx('btn', `${activeButton === 6 ? 'active' : ''}`)}
+          onClick={() => handleClick(6)}
+        >
+          Quản lý kho hàng
+        </Button>
+        <Button
+          to={config.routes.revenue}
+          leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faChartLine}></FontAwesomeIcon>}
+          className={cx('btn', `${activeButton === 7 ? 'active' : ''}`)}
+          onClick={() => handleClick(7)}
         >
           Doanh thu
         </Button>

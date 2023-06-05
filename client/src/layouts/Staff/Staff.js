@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRectangleList, faHouseChimney, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { faHouseChimney, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
 
 import styles from './Staff.module.scss';
@@ -14,6 +14,14 @@ const cx = classNames.bind(styles);
 
 function Staff({ children }) {
   const [infor, setInfor] = useState({});
+  const [activeButton, setActiveButton] = useState(() => {
+    const storageActive = localStorage.getItem('active');
+    return storageActive ? parseInt(storageActive) : 1;
+  });
+  const handleClick = (buttonId) => {
+    setActiveButton(buttonId);
+    localStorage.setItem('active', buttonId);
+  };
 
   function getJwtFromCookie() {
     //lấy token được lưu trong cookie ra
@@ -63,7 +71,8 @@ function Staff({ children }) {
         <Button
           to={config.routes.staffRecent}
           leftIcon={<FontAwesomeIcon icon={faHouseChimney}></FontAwesomeIcon>}
-          className={cx('btn')}
+          className={cx('btn', `${activeButton === 1 ? 'active' : ''}`)}
+          onClick={() => handleClick(1)}
         >
           Home
         </Button>

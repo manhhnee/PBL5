@@ -18,15 +18,11 @@ class AuthController {
         next();
       } catch (err) {
         // Token không hợp lệ
-        return res
-          .status(401)
-          .json({ success: false, message: "yêu cầu đăng nhập" });
+        return res.json({ success: false, message: "yêu cầu đăng nhập" });
       }
     } else {
       // Header Authorization không tồn tại
-      return res
-        .status(401)
-        .json({ success: false, message: "yêu cầu đăng nhập" });
+      return res.json({ success: false, message: "yêu cầu đăng nhập" });
     }
   }
   isAdmin(req, res, next) {
