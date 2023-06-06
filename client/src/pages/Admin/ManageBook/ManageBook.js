@@ -36,6 +36,7 @@ function ManageBook() {
   });
   const [isModalOpen1, setIsModalOpen1] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
+  console.log(avatar);
 
   const [errorMessages, setErrorMessages] = useState({
     name: null,
@@ -72,11 +73,6 @@ function ManageBook() {
 
     if (!payload.publisher.trim()) {
       errors.publisher = 'Vui lòng nhập nhà xuất bản';
-      isValid = false;
-    }
-
-    if (!payload.id_Category.trim()) {
-      errors.id_Category = 'Vui lòng chọn thể loại';
       isValid = false;
     }
 
@@ -139,7 +135,6 @@ function ManageBook() {
   };
 
   const handleAddBook = async (idCategory, name, price, author, description, publisher, image) => {
-    console.log(idCategory, name, price, author, description, publisher, image);
     await axios
       .post(
         'http://localhost:5000/api/book/add',
@@ -154,7 +149,7 @@ function ManageBook() {
         },
         {
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${getJwtFromCookie()}`,
           },
         },
@@ -170,7 +165,7 @@ function ManageBook() {
       });
   };
 
-  const handleUpdateBook = async (id, idCategory, name, price, author, description, publisher, image) => {
+  const handleUpdateBook = async (id, idCategory, name, price, author, description, publisher) => {
     if (!validateForm()) {
       return;
     } else {

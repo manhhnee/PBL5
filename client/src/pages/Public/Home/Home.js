@@ -9,9 +9,9 @@ import BookItem from '~/components/BookItem';
 import Button from '~/components/Button';
 import Image from '~/components/Image';
 import images from '~/assets/images';
-import * as BookService from '~/services/bookServices';
-import * as CategoryService from '~/services/categoryServices';
+import MessengerPopup from '~/components/Chat/MessengerPopup';
 import axios from 'axios';
+import config from '~/config';
 
 const cx = classNames.bind(styles);
 
@@ -72,12 +72,12 @@ function Home() {
 
   useEffect(() => {
     const fetchApiBooks = async () => {
-      const response = await BookService.showBook();
-      setBooks(response);
+      const response = await axios.get('http://localhost:5000/api/book');
+      setBooks(response.data.books);
     };
     const fetchAPICategories = async () => {
-      const response = await CategoryService.showCategory();
-      setCategories(response);
+      const response = await axios.get('http://localhost:5000/api/category');
+      setCategories(response.data);
     };
 
     fetchAPICategories();
@@ -106,9 +106,12 @@ function Home() {
           <BookItem key={books.id} items={books} />
         </div>
         <div className={cx('button')}>
-          <Button outline>Xem thêm</Button>
+          <Button to={config.routes.allbook} outline>
+            Xem thêm
+          </Button>
         </div>
       </div>
+      <MessengerPopup />
     </div>
   );
 }

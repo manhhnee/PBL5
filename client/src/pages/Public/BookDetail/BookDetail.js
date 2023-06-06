@@ -123,8 +123,8 @@ function BookDetail() {
             window.location.reload();
           }, 2000);
         })
-        .catch((error) => {
-          alert('Something went wrong', error);
+        .catch((err) => {
+          toast.error(err);
         });
     }
   };
