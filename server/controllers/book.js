@@ -2,7 +2,8 @@ const bookModel = require("../models/book");
 class bookController {
   add(req, res, next) {
     console.log(req.body);
-    bookModel.add(req.body, function (data) {
+    const BookPath = req.file ? `http://localhost:5000/${req.file.path}` : null;
+    bookModel.add(req.body,BookPath, function (data) {
       res.json(data);
     });
   }
@@ -15,8 +16,9 @@ class bookController {
       author = "",
       limit = 10,
       page = 1,
+      DESC_Price = false
     } = req.query;
-    var filter = { search, category, minPrice, maxPrice, author, limit, page };
+    var filter = { search, category, minPrice, maxPrice, author, limit, page, DESC_Price };
     bookModel.find(filter, function (data) {
       res.json(data);
     });

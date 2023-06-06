@@ -1,16 +1,17 @@
 const db = require("../config/db/index");
 
 const rating = function (rating) {
-  (this.id = rating.id),
+    (this.id = rating.id),
     (this.id_Book = rating.id_Book),
     (this.id_Account = rating.id_Account),
     (this.star = rating.star),
     (this.commemt = rating.commemt);
 };
-rating.add = function (data, results) {
+
+rating.add = function (data,id_Account, results) {
   db.query(
     "INSERT INTO rating (id_Book,id_Account, star,comment) VALUES (?, ?, ?, ?)",
-    [data.id_Book, data.id_Account, data.star, data.commemt],
+    [data.id_Book, id_Account, data.star, data.commemt],
     function (err, ratings) {
       if (err) return err;
       else {

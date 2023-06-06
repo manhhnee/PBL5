@@ -2,21 +2,29 @@ const CartModel = require('../models/cart')
 const jwt = require('jsonwebtoken')
 
 class CartController {
-  async getCartByAccountId(req, res, next) {
-    try {
-      // Lấy accountId từ decoded token
-      const decoded = jwt.verify(req.cookies.token, 'mk');
-      const accountId = decoded.id;
-  
-      // Gọi hàm getCartByAccountId để lấy thông tin giỏ hàng
-      const cart = await CartModel.getCartByAccountId(accountId);
-  
-      // Trả về kết quả
-      res.json({ success: true, cart });
-    } catch (err) {
-      next(err);
-    }
+
+  showAll(req,res,next){
+    CartModel.getCartDetailsbyIdAccount(req.user.id,function(data){
+      res.json(data)
+    })
   }
+  add(req,res,next){
+    CartModel.addItemIntoCart(req.user.id,req.body,function(data){
+      console.log(req.body)
+      res.json(data)
+    })
+  }
+  updateQuantity(req,res,next){
+    CartModel.updateQuantityCartItems(req.user.id,req.params.idCartItem,req.body.quantity,function(data){
+      res.json(data)
+    })
+  }
+  delete(req,res,next){
+    CartModel.deleteCartItems(req.user.id,req.params.idCartItem,function(data){
+      res.json(data)
+    })
+  }
+  
 }
 
 module.exports = new CartController()

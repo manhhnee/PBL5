@@ -1,8 +1,8 @@
-var mysql = require('mysql')
+var mysql = require("mysql");
 var connecttion = mysql.createConnection({
     host:'localhost',
     user:'root',
-    port: 4306,
+    port: 3306,
     password:'',
     database:'pbl5',
 })
@@ -15,3 +15,4 @@ connecttion.connect(function(err){
     }
 })
 module.exports = connecttion 
+

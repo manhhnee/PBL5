@@ -93,13 +93,12 @@ class CartItemController {
   }
   async ShowAll (req, res) {
     try {
-      const decoded = jwt.verify(req.cookies.token, 'mk')
-      console.log(decoded)
+      const decoded = jwt.verify(req.cookies.token, 'mk');
 
-      const cart = await CartModel.getCartByAccountId(decoded.id)
-      const cartId = cart[0].id
-      const cartItems = await CartItemModel.getCartItemsByCartId(cartId)
-      res.json(cartItems)
+      const cart = await CartModel.getCartByAccountId(decoded.id);
+      const cartId = cart[0].id;
+      const cartItems = await CartItemModel.getCartItemsByCartId(cartId);
+      res.json(cartItems);
     } catch (error) {
       console.error(error)
       res.status(500).json({ message: 'Internal server error' })

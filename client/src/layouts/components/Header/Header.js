@@ -1,9 +1,8 @@
 import classNames from 'classnames/bind';
 import { Link, useNavigate } from 'react-router-dom';
-import HeadlessTippy from '@tippyjs/react/headless';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faClipboard, faUser } from '@fortawesome/free-regular-svg-icons';
-import { faArrowRightFromBracket, faCartArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-regular-svg-icons';
+import { faArrowRightFromBracket, faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import { useCallback, useEffect, useState } from 'react';
 
 import styles from './Header.module.scss';
@@ -12,16 +11,39 @@ import images from '~/assets/images';
 import Search from '~/layouts/components/Search';
 import Menu from '~/components/Popper/Menu';
 import Button from '~/components/Button';
+import axios from 'axios';
 
 const cx = classNames.bind(styles);
 
 function Header() {
   const [currentUser, setCurrenUser] = useState(false);
+  const [showHeader, setShowHeader] = useState(true);
   const [infor, setInfor] = useState({});
+  const [countCart, setCountCart] = useState(0);
+
   const navigate = useNavigate();
-  const goLogin = useCallback((flag) => {
-    navigate(config.routes.login, { state: { flag } });
-  });
+  const goLogin = useCallback(
+    (flag) => {
+      navigate(config.routes.login, { state: { flag } });
+    },
+    [navigate],
+  );
+
+  useEffect(() => {
+    let prevScroll = window.pageYOffset;
+    const handleScroll = () => {
+      const currentScroll = window.pageYOffset;
+      if (prevScroll >= currentScroll) {
+        setShowHeader(true);
+      } else {
+        setShowHeader(false);
+      }
+      prevScroll = currentScroll;
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   function getJwtFromCookie() {
     //lấy token được lưu trong cookie ra
     const name = 'token=';
@@ -46,35 +68,44 @@ function Header() {
   }
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/user/profile/customer', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${getJwtFromCookie()}`, // trả token về server để xử lí
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        if (response.success === true) {
-          setCurrenUser(true);
-          setInfor(response.user);
-        } else {
-          setInfor({});
-          setCurrenUser(false);
-        }
+    const getApiProfileCustomer = async () => {
+      const response = await axios.get('http://localhost:5000/api/user/profile/customer', {
+        headers: {
+          Authorization: `Bearer ${getJwtFromCookie()}`,
+        },
       });
+      if (response.data.success === true) {
+        setCurrenUser(true);
+        setInfor(response.data.user);
+      } else {
+        setCurrenUser(false);
+        setInfor({});
+      }
+    };
+
+    const getApiCountCart = async () => {
+      const response = await axios.get('http://localhost:5000/api/cart/items', {
+        headers: {
+          Authorization: `Bearer ${getJwtFromCookie()}`,
+        },
+      });
+      setCountCart(response.data.cartItem.length);
+    };
+    getApiCountCart();
+    getApiProfileCustomer();
   }, []);
 
   const user_items = [
     {
       icon: <FontAwesomeIcon icon={faUser} />,
       title: 'Thông tin cá nhân',
-      to: `/customer/profile/${infor.id}`,
+      to: `/customer/information`,
     },
-    {
-      icon: <FontAwesomeIcon icon={faClipboard} />,
-      title: 'Đơn hàng yêu thích',
-      to: '/profile',
-    },
+    // {
+    //   icon: <FontAwesomeIcon icon={faClipboard} />,
+    //   title: 'Đơn hàng yêu thích',
+    //   to: '/profile',
+    // },
     {
       icon: <FontAwesomeIcon icon={faArrowRightFromBracket} />,
       title: 'Đăng xuất',
@@ -83,7 +114,7 @@ function Header() {
   ];
 
   return (
-    <header className={cx('wrapper')}>
+    <header className={cx('wrapper', `${showHeader ? 'show' : ''}`)}>
       <div className={cx('inner')}>
         <Link to={config.routes.home} className={cx('logo-link')}>
           <img src={images.logo3} alt="2H&MBookStore" />
@@ -95,17 +126,10 @@ function Header() {
         <div className={cx('actions')}>
           {currentUser ? (
             <>
-              <HeadlessTippy delay={[0, 50]}>
-                <div className={cx('action-box')}>
-                  <Link className={cx('action-btn')}>
-                    <FontAwesomeIcon icon={faBell} />
-                  </Link>
-                  <span className={cx('action-note')}>Thông báo</span>
-                </div>
-              </HeadlessTippy>
               <div className={cx('action-box')}>
                 <Link to="/cart" className={cx('action-btn')}>
-                  <FontAwesomeIcon icon={faCartArrowDown} />
+                  <FontAwesomeIcon icon={faCartShopping} />
+                  <span className={cx('notice')}>{countCart}</span>
                 </Link>
                 <span className={cx('action-note')}>Giỏ hàng</span>
               </div>
@@ -123,7 +147,7 @@ function Header() {
           <Menu items={user_items}>
             {currentUser ? (
               <div className={cx('action-box')}>
-                <Link to="/account" className={cx('action-btn')}>
+                <Link className={cx('action-btn')}>
                   <FontAwesomeIcon icon={faUser} />
                 </Link>
                 <span className={cx('action-note')}>{infor.FirstName + ' ' + infor.LastName}</span>

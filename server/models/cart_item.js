@@ -1,3 +1,4 @@
+
 const db = require('../config/db/index')
 
 class CartItem {
@@ -7,36 +8,38 @@ class CartItem {
     this.cartId = cartId
     this.quantity = quantity
   }
-  static async getCartItemByIdBookSupplierAndIdCart(idBookSupplier, idCart) {
-    console.log('idBookSupplier:', idBookSupplier);
-    console.log('idCart:', idCart);
-    const sql = `SELECT * FROM cart_item WHERE id_BookSupplier = ${idBookSupplier} AND id_Cart = ${idCart}`;
-    const results = await db.query(sql);
-    if (!results || !results.length) {
-      return null;
-    }
-    return results[0];
-}
 
-  static async updateCartItemQuantity (id, quantity) {
-    const sql = `UPDATE cart_item SET quantity = ${quantity} WHERE id = ${id}`
-    const result = await db.query(sql)
-    return result
-  }
-
-  static async addCartItem(cartItem) {
-    const sql = 'INSERT INTO cart_item SET ?'
-    const result = await db.query(sql, cartItem)
-    return result
+  static async createCartItem (bookSupplierId, cartId, quantity) {
+    return new Promise((resolve, reject) => {
+      db.query(
+        `INSERT INTO cart_item (id_BookSupplier, id_cart, quantity) VALUES (?, ?, ?)`,
+        [bookSupplierId, cartId, quantity],
+        (err, res) => {
+          if (err) {
+            reject(err)
+          } else {
+            const newCartItem = new CartItem(
+              res.insertId,
+              bookSupplierId,
+              cartId,
+              quantity
+            )
+            resolve(newCartItem)
+          }
+        }
+      )
+    })
   }
 
   static async updateCartItemQuantity (cartItemId, newQuantity) {
+
     return new Promise((resolve, reject) => {
       db.query(
         `UPDATE cart_item SET quantity = ? WHERE id = ?`,
         [newQuantity, cartItemId],
         (err, res) => {
           if (err) {
+
             reject(err)
           } else {
             resolve(res.affectedRows > 0)
@@ -53,6 +56,7 @@ class CartItem {
         [cartItemId],
         (err, res) => {
           if (err) {
+
             reject(err)
           } else {
             resolve(res.affectedRows > 0)
@@ -78,6 +82,7 @@ class CartItem {
                 id_BookSupplier,
                 id_cart,
                 quantity
+
               )
               resolve(cartItem)
             } else {
@@ -95,6 +100,7 @@ class CartItem {
         `SELECT ci.id, ci.id_BookSupplier, ci.id_cart, ci.quantity, 
         b.Name, b.Author, b.Price, 
         bs.Import_Price, bs.Amount, 
+
         ib.Image, s.Name as Supplier 
         FROM cart_item ci
         INNER JOIN book_supplier bs ON ci.id_BookSupplier = bs.id
@@ -103,6 +109,7 @@ class CartItem {
           SELECT id_Book, Image FROM image_book GROUP BY id_Book
         ) ib ON b.id = ib.id_Book
         INNER JOIN supplier s ON bs.id_Supplier = s.id
+
         WHERE ci.id_cart = ?`,
         [cartId],
         (err, res) => {
@@ -146,3 +153,4 @@ class CartItem {
 }
 
 module.exports = CartItem
+

@@ -1,0 +1,57 @@
+.wrapper {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.slider {
+  margin-top: 15px;
+}
+
+.container {
+  min-height: 400px;
+  padding: 0 15px;
+  margin: 15px 0 0;
+  background-color: var(--white);
+  width: 100%;
+  position: relative;
+  border-radius: var(--default-border-radius);
+}
+
+.title-field {
+  border-bottom: 1px solid var(--background-color);
+  padding: 12px 0 12px 12px;
+  font-size: 1.8rem;
+  color: var(--primary);
+
+  .icon {
+    margin-right: 22px;
+  }
+}
+
+.button {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
+
+  button,
+  a {
+    font-size: 14px;
+    width: 210px;
+    max-width: 100%;
+    height: 40px;
+    border-radius: var(--default-border-radius);
+  }
+}
+
+.image {
+  width: 110px;
+  height: 120px;
+}
+
+.title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 110px;
+}
