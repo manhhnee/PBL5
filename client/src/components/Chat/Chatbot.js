@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import classNames from 'classnames/bind';
 import io from 'socket.io-client';
-import './Chatbot.scss';
+
+import styles from './Chatbot.scss';
+
+const cx = classNames.bind(styles);
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([]);
@@ -56,27 +60,26 @@ const Chatbot = () => {
   };
 
   return (
-    <div className='chatbot'>
-      <div className='chat-wrapper'>
-        <div className='chat-messages'>
+    <div className={cx('chatbot')}>
+      <div className={cx('chat-wrapper')}>
+        <div className={cx('chat-messages')}>
           {messages.map((message, index) => (
             <div
               key={index}
-              className={`message ${
-                message.sender === 'user' ? 'user-message' : 'chatbot-message'
-              }`}
+              className={cx('message', ` ${message.sender === 'user' ? 'user-message' : 'chatbot-message'}`)}
             >
               {message.text}
             </div>
           ))}
-          {showSuggestions && messages.length > 0 &&
+          {showSuggestions &&
+            messages.length > 0 &&
             messages[messages.length - 1].suggestions &&
             messages[messages.length - 1].suggestions.length > 0 && (
-              <div className="suggestions">
+              <div className={cx('suggestions')}>
                 {messages[messages.length - 1].suggestions.map((suggestion, index) => (
                   <button
                     key={index}
-                    className="message suggestion-button"
+                    className={cx('message', ' suggestion-button')}
                     onClick={() => handleSuggestionClick(suggestion)}
                   >
                     {suggestion}
@@ -85,9 +88,9 @@ const Chatbot = () => {
               </div>
             )}
         </div>
-        <div className='chat-input'>
+        <div className={cx('chat-input')}>
           <input
-            type='text'
+            type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}

@@ -28,6 +28,11 @@
   margin-top: 18px;
 }
 
+.error-message {
+  font-size: 1.4rem;
+  color: var(--primary);
+}
+
 .input {
   display: grid;
   grid-template-columns: 10% 80%;

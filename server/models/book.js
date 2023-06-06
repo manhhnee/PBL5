@@ -10,7 +10,8 @@ const book = function (book) {
   (this.Publication_Date = book.Publication_Date),
     (this.Publisher = book.Publisher);
 };
-book.add = function (data, results) {
+book.add = function (data, BookPath, results) {
+  var today = Date();
   db.query(
     "INSERT INTO book (id_Category, Name, Price, Author, Description,Publication_Date,Publisher) VALUES (?, ?, ?, ?, ?, ?, ?)",
     [
@@ -68,13 +69,12 @@ book.find = function (data, results) {
     db.query(query, (err, listBook) => {
       var totalPage = parseInt(listBook.length / data.limit) + 1;
       const offset = (data.page - 1) * data.limit;
-      if (data.DESC_Price==1)
+      if (data.DESC_Price == 1)
         query += ` ORDER BY b.Price DESC LIMIT ${data.limit} OFFSET ${offset}`;
-      else if(data.DESC_Price==2)
+      else if (data.DESC_Price == 2)
         query += ` ORDER BY b.Price ASC LIMIT ${data.limit} OFFSET ${offset}`;
-      else
-        query += ` ORDER BY b.id DESC LIMIT ${data.limit} OFFSET ${offset}`;
-        console.log(query);
+      else query += ` ORDER BY b.id DESC LIMIT ${data.limit} OFFSET ${offset}`;
+      console.log(query);
       db.query(query, function (err, books) {
         if (err) return { success: false, message: err.message };
         else {
