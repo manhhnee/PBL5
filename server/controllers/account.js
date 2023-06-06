@@ -18,5 +18,10 @@ class AccountController{
             res.json({user:data,role:req.user.role,success:true})
         })
     }
+    changePassword(req,res,next){
+        accountModel.changePassWord(req.user.id,req.body,function(data){
+            res.json(data)
+        })
+    }
 }
 module.exports = new AccountController();
