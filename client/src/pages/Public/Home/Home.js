@@ -11,7 +11,10 @@ import Image from '~/components/Image';
 import images from '~/assets/images';
 import * as BookService from '~/services/bookServices';
 import * as CategoryService from '~/services/categoryServices';
+<<<<<<< HEAD
 import axios from 'axios';
+=======
+>>>>>>> c6d4629a39267c1d8013599c65b854e193918efb
 
 const cx = classNames.bind(styles);
 
@@ -72,12 +75,12 @@ function Home() {
 
   useEffect(() => {
     const fetchApiBooks = async () => {
-      const response = await axios.get('http://localhost:5000/api/book');
-      setBooks(response.data.books);
+      const response = await BookService.showBook();
+      setBooks(response);
     };
     const fetchAPICategories = async () => {
-      const response = await axios.get('http://localhost:5000/api/category');
-      setCategories(response.data);
+      const response = await CategoryService.showCategory();
+      setCategories(response);
     };
 
     fetchAPICategories();
