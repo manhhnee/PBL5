@@ -19,7 +19,7 @@ function Header() {
   const [currentUser, setCurrenUser] = useState(false);
   const [showHeader, setShowHeader] = useState(true);
   const [infor, setInfor] = useState({});
-  const [countCart, setCountCart] = useState(null);
+  const [countCart, setCountCart] = useState(0);
 
   const navigate = useNavigate();
   const goLogin = useCallback(
@@ -147,7 +147,7 @@ function Header() {
           <Menu items={user_items}>
             {currentUser ? (
               <div className={cx('action-box')}>
-                <Link to="/account" className={cx('action-btn')}>
+                <Link className={cx('action-btn')}>
                   <FontAwesomeIcon icon={faUser} />
                 </Link>
                 <span className={cx('action-note')}>{infor.FirstName + ' ' + infor.LastName}</span>

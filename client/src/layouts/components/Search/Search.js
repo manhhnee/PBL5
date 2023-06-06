@@ -77,7 +77,7 @@ function Search() {
                   <BookItemSearch
                     data={result}
                     key={result.id}
-                    to={`/bookdetail/${result.id}`}
+                    to={`/bookdetail?id=${result.id}`}
                     onClick={() => window.location.replace()}
                   />
                 );

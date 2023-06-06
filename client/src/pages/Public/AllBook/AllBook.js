@@ -19,7 +19,7 @@ function AllBook() {
   const [books, setBooks] = useState([]);
   const [categories, setCategories] = useState([]);
   const [idCategory, setIDCategory] = useState(id || '');
-  const [searchValue, setSearchValue] = useState(search || '');
+  const [searchValue, setSearchValue] = useState(search ? search : '');
   const [activeButton, setActiveButton] = useState(1);
   const [page, setPage] = useState(() => {
     const storedPage = localStorage.getItem('page');
@@ -32,13 +32,15 @@ function AllBook() {
   const handlePageClick = (buttonId) => {
     setActiveButton(buttonId);
     setPage(buttonId);
+    window.location.reload();
   };
 
   const handleCategoryClick = (buttonId) => {
-    const search = window.location.search;
-    const { search: searchValue } = queryString.parse(search);
-    const url = `/allbook?id=${buttonId}&search=${encodeURIComponent(searchValue)}`;
-    window.location.href = url;
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('id', buttonId);
+    const newSearch = urlParams.toString();
+    const newUrl = `${window.location.pathname}?${newSearch}`;
+    window.location.href = newUrl;
   };
 
   useEffect(() => {
