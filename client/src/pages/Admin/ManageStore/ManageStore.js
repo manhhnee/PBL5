@@ -5,6 +5,7 @@ import DataTable from 'react-data-table-component';
 import { faBook, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useSpring, animated } from 'react-spring';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Flip, ToastContainer, toast } from 'react-toastify';
 
 import Button from '~/components/Button/Button';
 import Popup from '~/components/Popup/Popup';
@@ -85,10 +86,13 @@ function ManageStore() {
         },
       )
       .then((res) => {
-        alert(res.data.message);
+        toast.success(res.data.message);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       })
       .catch((err) => {
-        alert(err);
+        toast.error(err);
       });
   };
 
@@ -100,10 +104,13 @@ function ManageStore() {
         },
       })
       .then((res) => {
-        alert(res.data.message);
+        toast.success(res.data.message);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       })
       .catch((err) => {
-        alert(err);
+        toast.error(err);
       });
   };
 
@@ -178,6 +185,19 @@ function ManageStore() {
 
   return (
     <div className={cx('wrapper')}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        transition={Flip}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <DataTable
         title="Danh sách truyện"
         columns={columns}

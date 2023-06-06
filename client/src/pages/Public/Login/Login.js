@@ -2,12 +2,13 @@ import { faLock, faPhone, faUser, faLocationDot, faSignature } from '@fortawesom
 import classNames from 'classnames/bind';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { Flip, ToastContainer, toast } from 'react-toastify';
 
-import styles from './Login.module.scss';
 import images from '~/assets/images';
 import Button from '~/components/Button';
 import InputForm from '~/components/InputForm';
 import config from '~/config';
+import styles from './Login.module.scss';
 
 const cx = classNames.bind(styles);
 
@@ -23,63 +24,135 @@ function Login() {
     phoneNumber: '',
     address: '',
   });
+  const [errorMessages, setErrorMessages] = useState({
+    username: null,
+    password: null,
+    firstName: null,
+    lastName: null,
+    phoneNumber: null,
+    address: null,
+  });
 
   const handleSignupClick = () => setIsSignupMode(true);
   const handleSigninClick = () => setIsSignupMode(false);
 
-  const HandleLoginSubmit = async () => {
-    const response = await fetch('http://localhost:5000/api/account/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        Username: payload.username.trim(),
-        Password: payload.password.trim(),
-      }),
-    });
-    const data = await response.json();
-    if (data.success === true) {
-      localStorage.setItem('Role', data.role);
-      document.cookie = `token=${data.token}`;
-      if (data.role === 'ADMIN') {
-        window.location.replace(config.routes.adminRecent);
-      } else if (data.role === 'STAFF') {
-        window.location.replace(config.routes.staffRecent);
-      } else {
-        window.location.replace(config.routes.home);
+  const validateForm = () => {
+    let isValid = true;
+    const errors = {};
+
+    if (!payload.username.trim()) {
+      errors.username = 'Vui lòng nhập tên người dùng';
+      isValid = false;
+    }
+
+    if (!payload.password.trim()) {
+      errors.password = 'Vui lòng nhập mật khẩu';
+      isValid = false;
+    }
+
+    if (isSignupMode) {
+      if (!payload.firstName.trim()) {
+        errors.firstName = 'Vui lòng nhập họ';
+        isValid = false;
       }
+
+      if (!payload.lastName.trim()) {
+        errors.lastName = 'Vui lòng nhập tên';
+        isValid = false;
+      }
+
+      if (!payload.phoneNumber.trim()) {
+        errors.phoneNumber = 'Vui lòng nhập số điện thoại';
+        isValid = false;
+      }
+
+      if (!payload.address.trim()) {
+        errors.address = 'Vui lòng nhập địa chỉ';
+        isValid = false;
+      }
+    }
+
+    setErrorMessages(errors);
+
+    return isValid;
+  };
+
+  const handleLoginSubmit = async () => {
+    if (!validateForm()) {
+      return;
     } else {
-      alert('Error');
-      window.location.reload();
+      const response = await fetch('http://localhost:5000/api/account/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          Username: payload.username.trim(),
+          Password: payload.password.trim(),
+        }),
+      });
+      const data = await response.json();
+      if (data.success === true) {
+        toast.success('Đăng nhập thành công');
+        localStorage.setItem('Role', data.role);
+        document.cookie = `token=${data.token}`;
+        if (data.role === 'ADMIN') {
+          window.location.replace(config.routes.adminRecent);
+        } else if (data.role === 'STAFF') {
+          window.location.replace(config.routes.staffRecent);
+        } else {
+          window.location.replace(config.routes.home);
+        }
+      } else {
+        toast.error('Sai tài khoản hoặc mật khẩu!');
+      }
     }
   };
   const HandleSubmitSignUp = async () => {
-    const response = await fetch('http://localhost:5000/api/account/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        Username: payload.username.trim(),
-        Password: payload.password.trim(),
-        FirstName: payload.firstName.trim(),
-        LastName: payload.lastName.trim(),
-        PhoneNumber: payload.phoneNumber.trim(),
-        Address: payload.address.trim(),
-        id_Role: 3,
-      }),
-    });
-    const data = await response.json();
-    if (data.success === true) {
-      alert(data.message);
-      setIsSignupMode(false);
+    if (!validateForm()) {
+      return;
     } else {
-      alert(data.message);
+      const response = await fetch('http://localhost:5000/api/account/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          Username: payload.username.trim(),
+          Password: payload.password.trim(),
+          FirstName: payload.firstName.trim(),
+          LastName: payload.lastName.trim(),
+          PhoneNumber: payload.phoneNumber.trim(),
+          Address: payload.address.trim(),
+          id_Role: 3,
+        }),
+      });
+      const data = await response.json();
+      if (data.success === true) {
+        toast.success('Đăng kí thành công!');
+        setTimeout(() => {
+          setIsSignupMode(false);
+        }, 2000);
+      } else {
+        toast.error(data.message);
+      }
     }
   };
   return (
     <div className={cx('wrapper')}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        transition={Flip}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className={cx('container', `${isSignupMode ? 'sign-up-mode' : ''}`)}>
         <div className={cx('form-container')}>
           <div className={cx('signin-signup')}>
@@ -93,6 +166,7 @@ function Login() {
                 setValue={setPayload}
                 name={'username'}
               />
+              {errorMessages.username && <div className={cx('error-message')}>{errorMessages.username}</div>}
               <InputForm
                 placeholder="Password"
                 leftIcon={faLock}
@@ -101,7 +175,9 @@ function Login() {
                 setValue={setPayload}
                 name={'password'}
               />
-              <Button signin_signup className={cx('btn')} onClick={HandleLoginSubmit}>
+              {errorMessages.password && <div className={cx('error-message')}>{errorMessages.password}</div>}
+
+              <Button signin_signup className={cx('btn')} onClick={handleLoginSubmit}>
                 Đăng nhập
               </Button>
             </div>
@@ -115,6 +191,7 @@ function Login() {
                 setValue={setPayload}
                 name={'firstName'}
               />
+              {errorMessages.firstName && <div className={cx('error-message')}>{errorMessages.firstName}</div>}
               <InputForm
                 placeholder="LastName"
                 leftIcon={faSignature}
@@ -123,6 +200,7 @@ function Login() {
                 setValue={setPayload}
                 name={'lastName'}
               />
+              {errorMessages.lastName && <div className={cx('error-message')}>{errorMessages.lastName}</div>}
               <InputForm
                 placeholder="Phone Number"
                 leftIcon={faPhone}
@@ -131,6 +209,7 @@ function Login() {
                 setValue={setPayload}
                 name={'phoneNumber'}
               />
+              {errorMessages.phoneNumber && <div className={cx('error-message')}>{errorMessages.phoneNumber}</div>}
               <InputForm
                 placeholder="Address"
                 leftIcon={faLocationDot}
@@ -139,6 +218,7 @@ function Login() {
                 setValue={setPayload}
                 name={'address'}
               />
+              {errorMessages.address && <div className={cx('error-message')}>{errorMessages.address}</div>}
               <InputForm
                 placeholder="Username"
                 leftIcon={faUser}
@@ -147,6 +227,7 @@ function Login() {
                 setValue={setPayload}
                 name={'username'}
               />
+              {errorMessages.username && <div className={cx('error-message')}>{errorMessages.username}</div>}
               <InputForm
                 placeholder="Password"
                 leftIcon={faLock}
@@ -155,6 +236,7 @@ function Login() {
                 setValue={setPayload}
                 name={'password'}
               />
+              {errorMessages.password && <div className={cx('error-message')}>{errorMessages.password}</div>}
               <Button signin_signup className={cx('btn')} onClick={HandleSubmitSignUp}>
                 Đăng kí
               </Button>

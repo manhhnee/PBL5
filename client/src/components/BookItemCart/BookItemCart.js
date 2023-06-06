@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
+import { useState } from 'react';
 import { Flip, ToastContainer, toast } from 'react-toastify';
 
 import Image from '~/components/Image';
@@ -9,7 +10,9 @@ import axios from 'axios';
 
 const cx = classNames.bind(styles);
 
-function BookItemCart({ data }) {
+function BookItemCart({ data, onSelect }) {
+  const [isChecked, setIsChecked] = useState(false);
+
   function getJwtFromCookie() {
     //lấy token được lưu trong cookie ra
     const name = 'token=';
@@ -27,7 +30,7 @@ function BookItemCart({ data }) {
     return '';
   }
 
-  const HandleDeteteCart = async () => {
+  const handleDeleteCart = async () => {
     await axios
       .delete(`http://localhost:5000/api/cart/delete/${data.id}`, {
         headers: { Authorization: `Bearer ${getJwtFromCookie()}` },
@@ -40,8 +43,13 @@ function BookItemCart({ data }) {
         }, 3000);
       })
       .catch((err) => {
-        alert('Sth wrong', err);
+        alert('Something went wrong', err);
       });
+  };
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+    onSelect(data, !isChecked);
   };
 
   return (
@@ -60,6 +68,7 @@ function BookItemCart({ data }) {
         theme="light"
       />
       <div className={cx('content-left')}>
+        <input type="checkbox" checked={isChecked} onChange={handleCheckboxChange} className={cx('checkbox')} />
         <Image className={cx('img')} src={data.Image}></Image>
       </div>
       <div className={cx('content-center')}>
@@ -72,7 +81,7 @@ function BookItemCart({ data }) {
       </div>
       <div className={cx('content-right')}>
         <div className={cx('options')}>
-          <Button onClick={() => HandleDeteteCart()} outline className={cx('btn')}>
+          <Button onClick={() => handleDeleteCart()} outline className={cx('btn')}>
             Xóa
           </Button>
         </div>
@@ -83,6 +92,7 @@ function BookItemCart({ data }) {
 
 BookItemCart.protoTypes = {
   data: PropTypes.node.isRequired,
+  onSelect: PropTypes.func,
 };
 
 export default BookItemCart;

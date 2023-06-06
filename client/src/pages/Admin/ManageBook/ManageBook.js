@@ -6,6 +6,7 @@ import { faImage } from '@fortawesome/free-regular-svg-icons';
 import { faBook, faPlus, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { useSpring, animated } from 'react-spring';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Flip, ToastContainer, toast } from 'react-toastify';
 
 import Button from '~/components/Button/Button';
 import Popup from '~/components/Popup/Popup';
@@ -69,7 +70,7 @@ function ManageBook() {
       const response = await axios.get(`http://localhost:5000/api/book/detail/${id}`);
 
       const { book } = response.data;
-      console.log(book);
+
       setPayload((prevPayload) => ({
         ...prevPayload,
         name: book.Name,
@@ -81,7 +82,7 @@ function ManageBook() {
         publisher: book.Publisher,
       }));
     } catch (e) {
-      console.log(e);
+      toast.error(e);
     }
   };
 
@@ -113,11 +114,13 @@ function ManageBook() {
         },
       )
       .then((res) => {
-        alert(res.data.message);
-        window.location.reload();
+        toast.success(res.data.message);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       })
       .catch((err) => {
-        alert(err);
+        toast.error(err);
       });
   };
 
@@ -143,11 +146,13 @@ function ManageBook() {
         },
       )
       .then((res) => {
-        alert(res.data.message);
-        window.location.reload();
+        toast.success(res.data.message);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       })
       .catch((e) => {
-        alert(e);
+        toast.error(e);
       });
   };
   const handleDeleteBook = async (id) => {
@@ -157,8 +162,10 @@ function ManageBook() {
         Authorization: `Bearer ${getJwtFromCookie()}`,
       })
       .then((res) => {
-        alert(res.data.message);
-        window.location.reload();
+        toast.success(res.data.message);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       })
       .catch((e) => {
         alert(e);
@@ -237,6 +244,19 @@ function ManageBook() {
 
   return (
     <div className={cx('wrapper')}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        transition={Flip}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <DataTable
         title="Danh sách truyện"
         columns={columns}

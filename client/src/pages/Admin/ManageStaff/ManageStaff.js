@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faMobileScreenButton, faPlus, faSignature } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { useSpring, animated } from 'react-spring';
+import { Flip, ToastContainer, toast } from 'react-toastify';
 
 import Image from '~/components/Image';
 import Button from '~/components/Button';
@@ -73,11 +74,41 @@ function ManageStaff() {
         },
       )
       .then((res) => {
-        alert(res.data.message);
-        window.location.reload();
+        toast.success(res.data.message);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       })
       .catch((e) => {
-        alert(e);
+        toast.error(e);
+      });
+  };
+
+  const handleUpdateStaff = async (id, fisrtname, lastname, phone, address) => {
+    await axios
+      .put(
+        `http://localhost:5000/api/user/updateStaff/${id}`,
+        {
+          FirstName: fisrtname,
+          LastName: lastname,
+          PhoneNumber: phone,
+          Address: address,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${getJwtFromCookie()}`,
+          },
+        },
+      )
+      .then((res) => {
+        toast.success(res.data.message);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      })
+      .catch((e) => {
+        toast.error(e);
       });
   };
 
@@ -91,11 +122,13 @@ function ManageStaff() {
       })
 
       .then((res) => {
-        alert(res.data.message);
-        window.location.reload();
+        toast.success(res.data.message);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       })
       .catch((e) => {
-        alert(e);
+        toast.error(e);
       });
   };
 
@@ -142,6 +175,19 @@ function ManageStaff() {
 
   return (
     <div className={cx('wrapper')}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        transition={Flip}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className={cx('btn')}>
         <Button
           onClick={() => {
@@ -224,7 +270,20 @@ function ManageStaff() {
             <Button onClick={() => handleDeleteStaff(selectedStaffId)} primary>
               Xóa nhân viên
             </Button>
-            <Button outline>Thay đổi thông tin nhân viên</Button>
+            <Button
+              onClick={() =>
+                handleUpdateStaff(
+                  selectedStaffId,
+                  payload.firstName,
+                  payload.lastName,
+                  payload.phoneNumber,
+                  payload.address,
+                )
+              }
+              outline
+            >
+              Thay đổi thông tin nhân viên
+            </Button>
           </div>
         </animated.div>
       </Popup>

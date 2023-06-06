@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const cx = classNames.bind(styles);
 
-function InputForm({ placeholder, leftIcon, type, value, setValue, name, className, readOnly }) {
-  let classes = cx('wrapper', { [className]: className });
+function InputForm({ placeholder, leftIcon, type, value, setValue, name, className, readOnly, error }) {
+  let classes = cx('wrapper', { [className]: className }, { error: error });
   return (
     <div className={classes}>
       <div className={cx('icon')}>{leftIcon && <FontAwesomeIcon icon={leftIcon}></FontAwesomeIcon>}</div>

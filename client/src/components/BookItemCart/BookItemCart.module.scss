@@ -8,6 +8,7 @@
 }
 
 .content-left {
+  display: flex;
   .img {
     width: 90px;
     height: 100px;
@@ -16,6 +17,11 @@
   .star {
     font-size: 1.2rem;
   }
+}
+
+.checkbox {
+  width: 1.6rem;
+  cursor: pointer;
 }
 
 .content-center {

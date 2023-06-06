@@ -19,6 +19,12 @@
   padding-top: 30px;
 }
 
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  padding-right: 100px;
+}
+
 .header {
   font-size: 2rem;
   color: var(--black);
@@ -90,4 +96,9 @@
     border-color: var(--text-color);
     background-color: #f5f5fb;
   }
+}
+
+.error-message {
+  color: var(--primary);
+  font-size: 1.4rem;
 }

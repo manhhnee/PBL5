@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { useSpring, animated } from 'react-spring';
+import { Flip, ToastContainer, toast } from 'react-toastify';
 
 import Image from '~/components/Image';
 import Button from '~/components/Button';
@@ -69,14 +70,15 @@ function ManageCategory() {
           },
         },
       )
-      .then((response) => {
-        alert(response.data.message);
+      .then((res) => {
+        toast.success(res.data.message);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       })
-      .catch((error) => {
-        alert('Something went wrong', error);
+      .catch((e) => {
+        toast.error(e);
       });
-
-    window.location.reload();
   };
 
   const handleUpdateCategory = async (name, image) => {
@@ -93,24 +95,28 @@ function ManageCategory() {
         },
       )
       .then((res) => {
-        alert(res.data.message);
+        toast.success(res.data.message);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       })
       .catch((err) => {
-        alert('Sth wrong', err);
+        toast.error(err);
       });
-    window.location.reload();
   };
 
   const handleDeleteCategory = async () => {
     await axios
       .delete(`http://localhost:5000/api/category/delete/${selectedCategoryId}`)
       .then((res) => {
-        alert(res.data.message);
+        toast.success(res.data.message);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       })
       .catch((err) => {
-        alert('Sth wrong', err);
+        toast.error(err);
       });
-    window.location.reload();
   };
 
   const modalAnimation1 = useSpring({
@@ -146,6 +152,19 @@ function ManageCategory() {
 
   return (
     <div className={cx('wrapper')}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        transition={Flip}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className={cx('btn')}>
         <Button onClick={() => openModal2()} blue leftIcon={<FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>}>
           Thêm thể loại
