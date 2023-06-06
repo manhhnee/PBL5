@@ -80,8 +80,7 @@ inforUser.deleteStaff = function(idAccount,results){
     else return results({success:true,message:"xóa thành công nhân viên"})
   })
 }
-inforUser.addStaff = function(data,results){
-  console.log(data)
+inforUser.addStaff = function(data,avatarPath,results){
   db.query(
     "SELECT * FROM account WHERE Username = ?",
     [data.Username],
@@ -98,6 +97,28 @@ inforUser.addStaff = function(data,results){
               [data.Username, hash, 2],
               function (err, user) {
                 if (err) return results({ success: false, message: err.message });
+                else if(avatarPath) {
+                  db.query(
+                    "INSERT INTO inforuser (id_Account,FirstName,LastName,PhoneNumber,Address,Avatar) VALUES (?, ?, ?, ?, ?, ?)",
+                    [
+                      user.insertId,
+                      data.FirstName,
+                      data.LastName,
+                      data.PhoneNumber,
+                      data.Address,
+                      avatarPath
+                    ],
+                    function (err, users) {
+                      if (err) return results({ success: false, message: err.message });
+                      else {
+                        return results({
+                          success: true,
+                          message: "tạo tài khoản nhân viên thành công",
+                        });
+                      }
+                    }
+                  );
+                }
                 else {
                   db.query(
                     "INSERT INTO inforuser (id_Account,FirstName,LastName,PhoneNumber,Address) VALUES (?, ?, ?, ?, ?)",
@@ -106,14 +127,14 @@ inforUser.addStaff = function(data,results){
                       data.FirstName,
                       data.LastName,
                       data.PhoneNumber,
-                      data.Address,
+                      data.Address
                     ],
                     function (err, users) {
                       if (err) return results({ success: false, message: err.message });
                       else {
                         return results({
                           success: true,
-                          message: "tạo tài khoản nhân viên thành công",
+                          message: "tạo tài khoản nhân viên thành công (without Avatar)",
                         });
                       }
                     }

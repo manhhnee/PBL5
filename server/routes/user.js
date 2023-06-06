@@ -19,6 +19,7 @@ router.delete(
     "/addStaff",
     AuthController.verifyToken,
     AuthController.isAdmin,
+    upload.single('Avatar'),
     InforUserController.addStaff
   )
   router.put(
