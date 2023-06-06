@@ -11,10 +11,7 @@ import Image from '~/components/Image';
 import images from '~/assets/images';
 import * as BookService from '~/services/bookServices';
 import * as CategoryService from '~/services/categoryServices';
-<<<<<<< HEAD
 import axios from 'axios';
-=======
->>>>>>> c6d4629a39267c1d8013599c65b854e193918efb
 
 const cx = classNames.bind(styles);
 
