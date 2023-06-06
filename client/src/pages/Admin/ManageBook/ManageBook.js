@@ -5,12 +5,13 @@ import DataTable from 'react-data-table-component';
 import { faImage } from '@fortawesome/free-regular-svg-icons';
 import { faBook, faPlus, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { useSpring, animated } from 'react-spring';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import Button from '~/components/Button/Button';
 import Popup from '~/components/Popup/Popup';
 import InputForm from '~/components/InputForm/InputForm';
+import CustomSelect from '~/components/CustomSelect';
 import styles from './ManageBook.module.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const cx = classNames.bind(styles);
 
@@ -101,6 +102,7 @@ function ManageBook() {
           Author: author,
           Description: description,
           Publication_Date: date,
+          Publisher: publisher,
           Image: image,
         },
         {
@@ -119,7 +121,7 @@ function ManageBook() {
       });
   };
 
-  const handleUpdateBook = async (id, idCategory, name, price, author, description, date, publisher) => {
+  const handleUpdateBook = async (id, idCategory, name, price, author, description, date, publisher, image) => {
     await axios
       .put(
         `http://localhost:5000/api/book/update/${id}`,
@@ -131,6 +133,7 @@ function ManageBook() {
           Description: description,
           Publication_Date: date,
           Publisher: publisher,
+          Image: image,
         },
         {
           headers: {
@@ -315,8 +318,8 @@ function ManageBook() {
               leftIcon={faImage}
             />
           </div>
+          <div className={cx('header')}>Mô tả</div>
           <div className={cx('input-field')}>
-            <div className={cx('header')}>Mô tả</div>
             <InputForm
               placeholder=""
               type="text"
@@ -327,24 +330,9 @@ function ManageBook() {
               leftIcon={faImage}
             />
           </div>
+          <div className={cx('header')}>Chọn thể loại</div>
           <div className={cx('input-field')}>
-            <div className={cx('header')}>Thể loại</div>
-            <select
-              className={cx('input-select')}
-              value={selectedCategoryId}
-              onChange={(e) => {
-                setSelectedCategoryId(e.target.value);
-              }}
-            >
-              {categories &&
-                categories.map((category) => {
-                  return (
-                    <option key={category.id} value={category.id}>
-                      {category.Name}
-                    </option>
-                  );
-                })}
-            </select>
+            <CustomSelect data={categories} setId={setSelectedCategoryId}></CustomSelect>
           </div>
 
           <div className={cx('options')}>
@@ -374,8 +362,8 @@ function ManageBook() {
       <Popup isOpen={isModalOpen2} onRequestClose={() => closeModal2()} width={'700px'} height={'700px'}>
         <animated.div style={modalAnimation2}>
           <h2>Thông tin sách</h2>
+          <div className={cx('header')}>Tên sách</div>
           <div className={cx('input-field')}>
-            <div className={cx('header')}>Tên sách</div>
             <InputForm
               placeholder=""
               type="text"
@@ -386,8 +374,8 @@ function ManageBook() {
               leftIcon={faBook}
             />
           </div>
+          <div className={cx('header')}>Tác giả</div>
           <div className={cx('input-field')}>
-            <div className={cx('header')}>Tác giả</div>
             <InputForm
               placeholder=""
               type="text"
@@ -398,8 +386,8 @@ function ManageBook() {
               leftIcon={faImage}
             />
           </div>
+          <div className={cx('header')}>Nhà sản xuất</div>
           <div className={cx('input-field')}>
-            <div className={cx('header')}>Nhà sản xuất</div>
             <InputForm
               placeholder=""
               type="text"
@@ -410,8 +398,8 @@ function ManageBook() {
               leftIcon={faImage}
             />
           </div>
+          <div className={cx('header')}>Giá</div>
           <div className={cx('input-field')}>
-            <div className={cx('header')}>Giá</div>
             <InputForm
               placeholder=""
               type="text"
@@ -422,8 +410,8 @@ function ManageBook() {
               leftIcon={faImage}
             />
           </div>
+          <div className={cx('header')}>Mô tả</div>
           <div className={cx('input-field')}>
-            <div className={cx('header')}>Mô tả</div>
             <InputForm
               placeholder=""
               type="text"
@@ -434,26 +422,12 @@ function ManageBook() {
               leftIcon={faImage}
             />
           </div>
+          <div className={cx('header')}>Chọn thể loại</div>
           <div className={cx('input-field')}>
-            <div className={cx('header')}>Thể loại</div>
-            <select
-              className={cx('input-select')}
-              value={selectedCategoryId}
-              onChange={(e) => {
-                setSelectedCategoryId(e.target.value);
-              }}
-            >
-              {categories.map((category) => {
-                return (
-                  <option key={category.id} value={category.id}>
-                    {category.Name}
-                  </option>
-                );
-              })}
-            </select>
+            <CustomSelect data={categories} setId={setSelectedCategoryId}></CustomSelect>
           </div>
+          <div className={cx('header')}>Ảnh của sách</div>
           <div className={cx('input-field')}>
-            <div className={cx('header')}>Ảnh của sách</div>
             <div className={cx('upload-field')}>
               {avatar && <img src={image} className={cx('image')} alt="Avatar" />}
               <label htmlFor="file-upload" className={cx('upload-btn')}>
@@ -473,7 +447,7 @@ function ManageBook() {
                   payload.description,
                   new Date().toString(),
                   payload.publisher,
-                  image,
+                  avatar,
                 )
               }
               outline
