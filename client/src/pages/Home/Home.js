@@ -11,6 +11,7 @@ import Image from '~/components/Image';
 import images from '~/assets/images';
 import * as BookService from '~/services/bookServices';
 import * as CategoryService from '~/services/categoryServices';
+import MessengerPopup from '~/components/Chat/MessengerPopup';
 
 const cx = classNames.bind(styles);
 
@@ -108,6 +109,7 @@ function Home() {
           <Button outline>Xem thêm</Button>
         </div>
       </div>
+      <MessengerPopup/>
     </div>
   );
 }

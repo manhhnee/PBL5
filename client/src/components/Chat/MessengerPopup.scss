@@ -1,0 +1,68 @@
+.messenger-popup {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+  width: 50px;
+  height: 50px;
+  background-color: #4267b2;
+  color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.hide {
+  display: none;
+}
+
+.popup-content {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 300px;
+  height: 400px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  display: none;
+  transition: transform 0.3s ease;
+  transform: translateY(100%);
+}
+
+.show-popup {
+  display: block;
+  transform: translateY(0);
+}
+
+.chatbot-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 30px;
+  padding: 10px;
+}
+
+
+.toggle-button {
+  position: absolute;
+  top: 6px;
+  right: 15px;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 35px;
+  font-weight: bold;
+  color: #4267b2;
+}
+

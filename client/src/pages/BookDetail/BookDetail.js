@@ -38,11 +38,12 @@ function BookDetail() {
     fetchAPIBooks();
   }, []);
 
-  function addToCart(bookId) {
+  function addToCart() {
     axios
-      .post("http://localhost:5000/api/cart", {
-        bookId: bookId,
+      .post(`http://localhost:5000/api/cart/${id}`, {
         quantity: 1,
+      }, {
+        withCredentials: true // Để truyền cookie trong request
       })
       .then((response) => {
         console.log(response);
@@ -52,6 +53,7 @@ function BookDetail() {
         console.log(error);
       });
   }
+  
 
   function handleIncrement() {
     setCount(count + 1);

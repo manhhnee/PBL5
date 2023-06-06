@@ -11,7 +11,7 @@ import config from '~/config';
 
 const cx = classNames.bind(styles);
 
-function Login() {
+function Login (props) {
   const location = useLocation();
 
   const [isSignupMode, setIsSignupMode] = useState(location.state?.flag);
@@ -24,6 +24,8 @@ function Login() {
     address: '',
   });
 
+  const [username, setUsername] = useState('');
+  console.log(username);
   const handleSignupClick = () => setIsSignupMode(true);
   const handleSigninClick = () => setIsSignupMode(false);
 
@@ -78,6 +80,7 @@ function Login() {
       alert(data.message);
     }
   };
+  const HandleValidation = (pros) => {};
   return (
     <div className={cx('wrapper')}>
       <div className={cx('container', `${isSignupMode ? 'sign-up-mode' : ''}`)}>
@@ -89,6 +92,7 @@ function Login() {
                 placeholder="Username"
                 leftIcon={faUser}
                 type="text"
+                onChange={console.log(document.getSelection("input[name='usename']").target)}
                 value={payload.username}
                 setValue={setPayload}
                 name={'username'}

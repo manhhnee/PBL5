@@ -1,42 +1,62 @@
 const CartItemModel = require('../models/cart_item')
-const BookSupplierModel = require('../models/book_supplier')
 const CartModel = require('../models/cart')
+const BookSupplierModel = require('../models/book_supplier')
 const jwt = require('jsonwebtoken')
 
 class CartItemController {
-  async Add(req, res){
+  async Add (req, res) {
+    const id_Book = parseInt(req.params.id_Book)
+    const quantity = parseInt(req.body.quantity)
+    console.log(id_Book, quantity)
+
     try {
-      // Lấy id_Book từ URL
-      const { id_Book } = req.params;
-  
-      // Lấy thông tin về BookSupplier từ database dựa trên id_Book
-      const bookSupplier = await BookSupplierModel.getBookSupplierByBookId(id_Book);
-      const { id: id_BookSupplier } = bookSupplier[0];
-  
-      // Lấy thông tin về tài khoản từ token được gửi trong header
-      const decoded = jwt.verify(req.cookies.token, 'mk');
-  
-      // Lấy thông tin giỏ hàng của tài khoản đó từ database
-      const cart = await CartModel.getCartByAccountId(decoded.id);
-      const cartId = cart[0].id;
-  
-      // Kiểm tra xem Cart Item đã tồn tại trong giỏ hàng chưa
-      const existingCartItem = await CartItemModel.getCartItemByCartIdAndBookSupplierId(cartId, id_BookSupplier);
-  
-      if (existingCartItem.length > 0) {
-        // Nếu Cart Item đã tồn tại, cập nhật số lượng
-        const newQuantity = existingCartItem[0].quantity + parseInt(req.body.quantity);
-        await CartItemModel.updateCartItem(existingCartItem[0].id, newQuantity);
-      } else {
-        // Nếu Cart Item chưa tồn tại, tạo mới
-        await CartItemModel.createCartItem(cartId, id_BookSupplier, req.body.quantity);
+      // Tìm thông tin của sách và nhà cung cấp
+      let bookSupplier = await BookSupplierModel.getBookSupplierByIdBook(id_Book)
+      
+      console.log(bookSupplier)
+
+      if (!bookSupplier) {
+        return res.status(404).json({ message: 'Book supplier not found' })
       }
-      res.json({ message: 'Thêm Cart Item vào giỏ hàng thành công' });
+
+      const id_Supplier = bookSupplier.id_Supplier
+      const Import_Price = bookSupplier.Import_Price
+      const Amount = bookSupplier.Amount
+      console.log(Import_Price, id_Supplier, Amount)
+
+      // Lấy thông tin giỏ hàng của user
+      const decoded = jwt.verify(req.cookies.token, 'mk')
+      const accountId = decoded.id
+      const cart = await CartModel.getCartByAccountId(accountId)
+      console.log(cart)
+      const idCart = cart[0].id
+
+      // Tìm cart item tương ứng trong giỏ hàng
+      const cartItem = await CartItemModel.getCartItemByIdBookSupplierAndIdCart(
+        bookSupplier.id,
+        idCart
+      )
+
+      if (cartItem) {
+        // Nếu đã có trong giỏ hàng thì cập nhật số lượng
+        const updatedQuantity = cartItem.quantity + quantity
+        await CartItemModel.updateCartItemQuantity(cartItem.id, updatedQuantity)
+        res.json({ message: `Added ${quantity} books to cart` })
+      } else {
+        // Nếu chưa có thì tạo mới cart item
+        const newCartItem = {
+          idBookSupplier: bookSupplier.id,
+          idCart,
+          quantity
+        }
+        await CartItemModel.addCartItem(newCartItem)
+        res.json({ message: `Added ${quantity} books to cart` })
+      }
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Lỗi server' });
+      console.error(error)
+      res.status(500).json({ message: 'Internal server error' })
     }
-  };
+  }
 
   async Update (req, res) {
     const { cartItemId } = req.params
@@ -74,6 +94,7 @@ class CartItemController {
   async ShowAll (req, res) {
     try {
       const decoded = jwt.verify(req.cookies.token, 'mk')
+      console.log(decoded)
 
       const cart = await CartModel.getCartByAccountId(decoded.id)
       const cartId = cart[0].id

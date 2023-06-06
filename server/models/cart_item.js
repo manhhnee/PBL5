@@ -7,17 +7,27 @@ class CartItem {
     this.cartId = cartId
     this.quantity = quantity
   }
-
-  static async addCartItem(cartId, bookSupplierId, quantity) {
-    try {
-      const [result] = await db.query(
-        'INSERT INTO Cart_Item (CartId, BookSupplierId, Quantity) VALUES (?, ?, ?)',
-        [cartId, bookSupplierId, quantity]
-      );
-      return result.insertId;
-    } catch (error) {
-      throw error;
+  static async getCartItemByIdBookSupplierAndIdCart(idBookSupplier, idCart) {
+    console.log('idBookSupplier:', idBookSupplier);
+    console.log('idCart:', idCart);
+    const sql = `SELECT * FROM cart_item WHERE id_BookSupplier = ${idBookSupplier} AND id_Cart = ${idCart}`;
+    const results = await db.query(sql);
+    if (!results || !results.length) {
+      return null;
     }
+    return results[0];
+}
+
+  static async updateCartItemQuantity (id, quantity) {
+    const sql = `UPDATE cart_item SET quantity = ${quantity} WHERE id = ${id}`
+    const result = await db.query(sql)
+    return result
+  }
+
+  static async addCartItem(cartItem) {
+    const sql = 'INSERT INTO cart_item SET ?'
+    const result = await db.query(sql, cartItem)
+    return result
   }
 
   static async updateCartItemQuantity (cartItemId, newQuantity) {

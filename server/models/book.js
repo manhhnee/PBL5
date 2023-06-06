@@ -10,6 +10,20 @@ const book = function (book) {
     (this.Publication_Date = book.Publication_Date),
     (this.Publisher = book.Publisher);
 };
+book.getBookById = function (bookId, result) {
+  db.query('SELECT * FROM book WHERE id = ?', [bookId], function (err, res) {
+    if (err) {
+      console.log('Error while fetching book by id', err);
+      result(err, null); // Gọi hàm callback với kết quả là lỗi
+    } else if (res.length) {
+      result(null, res[0]); // Gọi hàm callback với kết quả là thông tin sách
+    } else {
+      result("Book not found", null); // Gọi hàm callback với kết quả là sách không tìm thấy
+    }
+  });
+};
+
+
 book.add = function (data, results) {
   db.query(
     "INSERT INTO book (id_Category, Name, Price, Author, Description,Publication_Date,Publisher) VALUES (?, ?, ?, ?, ?, ?, ?)",
