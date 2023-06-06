@@ -23,7 +23,7 @@ book.add = function (data, BookPath, results) {
       data.Publisher,
     ],
     function (err, book) {
-      if (err) return err;
+      if (err) console.log(1);
       else if (BookPath == null)
         return results({
           success: true,
@@ -34,7 +34,7 @@ book.add = function (data, BookPath, results) {
           "INSERT INTO image_book (id_Book, Image) VALUES (?, ?)",
           [book.insertId, BookPath],
           function (err, images) {
-            if (err) return err;
+            if (err) console.log(2);
             else {
               return results({ success: true, message: "thêm thành công" });
             }
