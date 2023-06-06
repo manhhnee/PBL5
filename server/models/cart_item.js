@@ -10,7 +10,6 @@ class CartItem {
   }
 
   static async createCartItem (bookSupplierId, cartId, quantity) {
-
     return new Promise((resolve, reject) => {
       db.query(
         `INSERT INTO cart_item (id_BookSupplier, id_cart, quantity) VALUES (?, ?, ?)`,
@@ -24,7 +23,6 @@ class CartItem {
               bookSupplierId,
               cartId,
               quantity
-
             )
             resolve(newCartItem)
           }

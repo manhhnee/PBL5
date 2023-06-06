@@ -6,10 +6,10 @@ var AuthController = require("../controllers/auth");
 
 
 // Cart item
-
+router.post('/', CartItemController.Add);
 
 // Route to update an existing cart item's quantity
-// router.patch('/:cartItemId', CartItemController.Update);
+router.patch('/:cartItemId', CartItemController.Update);
 
 // Route to delete a cart item
 // router.delete('/:cartItemId', CartItemController.Delete);
@@ -23,6 +23,9 @@ router.put('/quantityUpdate/:idCartItem',AuthController.verifyToken, CartControl
 
 router.delete('/delete/:idCartItem',AuthController.verifyToken, CartController.delete)
 
+
+
+router.post('/:id_Book', CartItemController.Add);
 
 
 

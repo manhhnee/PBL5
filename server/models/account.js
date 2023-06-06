@@ -117,5 +117,28 @@ account.find = function (id, result) {
     }
   });
 };
-
+account.changePassWord = function (idAccount,data,results){
+  db.query("SELECT * FROM account WHERE id = ?",idAccount,(err,user)=>{
+    bcrypt.compare(data.Password, user[0].Password, function (err, result) {
+      if (err) return err;
+      if (result === false) return results({ success: false, message: "mật khẩu cũ không đúng" });
+      else if (data.Password == data.NewPassword) return results({ success: false, message:"mật khẩu mới trùng mật khẩu cũ"})
+      else if (data.NewPassword != data.AgainPassword) return results({ success: false, message:"không khớp mật khẩu mới"})
+      else {
+        bcrypt.hash(data.NewPassword , salt, (err, hash) => {
+          if (err) return err;
+          else {
+            db.query(
+              "UPDATE account SET Password = ? WHERE id =?",
+              [hash, idAccount],
+              function (err, user) {
+                if (err) return err;
+                else return results({success: true, message:"đổi mật khẩu thành công"})
+              })
+          }
+        });
+      }
+    })
+  })
+} 
 module.exports = account;

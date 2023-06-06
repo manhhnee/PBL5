@@ -21,7 +21,7 @@ function ManageBook() {
   const [avatar, setAvatar] = useState([]);
   const [image, setImage] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [selectedCategoryId, setSelectedCategoryId] = useState('1');
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [bookId, setBookId] = useState();
   const [search, setSearch] = useState('');
   const [filteredBooks, setFilteredBooks] = useState([]);
@@ -33,10 +33,57 @@ function ManageBook() {
     price: '',
     description: '',
     id_Category: '',
-    date: '',
   });
   const [isModalOpen1, setIsModalOpen1] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
+
+  const [errorMessages, setErrorMessages] = useState({
+    name: null,
+    description: null,
+    author: null,
+    price: null,
+    category: null,
+    publisher: null,
+    id_Category: null,
+  });
+  const validateForm = () => {
+    let isValid = true;
+    const errors = {};
+
+    if (!payload.name.trim()) {
+      errors.name = 'Vui lòng nhập tên truyện';
+      isValid = false;
+    }
+
+    if (!payload.description.trim()) {
+      errors.description = 'Vui lòng nhập mô tả';
+      isValid = false;
+    }
+
+    if (!payload.author.trim()) {
+      errors.author = 'Vui lòng nhập tên tác giả';
+      isValid = false;
+    }
+
+    if (!payload.price.toString().trim()) {
+      errors.price = 'Vui lòng nhập giá bán';
+      isValid = false;
+    }
+
+    if (!payload.publisher.trim()) {
+      errors.publisher = 'Vui lòng nhập nhà xuất bản';
+      isValid = false;
+    }
+
+    if (!payload.id_Category.trim()) {
+      errors.id_Category = 'Vui lòng chọn thể loại';
+      isValid = false;
+    }
+
+    setErrorMessages(errors);
+
+    return isValid;
+  };
 
   function getJwtFromCookie() {
     //lấy token được lưu trong cookie ra
@@ -78,7 +125,6 @@ function ManageBook() {
         description: book.Description,
         price: book.Price,
         category: book.category,
-        idCategory: book.id_Category,
         publisher: book.Publisher,
       }));
     } catch (e) {
@@ -92,7 +138,8 @@ function ManageBook() {
     setCategories(categoriesData);
   };
 
-  const handleAddBook = async (idCategory, name, price, author, description, date, publisher, image) => {
+  const handleAddBook = async (idCategory, name, price, author, description, publisher, image) => {
+    console.log(idCategory, name, price, author, description, publisher, image);
     await axios
       .post(
         'http://localhost:5000/api/book/add',
@@ -102,7 +149,6 @@ function ManageBook() {
           Price: price,
           Author: author,
           Description: description,
-          Publication_Date: date,
           Publisher: publisher,
           Image: image,
         },
@@ -124,36 +170,38 @@ function ManageBook() {
       });
   };
 
-  const handleUpdateBook = async (id, idCategory, name, price, author, description, date, publisher, image) => {
-    await axios
-      .put(
-        `http://localhost:5000/api/book/update/${id}`,
-        {
-          id_Category: idCategory,
-          Name: name,
-          Price: price,
-          Author: author,
-          Description: description,
-          Publication_Date: date,
-          Publisher: publisher,
-          Image: image,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${getJwtFromCookie()}`,
+  const handleUpdateBook = async (id, idCategory, name, price, author, description, publisher, image) => {
+    if (!validateForm()) {
+      return;
+    } else {
+      await axios
+        .put(
+          `http://localhost:5000/api/book/update/${id}`,
+          {
+            id_Category: idCategory,
+            Name: name,
+            Price: price,
+            Author: author,
+            Description: description,
+            Publisher: publisher,
           },
-        },
-      )
-      .then((res) => {
-        toast.success(res.data.message);
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
-      })
-      .catch((e) => {
-        toast.error(e);
-      });
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${getJwtFromCookie()}`,
+            },
+          },
+        )
+        .then((res) => {
+          toast.success(res.data.message);
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        })
+        .catch((e) => {
+          toast.error(e);
+        });
+    }
   };
   const handleDeleteBook = async (id) => {
     await axios
@@ -301,6 +349,7 @@ function ManageBook() {
               className={cx('input')}
               leftIcon={faBook}
             />
+            {errorMessages.name && <div className={cx('error-message')}>{errorMessages.name}</div>}
           </div>
           <div className={cx('input-field')}>
             <div className={cx('header')}>Tác giả</div>
@@ -313,6 +362,7 @@ function ManageBook() {
               className={cx('input')}
               leftIcon={faImage}
             />
+            {errorMessages.author && <div className={cx('error-message')}>{errorMessages.author}</div>}
           </div>
           <div className={cx('input-field')}>
             <div className={cx('header')}>Nhà sản xuất</div>
@@ -325,6 +375,7 @@ function ManageBook() {
               className={cx('input')}
               leftIcon={faImage}
             />
+            {errorMessages.publisher && <div className={cx('error-message')}>{errorMessages.publisher}</div>}
           </div>
           <div className={cx('input-field')}>
             <div className={cx('header')}>Giá</div>
@@ -337,6 +388,7 @@ function ManageBook() {
               className={cx('input')}
               leftIcon={faImage}
             />
+            {errorMessages.price && <div className={cx('error-message')}>{errorMessages.price}</div>}
           </div>
           <div className={cx('header')}>Mô tả</div>
           <div className={cx('input-field')}>
@@ -349,10 +401,12 @@ function ManageBook() {
               className={cx('input')}
               leftIcon={faImage}
             />
+            {errorMessages.description && <div className={cx('error-message')}>{errorMessages.description}</div>}
           </div>
           <div className={cx('header')}>Chọn thể loại</div>
           <div className={cx('input-field')}>
             <CustomSelect data={categories} setId={setSelectedCategoryId}></CustomSelect>
+            {errorMessages.id_Category && <div className={cx('error-message')}>{errorMessages.id_Category}</div>}
           </div>
 
           <div className={cx('options')}>
@@ -365,7 +419,6 @@ function ManageBook() {
                   payload.price,
                   payload.author,
                   payload.description,
-                  new Date().toString(),
                   payload.publisher,
                 )
               }
@@ -382,8 +435,8 @@ function ManageBook() {
       <Popup isOpen={isModalOpen2} onRequestClose={() => closeModal2()} width={'700px'} height={'700px'}>
         <animated.div style={modalAnimation2}>
           <h2>Thông tin sách</h2>
-          <div className={cx('header')}>Tên sách</div>
           <div className={cx('input-field')}>
+            <div className={cx('header')}>Tên sách</div>
             <InputForm
               placeholder=""
               type="text"
@@ -393,9 +446,10 @@ function ManageBook() {
               className={cx('input')}
               leftIcon={faBook}
             />
+            {errorMessages.name && <div className={cx('error-message')}>{errorMessages.name}</div>}
           </div>
-          <div className={cx('header')}>Tác giả</div>
           <div className={cx('input-field')}>
+            <div className={cx('header')}>Tác giả</div>
             <InputForm
               placeholder=""
               type="text"
@@ -405,9 +459,10 @@ function ManageBook() {
               className={cx('input')}
               leftIcon={faImage}
             />
+            {errorMessages.author && <div className={cx('error-message')}>{errorMessages.author}</div>}
           </div>
-          <div className={cx('header')}>Nhà sản xuất</div>
           <div className={cx('input-field')}>
+            <div className={cx('header')}>Nhà sản xuất</div>
             <InputForm
               placeholder=""
               type="text"
@@ -418,8 +473,9 @@ function ManageBook() {
               leftIcon={faImage}
             />
           </div>
-          <div className={cx('header')}>Giá</div>
+          {errorMessages.publisher && <div className={cx('error-message')}>{errorMessages.publisher}</div>}
           <div className={cx('input-field')}>
+            <div className={cx('header')}>Giá</div>
             <InputForm
               placeholder=""
               type="text"
@@ -429,6 +485,7 @@ function ManageBook() {
               className={cx('input')}
               leftIcon={faImage}
             />
+            {errorMessages.price && <div className={cx('error-message')}>{errorMessages.price}</div>}
           </div>
           <div className={cx('header')}>Mô tả</div>
           <div className={cx('input-field')}>
@@ -441,10 +498,12 @@ function ManageBook() {
               className={cx('input')}
               leftIcon={faImage}
             />
+            {errorMessages.description && <div className={cx('error-message')}>{errorMessages.description}</div>}
           </div>
           <div className={cx('header')}>Chọn thể loại</div>
           <div className={cx('input-field')}>
             <CustomSelect data={categories} setId={setSelectedCategoryId}></CustomSelect>
+            {errorMessages.id_Category && <div className={cx('error-message')}>{errorMessages.id_Category}</div>}
           </div>
           <div className={cx('header')}>Ảnh của sách</div>
           <div className={cx('input-field')}>
@@ -465,7 +524,6 @@ function ManageBook() {
                   payload.price,
                   payload.author,
                   payload.description,
-                  new Date().toString(),
                   payload.publisher,
                   avatar,
                 )

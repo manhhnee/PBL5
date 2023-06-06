@@ -12,7 +12,7 @@ import styles from './Login.module.scss';
 
 const cx = classNames.bind(styles);
 
-function Login() {
+function Login (props) {
   const location = useLocation();
 
   const [isSignupMode, setIsSignupMode] = useState(location.state?.flag);
@@ -33,6 +33,8 @@ function Login() {
     address: null,
   });
 
+  const [username, setUsername] = useState('');
+  console.log(username);
   const handleSignupClick = () => setIsSignupMode(true);
   const handleSigninClick = () => setIsSignupMode(false);
 
@@ -138,6 +140,7 @@ function Login() {
       }
     }
   };
+  const HandleValidation = (pros) => {};
   return (
     <div className={cx('wrapper')}>
       <ToastContainer
@@ -162,6 +165,7 @@ function Login() {
                 placeholder="Username"
                 leftIcon={faUser}
                 type="text"
+                onChange={console.log(document.getSelection("input[name='usename']").target)}
                 value={payload.username}
                 setValue={setPayload}
                 name={'username'}
