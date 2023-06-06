@@ -1,98 +1,107 @@
-const CartItemModel = require('../models/cart_item');
-const CartModel = require('../models/cart');
-const jwt = require('jsonwebtoken');
-
+const CartItemModel = require('../models/cart_item')
+const CartModel = require('../models/cart')
+const BookSupplierModel = require('../models/book_supplier')
+const jwt = require('jsonwebtoken')
 
 class CartItemController {
-  async Add(req, res){
+  async Add (req, res) {
+    const id_Book = parseInt(req.params.id_Book)
+    const quantity = parseInt(req.body.quantity)
+    console.log(id_Book, quantity)
+
     try {
-      const token = req.headers.authorization.split(' ')[1]; // Extract JWT from Authorization header
-      const decoded = jwt.verify(token, 'mk'); // Verify JWT
-      const accountId = decoded.id;
-      const {bookId, quantity} = req.body;
-  
-      // Check if the book exists and retrieve its information
-      const [book] = await db.query('SELECT * FROM books WHERE id = ?', [bookId]);
-  
-      if (!book) {
-        return res.status(404).json({ message: 'Book not found' });
+      // Tìm thông tin của sách và nhà cung cấp
+      let bookSupplier = await BookSupplierModel.getBookSupplierByIdBook(id_Book)
+      
+      console.log(bookSupplier)
+
+      if (!bookSupplier) {
+        return res.status(404).json({ message: 'Book supplier not found' })
       }
-  
-      // Check if the user has an existing cart
-      const [cart] = await db.query('SELECT * FROM cart WHERE id_Account = ?', [accountId]);
-  
-      if (!cart) {
-        // If the user doesn't have a cart yet, create a new cart for them
-        await db.query('INSERT INTO cart (id_Account) VALUES (?)', [accountId]);
-      }
-  
-      // Add the book to the cart or update its quantity if it already exists in the cart
-      const [cartItem] = await db.query(
-        'SELECT * FROM cart_items WHERE id_Cart = ? AND id_Book = ?',
-        [cart.id, bookId]
-      );
-  
-      if (!cartItem) {
-        await db.query(
-          'INSERT INTO cart_items (id_Cart, id_Book, quantity) VALUES (?, ?, ?)',
-          [cart.id, bookId, quantity]
-        );
+
+      const id_Supplier = bookSupplier.id_Supplier
+      const Import_Price = bookSupplier.Import_Price
+      const Amount = bookSupplier.Amount
+      console.log(Import_Price, id_Supplier, Amount)
+
+      // Lấy thông tin giỏ hàng của user
+      const decoded = jwt.verify(req.cookies.token, 'mk')
+      const accountId = decoded.id
+      const cart = await CartModel.getCartByAccountId(accountId)
+      console.log(cart)
+      const idCart = cart[0].id
+
+      // Tìm cart item tương ứng trong giỏ hàng
+      const cartItem = await CartItemModel.getCartItemByIdBookSupplierAndIdCart(
+        bookSupplier.id,
+        idCart
+      )
+
+      if (cartItem) {
+        // Nếu đã có trong giỏ hàng thì cập nhật số lượng
+        const updatedQuantity = cartItem.quantity + quantity
+        await CartItemModel.updateCartItemQuantity(cartItem.id, updatedQuantity)
+        res.json({ message: `Added ${quantity} books to cart` })
       } else {
-        await db.query(
-          'UPDATE cart_items SET quantity = ? WHERE id_Cart = ? AND id_Book = ?',
-          [cartItem.quantity + quantity, cart.id, bookId]
-        );
+        // Nếu chưa có thì tạo mới cart item
+        const newCartItem = {
+          idBookSupplier: bookSupplier.id,
+          idCart,
+          quantity
+        }
+        await CartItemModel.addCartItem(newCartItem)
+        res.json({ message: `Added ${quantity} books to cart` })
       }
-  
-      res.status(200).json({ message: 'Book added to cart successfully' });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: 'Internal server error' });
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ message: 'Internal server error' })
     }
   }
 
-  async Update(req, res){
-    const { cartItemId } = req.params;
-    const { quantity } = req.body;
+  async Update (req, res) {
+    const { cartItemId } = req.params
+    const { quantity } = req.body
     try {
-      const success = await CartItemModel.updateCartItemQuantity(cartItemId, quantity);
+      const success = await CartItemModel.updateCartItemQuantity(
+        cartItemId,
+        quantity
+      )
       if (success) {
-        res.sendStatus(204);
+        res.sendStatus(204)
       } else {
-        res.sendStatus(404);
+        res.sendStatus(404)
       }
     } catch (err) {
-      console.error(err);
-      res.status(500).send('Server Error');
+      console.error(err)
+      res.status(500).send('Server Error')
     }
   }
 
-  async Delete(req, res){
-    const { cartItemId } = req.params;
+  async Delete (req, res) {
+    const { cartItemId } = req.params
     try {
-      const success = await CartItemModel.deleteCartItem(cartItemId);
+      const success = await CartItemModel.deleteCartItem(cartItemId)
       if (success) {
-        res.sendStatus(204);
+        res.sendStatus(204)
       } else {
-        res.sendStatus(404);
+        res.sendStatus(404)
       }
     } catch (err) {
-      console.error(err);
-      res.status(500).send('Server Error');
+      console.error(err)
+      res.status(500).send('Server Error')
     }
   }
-  async ShowAll(req, res) {
+  async ShowAll (req, res) {
     try {
+      const decoded = jwt.verify(req.cookies.token, 'mk');
 
-      const token = req.headers.authorization.split(' ')[1];
-      const decoded = jwt.verify(token, 'mk');
       const cart = await CartModel.getCartByAccountId(decoded.id);
       const cartId = cart[0].id;
       const cartItems = await CartItemModel.getCartItemsByCartId(cartId);
       res.json(cartItems);
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Internal server error' });
+      console.error(error)
+      res.status(500).json({ message: 'Internal server error' })
     }
   }
 }

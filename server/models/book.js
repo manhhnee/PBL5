@@ -10,8 +10,7 @@ const book = function (book) {
   (this.Publication_Date = book.Publication_Date),
     (this.Publisher = book.Publisher);
 };
-book.add = function (data, BookPath, results) {
-  var today = Date()
+book.add = function (data, results) {
   db.query(
     "INSERT INTO book (id_Category, Name, Price, Author, Description,Publication_Date,Publisher) VALUES (?, ?, ?, ?, ?, ?, ?)",
     [
