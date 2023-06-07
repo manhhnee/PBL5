@@ -24,6 +24,9 @@ function BookItemHistory() {
   const [historyDetails, setHistoryDetails] = useState({});
   const [idStatus, setIdStatus] = useState();
   const [idBook, setIdBook] = useState();
+  const [idOrderItem, setIdOrderItem] = useState();
+  const [isRated, setIsRated] = useState(0);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [payload, setPayload] = useState({
     comment: '',
@@ -72,8 +75,7 @@ function BookItemHistory() {
     getApiHistoryDetail();
   }, [id]);
 
-  const handleRating = async (idBook, star, comment) => {
-    console.log(idBook, star, comment);
+  const handleRating = async (idBook, star, comment, idOrderItem) => {
     await axios
       .post(
         'http://localhost:5000/api/rating/add',
@@ -81,6 +83,7 @@ function BookItemHistory() {
           id_Book: idBook,
           star: star,
           commemt: comment,
+          idOrderItem: idOrderItem,
         },
         {
           headers: {
@@ -154,7 +157,7 @@ function BookItemHistory() {
           </div>
 
           <div className={cx('options1')}>
-            <Button onClick={() => handleRating(idBook, rating, payload.comment)} primary>
+            <Button onClick={() => handleRating(idBook, rating, payload.comment, idOrderItem)} primary>
               Xác nhận
             </Button>
           </div>
@@ -182,18 +185,19 @@ function BookItemHistory() {
                     {statusComponent}
                   </div>
                   <div className={cx('options')}>
-                    {idStatus === 3 && (
+                    {idStatus === 3 && order.isRated === 0 ? (
                       <Button
                         onClick={() => {
                           openModal();
                           setIdBook(order.idBook);
+                          setIdOrderItem(order.id);
                         }}
                         blue
                         className={cx('btn')}
                       >
                         Đánh giá
                       </Button>
-                    )}
+                    ) : null}
                     <Button to={`${config.routes.bookdetail}?id=${order.idBook}`} white className={cx('btn')}>
                       Mua lại
                     </Button>

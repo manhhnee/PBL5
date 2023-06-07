@@ -195,7 +195,7 @@ function Information() {
           },
         )
         .then((res) => {
-          toast.success(res.data.message);
+          toast(res.data.message);
           setTimeout(() => {
             window.location.reload();
           }, 2000);

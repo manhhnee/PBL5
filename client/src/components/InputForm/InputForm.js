@@ -26,7 +26,7 @@ InputForm.protoTypes = {
   leftIcon: PropTypes.node,
   type: PropTypes.node.isRequired,
   value: PropTypes.string,
-  setValue: PropTypes.func,
+  setValue: PropTypes.node,
   name: PropTypes.string,
   className: PropTypes.node,
 };

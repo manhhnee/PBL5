@@ -1,21 +1,28 @@
 const db = require("../config/db/index");
 
 const rating = function (rating) {
-    (this.id = rating.id),
+  (this.id = rating.id),
     (this.id_Book = rating.id_Book),
     (this.id_Account = rating.id_Account),
     (this.star = rating.star),
     (this.commemt = rating.commemt);
 };
 
-rating.add = function (data,id_Account, results) {
+rating.add = function (data, id_Account, results) {
   db.query(
     "INSERT INTO rating (id_Book,id_Account, star,comment) VALUES (?, ?, ?, ?)",
     [data.id_Book, id_Account, data.star, data.commemt],
     function (err, ratings) {
-      if (err) return err;
+      if (err) return results({ success: false, message: err.message });
       else {
-        results({ success: true, message: "thêm thành công" });
+        db.query(
+          "UPDATE order_item SET isRated = 1 WHERE id =?",
+          [data.idOrderItem],
+          (err, order) => {
+            if (err) return results({ success: false, message: err.message });
+            else results({ success: true, message: "thêm thành công" });
+          }
+        );
       }
     }
   );
