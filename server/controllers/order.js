@@ -50,5 +50,10 @@ class OrderController {
             res.json(data)
         })
     }
+    revenueOfYear(req,res,next){
+        OrderModel.RevenueOfYear(function(data){
+            res.json(data)
+        })
+    }
 }
 module.exports = new OrderController();

@@ -228,23 +228,91 @@ order.Revenue = function (data, results) {
                 FROM make_order mo
                 INNER JOIN inforuser i ON i.id_Account = mo.id_Account
                 WHERE mo.id_Status = 3 `
+    var query2 = `SELECT DATE(OrderDate) AS revenue_date, SUM(totalPrice) AS revenue
+                FROM make_order WHERE id_Status = 3 ` 
+                
     if (data.dateMin && data.dateMax) {
         query += `AND DATE(mo.OrderDate) >= '${data.dateMin}'
-                    AND DATE(mo.OrderDate) <= '${data.dateMax}'`
+                    AND DATE(mo.OrderDate) <= '${data.dateMax}' `
+        query2+= `AND DATE(OrderDate) >= '${data.dateMin}'
+                    AND DATE(OrderDate) <= '${data.dateMax}' `
     }
     else {
         query += `AND DATE(mo.OrderDate) >= '${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}'
                     AND DATE(mo.OrderDate) <= '${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}'`
+        query2+= `AND DATE(OrderDate) >= '${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}'
+                    AND DATE(OrderDate) <= '${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}'`
     }
     query += `GROUP BY mo.id DESC`
+    query2+=`GROUP BY revenue_date
+             ORDER BY revenue_date ASC`
     db.query(query, [], (err, successOrder) => {
         if (err) return results({ success: false, message: err.message })
-        var revenue = 0
+        var totalRevenue = 0
         for (var i = 0; i < successOrder.length; i++) {
-            revenue += parseInt(successOrder[i].totalPrice)
+            totalRevenue += parseInt(successOrder[i].totalPrice)
         }
-        return results({ revenue: revenue, order: successOrder })
+        db.query(query2,[],(err,chartRevenue)=>{
+            if (err) return results({ success: false, message: err.message })
+            else return results({ totalRevenue: totalRevenue, order: successOrder,chartRevenue: chartRevenue})
+        })             
     })
 }
-
+order.RevenueOfYear = function(results) {
+    // tổng sản phảm mua trong 1 năm 
+    var query1 = `SELECT SUM(oi.quantity) AS total_books_sold
+                    FROM order_item oi INNER JOIN make_order mo ON oi.id_Order = mo.id
+                    WHERE mo.id_Status = 3
+                    AND YEAR(OrderDate) = YEAR(CURRENT_DATE);`
+    // tổng doanh thu trong 1 năm
+    var query2 = `SELECT SUM(totalPrice) AS total_revenue
+                    FROM make_order
+                    WHERE id_Status = 3
+                    AND YEAR(OrderDate) = YEAR(CURRENT_DATE);`
+    // khách hàng tiềm năng và số sản phẩm khách hàng đó mua
+    var query3 = `SELECT i.FirstName,i.LastName, SUM(oi.quantity) AS total_purchases
+                    FROM order_item oi
+                    INNER JOIN make_order mo ON oi.id_Order = mo.id
+                    INNER JOIN inforuser i ON i.id_Account = mo.id_Account
+                    WHERE mo.id_Status = 3
+                    AND YEAR(mo.OrderDate) = YEAR(CURRENT_DATE)
+                    GROUP BY i.LastName
+                    ORDER BY total_purchases DESC 
+                    LIMIT 1;`
+    // top 10 sản phẩm bán chạy 
+    var query4 = `SELECT b.Name AS product_name,SUM(oi.quantity) AS total_sold
+                    FROM order_item oi
+                    INNER JOIN make_order mo ON oi.id_Order = mo.id
+                    INNER JOIN book_supplier bs ON oi.id_BookSupplier = bs.id
+                    INNER JOIN book b ON bs.id_Book = b.id
+                    WHERE mo.id_Status = 3 
+                    AND YEAR(mo.OrderDate) = YEAR(CURRENT_DATE)
+                    GROUP BY oi.id_BookSupplier
+                    ORDER BY total_sold DESC
+                    LIMIT 10;`
+    db.query(query1,(err,YearNumberOfProducts)=>{
+        if (err) return results({success:false,message:err.message})
+        else {
+            db.query(query2,(err,RevenueofYear)=>{
+                if (err) return results({success:false,message:err.message})
+                else {
+                    db.query(query3,(err,potentialCustomer)=>{
+                        if (err) return results({success:false,message:err.message})
+                        else {
+                            db.query(query4,(err,TopProduct)=>{
+                                if (err) return results({success:false,message:err.message})
+                                else return results({
+                                    NumberOfProducts :YearNumberOfProducts[0].total_books_sold,
+                                    RevenueofYear : RevenueofYear[0].total_revenue,
+                                    potentialCustomer : potentialCustomer[0],
+                                    TopProduct: TopProduct
+                                })
+                            })
+                        }
+                    })
+                }
+            })
+        }
+    })  
+}
 module.exports = order
