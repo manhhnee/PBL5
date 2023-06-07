@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot, faMobileScreenButton, faPlus, faSignature } from '@fortawesome/free-solid-svg-icons';
+import { faLocationDot, faMobileScreenButton, faPlus, faSignature, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { useSpring, animated } from 'react-spring';
 import { Flip, ToastContainer, toast } from 'react-toastify';
@@ -16,6 +16,8 @@ const cx = classNames.bind(styles);
 
 function ManageStaff() {
   const [listStaff, setListStaff] = useState([]);
+  const [avatar, setAvatar] = useState([]);
+  const [image, setImage] = useState([]);
   const [isModalOpen1, setIsModalOpen1] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const [selectedStaffId, setSelectedStaffId] = useState();
@@ -54,7 +56,7 @@ function ManageStaff() {
     return '';
   }
 
-  const handleAddStaff = async (username, password, fisrtname, lastname, phone, address) => {
+  const handleAddStaff = async (username, password, fisrtname, lastname, phone, address, image) => {
     await axios
       .post(
         'http://localhost:5000/api/user/addStaff',
@@ -65,10 +67,11 @@ function ManageStaff() {
           LastName: lastname,
           PhoneNumber: phone,
           Address: address,
+          Avatar: image,
         },
         {
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${getJwtFromCookie()}`,
           },
         },
@@ -84,7 +87,7 @@ function ManageStaff() {
       });
   };
 
-  const handleUpdateStaff = async (id, fisrtname, lastname, phone, address) => {
+  const handleUpdateStaff = async (id, fisrtname, lastname, phone, address, image) => {
     await axios
       .put(
         `http://localhost:5000/api/user/updateStaff/${id}`,
@@ -93,10 +96,11 @@ function ManageStaff() {
           LastName: lastname,
           PhoneNumber: phone,
           Address: address,
+          Avatar: image,
         },
         {
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${getJwtFromCookie()}`,
           },
         },
@@ -148,6 +152,17 @@ function ManageStaff() {
 
     getApiStaffs();
   }, []);
+
+  const handleImgChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setImage(e.target.result);
+    };
+
+    reader.readAsDataURL(file);
+    setAvatar(e.target.files[0]);
+  };
 
   const openModal1 = (staffID, firstName, lastName, address, phone) => {
     setSelectedStaffId(staffID);
@@ -254,8 +269,8 @@ function ManageStaff() {
               leftIcon={faLocationDot}
             />
           </div>
+          <div className={cx('header')}>Số điện thoại</div>
           <div className={cx('input-field')}>
-            <div className={cx('header')}>Số điện thoại</div>
             <InputForm
               placeholder="0905111123"
               type="text"
@@ -265,6 +280,16 @@ function ManageStaff() {
               className={cx('input')}
               leftIcon={faMobileScreenButton}
             />
+          </div>
+          <div className={cx('header')}>Ảnh của sách</div>
+          <div className={cx('input-field')}>
+            <div className={cx('upload-field')}>
+              {avatar && <img src={image} className={cx('image')} alt="Avatar" />}
+              <label htmlFor="file-upload" className={cx('upload-btn')}>
+                <FontAwesomeIcon icon={faUpload}></FontAwesomeIcon>
+                <input id="file-upload" type="file" onChange={handleImgChange}></input>
+              </label>
+            </div>
           </div>
           <div className={cx('options')}>
             <Button onClick={() => handleDeleteStaff(selectedStaffId)} primary>
@@ -278,6 +303,7 @@ function ManageStaff() {
                   payload.lastName,
                   payload.phoneNumber,
                   payload.address,
+                  avatar,
                 )
               }
               outline
@@ -353,8 +379,8 @@ function ManageStaff() {
               leftIcon={faLocationDot}
             />
           </div>
+          <div className={cx('header')}>Số điện thoại</div>
           <div className={cx('input-field')}>
-            <div className={cx('header')}>Số điện thoại</div>
             <InputForm
               placeholder=""
               type="text"
@@ -364,6 +390,16 @@ function ManageStaff() {
               className={cx('input')}
               leftIcon={faMobileScreenButton}
             />
+          </div>
+          <div className={cx('header')}>Ảnh của sách</div>
+          <div className={cx('input-field')}>
+            <div className={cx('upload-field')}>
+              {avatar && <img src={image} className={cx('image')} alt="Avatar" />}
+              <label htmlFor="file-upload" className={cx('upload-btn')}>
+                <FontAwesomeIcon icon={faUpload}></FontAwesomeIcon>
+                <input id="file-upload" type="file" onChange={handleImgChange}></input>
+              </label>
+            </div>
           </div>
           <div className={cx('options')}>
             <Button
@@ -375,6 +411,7 @@ function ManageStaff() {
                   payload.lastName,
                   payload.phoneNumber,
                   payload.address,
+                  avatar,
                 )
               }
               outline

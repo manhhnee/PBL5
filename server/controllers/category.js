@@ -1,7 +1,6 @@
 const categoriesModel = require("../models/category");
 class CategoryController {
   add(req, res, next) {
-    console.log(req.body);
     categoriesModel.add(req.body, function (data) {
       res.json(data);
     });

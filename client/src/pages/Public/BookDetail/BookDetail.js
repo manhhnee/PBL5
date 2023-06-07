@@ -14,8 +14,8 @@ import Popup from '~/components/Popup';
 import Button from '~/components/Button/Button';
 import Rate from '~/components/Rate';
 import Star from '~/components/Star';
-import styles from './BookDetail.module.scss';
 import InputForm from '~/components/InputForm/InputForm';
+import styles from './BookDetail.module.scss';
 
 const cx = classNames.bind(styles);
 
@@ -31,12 +31,28 @@ function BookDetail() {
   const [payload, setPayload] = useState({
     address: '',
   });
+  const [errorMessages, setErrorMessages] = useState({
+    address: '',
+  });
   const modalAnimation = useSpring({
     opacity: isModalOpen ? 1 : 0,
   });
   const location = useLocation();
   const { id } = queryString.parse(location.search);
-  console.log(id);
+
+  const validateForm = () => {
+    let isValid = true;
+    const errors = {};
+
+    if (!payload.address.trim()) {
+      errors.address = 'Vui lòng nhập địa chỉ đặt hàng!';
+      isValid = false;
+    }
+
+    setErrorMessages(errors);
+
+    return isValid;
+  };
 
   function getJwtFromCookie() {
     //lấy token được lưu trong cookie ra
@@ -97,35 +113,40 @@ function BookDetail() {
   };
 
   const handleCreateOneOrder = async (id_BookSupplier, quantity, Price, Amount, address) => {
+    console.log(id_BookSupplier, quantity, Price, Amount, address);
     if (!getJwtFromCookie()) {
       toast.warning('Vui lòng đăng nhập để mua hàng');
     } else {
-      await axios
-        .post(
-          'http://localhost:5000/api/order/addOneItem',
-          {
-            id_BookSupplier: id_BookSupplier,
-            quantity: quantity,
-            Price: Price,
-            Amount: Amount,
-            address: address,
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${getJwtFromCookie()}`,
+      if (!validateForm()) {
+        return;
+      } else {
+        await axios
+          .post(
+            'http://localhost:5000/api/order/addOneItem',
+            {
+              id_BookSupplier: id_BookSupplier,
+              quantity: quantity,
+              Price: Price,
+              Amount: Amount,
+              address: address,
             },
-          },
-        )
-        .then((res) => {
-          toast.success(res.data.message);
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
-        })
-        .catch((err) => {
-          toast.error(err);
-        });
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${getJwtFromCookie()}`,
+              },
+            },
+          )
+          .then((res) => {
+            toast.success(res.data.message);
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          })
+          .catch((err) => {
+            toast.error(err);
+          });
+      }
     }
   };
 
@@ -223,7 +244,7 @@ function BookDetail() {
         <animated.div style={modalAnimation}>
           <h2>Xác nhận thanh toán</h2>
           <div className={cx('input-field')}>
-            <div className={cx('header')}>Nhà sản xuất</div>
+            <div className={cx('header')}>Nhập địa chỉ</div>
             <InputForm
               placeholder=""
               type="text"
@@ -233,6 +254,7 @@ function BookDetail() {
               className={cx('input')}
               leftIcon={faLocationDot}
             />
+            {errorMessages.address && <div className={cx('error-message')}>{errorMessages.address}</div>}
           </div>
           <div className={cx('options')}>
             <Button

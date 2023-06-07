@@ -1,6 +1,6 @@
 .cart-item {
   display: flex;
-  align-items: start;
+  align-items: flex-start;
   justify-content: space-between;
   margin: 8px;
   padding: 8px;
@@ -33,7 +33,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: end;
+  align-items: flex-end;
 }
 
 .cart-item-btn {
@@ -64,4 +64,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.error-message {
+  color: var(--primary);
+  font-size: 1.4rem;
 }

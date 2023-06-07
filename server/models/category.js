@@ -45,7 +45,6 @@ category.delete = function (idCategory, results) {
     function (err, categories) {
       if (err) return err;
       else {
-        console.log(categories);
         results({ success: true, message: "xóa thành công" });
       }
     }
