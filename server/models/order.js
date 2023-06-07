@@ -132,7 +132,7 @@ order.GetOrderDetailsbyOrderId = function (id_Order, results) {
 
     db.query(query1, [id_Order],
         function (err, orderInfor) {
-            const query2 = `SELECT oi.id, oi.id_BookSupplier,oi.quantity, oi.Fixed_Price,
+            const query2 = `SELECT oi.id, oi.id_BookSupplier,oi.quantity, oi.Fixed_Price, oi.isRated,
                     b.Name, b.Author, b.Price, b.id as idBook,
                     bs.Import_Price, 
                     ib.Image, s.Name as Supplier 
