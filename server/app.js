@@ -63,7 +63,6 @@ socketIo.on("connection", (socket) => {
         text: replyMessage,
         sender: "chatbot",
         suggestions: [
-          "Sản phẩm",
           "Đặt hàng",
           "Thanh toán",
           "Chính sách giao hàng",
