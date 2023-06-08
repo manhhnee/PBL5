@@ -16,10 +16,12 @@ import Rate from '~/components/Rate';
 import Star from '~/components/Star';
 import InputForm from '~/components/InputForm/InputForm';
 import styles from './BookDetail.module.scss';
+import Paypal from '~/components/Paypal';
 
 const cx = classNames.bind(styles);
 
 function BookDetail() {
+  const [paymentMethod, setPaymentMethod] = useState('cash'); // Mặc định là tiền mặt khi nhận hàng
   const [count, setCount] = useState(1);
   const [isActive, setIsActive] = useState(false);
   const [totalRating, setTotalRating] = useState(5);
@@ -31,6 +33,10 @@ function BookDetail() {
   const [payload, setPayload] = useState({
     address: '',
   });
+
+  const handlePaymentMethodChange = (event) => {
+    setPaymentMethod(event.target.value);
+  };
   const [errorMessages, setErrorMessages] = useState({
     address: '',
   });
@@ -240,7 +246,7 @@ function BookDetail() {
           </div>
         </div>
       </div>
-      <Popup isOpen={isModalOpen} onRequestClose={() => closeModal()} width={String('500px')} height={'270px'}>
+      <Popup isOpen={isModalOpen} onRequestClose={() => closeModal()} width={String('500px')} height={'500px'}>
         <animated.div style={modalAnimation}>
           <h2>Xác nhận thanh toán</h2>
           <div className={cx('input-field')}>
@@ -257,14 +263,38 @@ function BookDetail() {
             {errorMessages.address && <div className={cx('error-message')}>{errorMessages.address}</div>}
           </div>
           <div className={cx('options')}>
-            <Button
-              onClick={() =>
-                handleCreateOneOrder(book.id_BookSupplier, count, book.Price, book.Amount, payload.address)
-              }
-              outline
-            >
-              Xác nhận
-            </Button>
+            <div className={cx('payment-methods')}>
+              <label>
+                <input
+                  type="radio"
+                  value="cash"
+                  checked={paymentMethod === 'cash'}
+                  onChange={handlePaymentMethodChange}
+                />
+                Thanh toán bằng tiền mặt khi nhận hàng
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  value="paypal"
+                  checked={paymentMethod === 'paypal'}
+                  onChange={handlePaymentMethodChange}
+                />
+                Thanh toán bằng PayPal
+              </label>
+            </div>
+            {paymentMethod === 'cash' ? (
+              <Button
+                onClick={() =>
+                  handleCreateOneOrder(book.id_BookSupplier, count, book.Price, book.Amount, payload.address)
+                }
+                outline
+              >
+                Xác nhận
+              </Button>
+            ) : (
+              <Paypal price={((book.Price / 24000) * count).toFixed(2)} />
+            )}
           </div>
         </animated.div>
       </Popup>

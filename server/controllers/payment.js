@@ -1,6 +1,14 @@
 // const bookSupplierModel = require("../models/book_supplier");
 const paypal = require("../config/paypal/index");
+require('dotenv').config();
 class paymentController {
+  getConfig(req, res) {
+    return res.status(200).json({
+      status: 'OK',
+      data: process.env.CLIENT_ID,
+    });
+  };
+
   createPayment(req, res, next) {
     const create_payment_json = {
       intent: "sale",
