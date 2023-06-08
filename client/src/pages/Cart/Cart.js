@@ -163,17 +163,17 @@ function Cart() {
       )}
       {cartItems.length > 0 && (
         <div className={cx('options')}>
-          <Button onClick={() => openModal()} primary>
+          <Button className={cx('btn')} onClick={() => openModal()} primary>
             Thanh toán
           </Button>
         </div>
       )}
       ,
-      <Popup isOpen={isModalOpen} onRequestClose={() => closeModal()} width={String('500px')} height={'300px'}>
+      <Popup isOpen={isModalOpen} onRequestClose={() => closeModal()} width={String('500px')} height={'240px'}>
         <animated.div style={modalAnimation}>
           <h2>Xác nhận thanh toán</h2>
           <div className={cx('input-field')}>
-            <div className={cx('header')}>Nhà sản xuất</div>
+            <div className={cx('header')}>Nhập địa chỉ giao hàng</div>
             <InputForm
               placeholder=""
               type="text"

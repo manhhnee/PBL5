@@ -240,7 +240,7 @@ function BookDetail() {
           </div>
         </div>
       </div>
-      <Popup isOpen={isModalOpen} onRequestClose={() => closeModal()} width={String('500px')} height={'300px'}>
+      <Popup isOpen={isModalOpen} onRequestClose={() => closeModal()} width={String('500px')} height={'270px'}>
         <animated.div style={modalAnimation}>
           <h2>Xác nhận thanh toán</h2>
           <div className={cx('input-field')}>

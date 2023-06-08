@@ -1,3 +1,6 @@
+.container {
+  height: 100vh;
+}
 .cart-item {
   display: flex;
   align-items: flex-start;
@@ -69,4 +72,16 @@
 .error-message {
   color: var(--primary);
   font-size: 1.4rem;
+}
+
+.btn {
+  margin-top: 22px;
+  height: 40px;
+}
+
+.header {
+  font-size: 1.6rem;
+  color: var(--black);
+  font-weight: 500;
+  margin-top: 10px;
 }

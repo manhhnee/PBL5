@@ -2,30 +2,23 @@
   margin: 12px 0;
 }
 
-.header,
 .header1 {
-  font-size: 1.8rem;
+  font-size: 3rem;
   color: var(--black);
   font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 20px;
 }
 
-.header {
-  font-size: 2rem;
-  font-weight: 400;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 12px;
-  color: var(--blue);
+.product-item {
+  margin: 12px;
 }
 
 .number {
   font-size: 1.8rem;
-  color: var(--primary);
-  margin: 12px 0;
+  color: var(--black);
 }
 
 .date-field {
@@ -65,7 +58,60 @@
 .sold-product,
 .total-revenue {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  background-color: transparent;
+  border-radius: 10px;
+  border: 2px solid var(--black);
+  padding: 12px;
+  margin: 12px;
+  cursor: default;
+}
+
+.header {
+  font-size: 1.8rem;
+  font-weight: 500;
+  display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--black);
+}
+
+.number {
+  padding: 14px;
+  margin: 12px;
+  background-color: transparent;
+  color: #ff577f;
+  border-radius: 12px;
+  border: 2px solid var(--black);
+}
+
+.Top10 {
+  border: 1px solid var(--black);
+  border-radius: 12px;
+  margin: 12px;
+  padding: 12px;
+  cursor: default;
+}
+
+.product-item {
+  color: var(--black);
+  font-weight: 500;
+}
+
+.high-light {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.BestCustomer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.name {
+  font-size: 2.6rem;
+  font-weight: 600;
+  color: var(--primary);
 }
