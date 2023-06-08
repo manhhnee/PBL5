@@ -46,7 +46,7 @@ class OrderController {
         })
     }
     revenue(req,res,next){
-        OrderModel.Revenue(req.body,function(data){
+        OrderModel.Revenue(req.query,function(data){
             res.json(data)
         })
     }
