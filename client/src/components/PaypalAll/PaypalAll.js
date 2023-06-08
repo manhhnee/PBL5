@@ -6,10 +6,12 @@ import axios from 'axios';
 
 import * as PaymentService from '../../services/PaymentService';
 
-const Paypal = ({ idBookSupplier, quantity, price, amount, address }) => {
+const PaypalAll = ({ address, orderItems }) => {
+  console.log(address, orderItems);
   const [sdkReady, setSdkReady] = useState(false);
   const [clientId, setClientId] = useState('');
   const [loggedIn, setLoggedIn] = useState(!!getJwtFromCookie());
+  const [totalPrice, setTotalPrice] = useState(null);
 
   const addPaypalScript = async () => {
     const { data } = await PaymentService.getConfig();
@@ -40,17 +42,22 @@ const Paypal = ({ idBookSupplier, quantity, price, amount, address }) => {
     return '';
   }
 
-  const handleCreateOneOrder = async (id_BookSupplier, quantity, Price, Amount, address) => {
-    try {
-      const response = await axios.post(
-        'http://localhost:5000/api/order/addOneItem',
+  const handleOrderAll = async (address) => {
+    const orderItemsPayload = orderItems.map((item) => ({
+      idCartItem: item.id,
+      id_BookSupplier: item.id_BookSupplier,
+      quantity: item.quantity,
+      Price: item.Price,
+      Amount: item.Amount,
+    }));
+
+    await axios
+      .post(
+        'http://localhost:5000/api/order/add',
         {
-          payment: 2,
-          id_BookSupplier: id_BookSupplier,
-          quantity: quantity,
-          Price: Price,
-          Amount: Amount,
           address: address,
+          payment: 2,
+          OrderItems: orderItemsPayload,
         },
         {
           headers: {
@@ -58,15 +65,16 @@ const Paypal = ({ idBookSupplier, quantity, price, amount, address }) => {
             Authorization: `Bearer ${getJwtFromCookie()}`,
           },
         },
-      );
-
-      toast.success(response.data.message);
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
-    } catch (error) {
-      toast.error(error.message);
-    }
+      )
+      .then((res) => {
+        toast.success(res.data.message);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      })
+      .catch((e) => {
+        toast.error(e);
+      });
   };
 
   useEffect(() => {
@@ -79,7 +87,9 @@ const Paypal = ({ idBookSupplier, quantity, price, amount, address }) => {
 
   useEffect(() => {
     setLoggedIn(!!getJwtFromCookie());
-  }, []);
+    const totalPrice = orderItems.reduce((total, item) => total + item.Price, 0);
+    setTotalPrice(totalPrice);
+  }, [orderItems]);
 
   return (
     <div>
@@ -96,11 +106,11 @@ const Paypal = ({ idBookSupplier, quantity, price, amount, address }) => {
         pauseOnHover
         theme="light"
       />
-      {address.trim() && loggedIn && sdkReady && (
+      {address.trim() && loggedIn && sdkReady && orderItems.length > 0 && (
         <PayPalButton
-          amount={price}
+          amount={(totalPrice / 24000).toFixed(2)}
           onSuccess={(details, data) => {
-            handleCreateOneOrder(idBookSupplier, quantity, (price * 24000).toFixed(2), amount, address);
+            handleOrderAll(address);
             return fetch('/paypal-transaction-complete', {
               method: 'post',
               body: JSON.stringify({
@@ -115,4 +125,4 @@ const Paypal = ({ idBookSupplier, quantity, price, amount, address }) => {
   );
 };
 
-export default Paypal;
+export default PaypalAll;

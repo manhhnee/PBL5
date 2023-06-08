@@ -130,6 +130,7 @@ function BookDetail() {
           .post(
             'http://localhost:5000/api/order/addOneItem',
             {
+              payment: 1,
               id_BookSupplier: id_BookSupplier,
               quantity: quantity,
               Price: Price,
@@ -293,7 +294,13 @@ function BookDetail() {
                 Xác nhận
               </Button>
             ) : (
-              <Paypal price={((book.Price / 24000) * count).toFixed(2)} />
+              <Paypal
+                idBookSupplier={book.id_BookSupplier}
+                quantity={count}
+                price={((book.Price / 24000) * count).toFixed(2)}
+                amount={book.Amount}
+                address={payload.address}
+              />
             )}
           </div>
         </animated.div>

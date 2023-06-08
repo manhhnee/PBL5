@@ -4,7 +4,6 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 import InputForm from '~/components/InputForm';
-import Button from '~/components/Button';
 import styles from './Revenue.module.scss';
 import moment from 'moment';
 
@@ -40,8 +39,6 @@ function Revenue() {
 
   const [data, setData] = useState([]);
   const [dataCircle, setDataCircle] = useState([]);
-
-  const getApiRevenue = async (fromDate, toDate) => {};
 
   useEffect(() => {
     const fetchApiRevenue = async (fromDate, toDate) => {

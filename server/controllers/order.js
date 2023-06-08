@@ -5,6 +5,7 @@ class OrderController {
       req.user.id,
       req.body.OrderItems,
       req.body.address,
+      req.body.payment,
       function (data) {
         res.json(data);
       }
@@ -15,6 +16,7 @@ class OrderController {
       req.user.id,
       req.body,
       req.body.address,
+      req.body.payment,
       function (data) {
         res.json(data);
       }

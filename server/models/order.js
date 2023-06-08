@@ -10,7 +10,13 @@ const order = function (order) {
 };
 
 // tao don hang cho toan bo cart
-order.CreateOrderAllCart = function (id_Account, orderItems, address, results) {
+order.CreateOrderAllCart = function (
+  id_Account,
+  orderItems,
+  address,
+  payment,
+  results
+) {
   var today = new Date();
   for (var i = 0; i < orderItems.length; i++) {
     if (orderItems[i].quantity > orderItems[i].Amount)
@@ -21,7 +27,7 @@ order.CreateOrderAllCart = function (id_Account, orderItems, address, results) {
   }
   db.query(
     "INSERT INTO make_order (id_Status,id_Account,id_Payment,OrderDate,OrderAddress) VALUES (?, ?, ?, ?, ?)",
-    [1, id_Account, 1, today, address],
+    [1, id_Account, payment, today, address],
     function (err, order) {
       if (err) return err;
       else {
@@ -86,7 +92,13 @@ order.CreateOrderAllCart = function (id_Account, orderItems, address, results) {
   );
 };
 // tạo don hang cho 1 item
-order.CreateOrder = function (id_Account, orderItem, address, results) {
+order.CreateOrder = function (
+  id_Account,
+  orderItem,
+  address,
+  payment,
+  results
+) {
   var today = new Date();
   if (orderItem.quantity > orderItem.Amount)
     return results({
@@ -96,7 +108,7 @@ order.CreateOrder = function (id_Account, orderItem, address, results) {
   else {
     db.query(
       "INSERT INTO make_order (id_Status,id_Account,id_Payment,OrderDate,OrderAddress) VALUES (?, ?, ?, ?, ?)",
-      [1, id_Account, 1, today, address],
+      [1, id_Account, payment, today, address],
       function (err, order) {
         if (err) return err;
         else {
