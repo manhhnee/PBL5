@@ -29,6 +29,7 @@
   font-size: 2rem;
   color: var(--black);
   font-weight: 500;
+  margin-top: 18px;
 }
 
 .information,
@@ -43,11 +44,10 @@
   align-items: flex-end;
 }
 
-.cancel-btn {
+.save-btn {
   margin-left: auto;
 }
-
-.save-btn {
+.changePass-btn {
   margin-left: 20px;
 }
 
@@ -101,4 +101,11 @@
 .error-message {
   color: var(--primary);
   font-size: 1.4rem;
+}
+
+.options {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
 }

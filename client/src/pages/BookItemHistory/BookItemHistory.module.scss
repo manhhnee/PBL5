@@ -53,11 +53,40 @@
   justify-content: space-between;
 }
 
-.icon {
+.status {
+  color: var(--blue);
+}
+
+.icon,
+.icon1 {
   margin: 0 12px;
+}
+
+.icon1,
+.status-name1 {
+  color: var(--primary);
 }
 
 .options {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
+}
+
+.options1 {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.btn + .btn {
+  margin-left: 22px;
+}
+.header {
+  font-size: 2rem;
+  color: var(--black);
+  font-weight: 500;
+  margin: 18px 0;
+}
+.star {
+  font-size: 2rem;
 }

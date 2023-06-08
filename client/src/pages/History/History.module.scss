@@ -47,18 +47,28 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
 }
 
 .status {
   color: var(--blue);
 }
 
-.icon {
+.icon,
+.icon1 {
   margin: 0 12px;
+}
+
+.icon1,
+.status-name1 {
+  color: var(--primary);
 }
 
 .options {
   display: flex;
   justify-content: space-between;
+}
+
+.btn + .btn {
+  margin-left: 12px;
 }

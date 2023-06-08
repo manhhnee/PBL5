@@ -4,11 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { Flip, ToastContainer, toast } from 'react-toastify';
+import { useSpring, animated } from 'react-spring';
 
 import InputForm from '~/components/InputForm';
-import styles from './Information.module.scss';
 import Button from '~/components/Button';
 import Profile from '~/layouts/Profile';
+import Popup from '~/components/Popup';
+import styles from './Information.module.scss';
 
 const cx = classNames.bind(styles);
 
@@ -16,10 +18,9 @@ function Information() {
   const [infor, setInfor] = useState({});
   const [avatar, setAvatar] = useState({});
   const [image, setImage] = useState('');
-
-  const [payload, setPayload] = useState({
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [payload1, setPayload1] = useState({
     username: '',
-    password: '',
     firstName: '',
     lastName: '',
     phoneNumber: '',
@@ -27,39 +28,75 @@ function Information() {
     avatar: '',
   });
 
-  const [errorMessages, setErrorMessages] = useState({
+  const [payload2, setPayload2] = useState({
+    password: '',
+    newPassword: '',
+    againPassword: '',
+  });
+
+  const [errorMessages1, setErrorMessages1] = useState({
     username: null,
-    password: null,
     firstName: null,
     lastName: null,
     phoneNumber: null,
     address: null,
   });
-  const validateForm = () => {
+
+  const [errorMessages2, setErrorMessages2] = useState({
+    password: null,
+    newPassword: null,
+    againPassword: null,
+  });
+
+  const validateForm1 = () => {
     let isValid = true;
     const errors = {};
 
-    if (!payload.firstName.trim()) {
+    if (!payload1.firstName.trim()) {
       errors.firstName = 'Vui lòng nhập họ';
       isValid = false;
     }
 
-    if (!payload.lastName.trim()) {
+    if (!payload1.lastName.trim()) {
       errors.lastName = 'Vui lòng nhập tên';
       isValid = false;
     }
 
-    if (!payload.phoneNumber.trim()) {
+    if (!payload1.phoneNumber.trim()) {
       errors.phoneNumber = 'Vui lòng nhập số điện thoại';
       isValid = false;
     }
 
-    if (!payload.address.trim()) {
+    if (!payload1.address.trim()) {
       errors.address = 'Vui lòng nhập địa chỉ';
       isValid = false;
     }
 
-    setErrorMessages(errors);
+    setErrorMessages1(errors);
+
+    return isValid;
+  };
+
+  const validateForm2 = () => {
+    let isValid = true;
+    const errors = {};
+
+    if (!payload2.password.trim()) {
+      errors.password = 'Vui lòng nhập mật khẩu';
+      isValid = false;
+    }
+
+    if (!payload2.newPassword.trim()) {
+      errors.newPassword = 'Vui lòng nhập mật khẩu mới';
+      isValid = false;
+    }
+
+    if (!payload2.againPassword.trim()) {
+      errors.againPassword = 'Vui lòng nhập lại mật khẩu mới';
+      isValid = false;
+    }
+
+    setErrorMessages2(errors);
 
     return isValid;
   };
@@ -96,27 +133,26 @@ function Information() {
       }
       const user = response.data.user;
 
-      setPayload((prevPayload) => ({
-        ...prevPayload,
+      setPayload1((prevPayload1) => ({
+        ...prevPayload1,
         firstName: user.FirstName,
         lastName: user.LastName,
         phoneNumber: user.PhoneNumber,
         address: user.Address,
-        username: user.Username,
       }));
     };
     fetchAPIProfile();
   }, []);
 
   const handleUpdate = async () => {
-    if (!validateForm()) {
+    if (!validateForm1()) {
       return;
     } else {
       const formData = new FormData();
-      formData.append('FirstName', payload.firstName);
-      formData.append('LastName', payload.lastName);
-      formData.append('PhoneNumber', payload.phoneNumber);
-      formData.append('Address', payload.address);
+      formData.append('FirstName', payload1.firstName);
+      formData.append('LastName', payload1.lastName);
+      formData.append('PhoneNumber', payload1.phoneNumber);
+      formData.append('Address', payload1.address);
       formData.append('Avatar', avatar);
       const response = await fetch('http://localhost:5000/api/user/edit', {
         method: 'PUT',
@@ -129,13 +165,44 @@ function Information() {
       const data = await response.json();
       if (data.success === true) {
         toast.success(data.message);
-        setInfor({ ...infor, payload });
+        setInfor({ ...infor, payload1 });
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       } else {
         toast.error(data.message);
       }
+    }
+  };
+
+  const handleChangePassword = async (oldPass, newPass, againPass) => {
+    if (!validateForm2()) {
+      return;
+    } else {
+      await axios
+        .put(
+          'http://localhost:5000/api/account/changePass',
+          {
+            Password: oldPass,
+            NewPassword: newPass,
+            AgainPassword: againPass,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${getJwtFromCookie()}`,
+            },
+          },
+        )
+        .then((res) => {
+          toast(res.data.message);
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        })
+        .catch((e) => {
+          toast.error(e);
+        });
     }
   };
 
@@ -148,6 +215,18 @@ function Information() {
 
     reader.readAsDataURL(file);
     setAvatar(e.target.files[0]);
+  };
+
+  const modalAnimation = useSpring({
+    opacity: isModalOpen ? 1 : 0,
+  });
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  const openModal = () => {
+    setIsModalOpen(true);
+    setPayload1({});
   };
 
   return (
@@ -172,11 +251,12 @@ function Information() {
             <div className={cx('header')}>Thông tin cá nhân</div>
             <div className={cx('description-field')}>
               <div className={cx('description')}>Cập nhật ảnh và thông tin của bạn tại đây</div>
-              <Button white className={cx('cancel-btn')}>
-                Hủy
-              </Button>
+
               <Button blue className={cx('save-btn')} onClick={handleUpdate}>
                 Lưu thay đổi
+              </Button>
+              <Button primary className={cx('changePass-btn')} onClick={openModal}>
+                Đổi mật khẩu
               </Button>
             </div>
           </div>
@@ -187,23 +267,23 @@ function Information() {
                 <InputForm
                   placeholder=""
                   type="text"
-                  value={payload.firstName}
-                  setValue={setPayload}
+                  value={payload1.firstName}
+                  setValue={setPayload1}
                   name={'firstName'}
                   className={cx('input')}
                 />
-                {errorMessages.firstName && <div className={cx('error-message')}>{errorMessages.firstName}</div>}
+                {errorMessages1.firstName && <div className={cx('error-message')}>{errorMessages1.firstName}</div>}
               </div>
               <div className={cx('input-wrapper')}>
                 <InputForm
                   placeholder=""
                   type="text"
-                  value={payload.lastName}
-                  setValue={setPayload}
+                  value={payload1.lastName}
+                  setValue={setPayload1}
                   name={'lastName'}
                   className={cx('input')}
                 />
-                {errorMessages.lastName && <div className={cx('error-message')}>{errorMessages.lastName}</div>}
+                {errorMessages1.lastName && <div className={cx('error-message')}>{errorMessages1.lastName}</div>}
               </div>
             </div>
           </div>
@@ -214,12 +294,12 @@ function Information() {
                 <InputForm
                   placeholder=""
                   type="text"
-                  value={payload.address}
-                  setValue={setPayload}
+                  value={payload1.address}
+                  setValue={setPayload1}
                   name={'address'}
                   className={cx('input')}
                 />
-                {errorMessages.address && <div className={cx('error-message')}>{errorMessages.address}</div>}
+                {errorMessages1.address && <div className={cx('error-message')}>{errorMessages1.address}</div>}
               </div>
             </div>
           </div>
@@ -230,37 +310,16 @@ function Information() {
                 <InputForm
                   placeholder=""
                   type="text"
-                  value={payload.phoneNumber}
-                  setValue={setPayload}
+                  value={payload1.phoneNumber}
+                  setValue={setPayload1}
                   name={'phoneNumber'}
                   className={cx('input')}
                 />
-                {errorMessages.phoneNumber && <div className={cx('error-message')}>{errorMessages.phoneNumber}</div>}
+                {errorMessages1.phoneNumber && <div className={cx('error-message')}>{errorMessages1.phoneNumber}</div>}
               </div>
             </div>
           </div>
-          {/* <div className={cx('text-field')}>
-            <div className={cx('header')}>Tài khoản</div>
-            <div className={cx('input-field')}>
-              <InputForm
-                readOnly
-                placeholder="Enter Username..."
-                type="text"
-                value={payload.username}
-                setValue={setPayload}
-                name={'username'}
-                className={cx('input')}
-              />
-              <InputForm
-                placeholder="Enter Password..."
-                type="password"
-                value={payload.password}
-                setValue={setPayload}
-                name={'password'}
-                className={cx('input')}
-              />
-            </div>
-          </div> */}
+
           <div className={cx('text-field')}>
             <div className={cx('header')}>Ảnh của bạn</div>
             <div className={cx('input-field')}>
@@ -273,6 +332,58 @@ function Information() {
           </div>
         </div>
       </div>
+      <Popup isOpen={isModalOpen} onRequestClose={() => closeModal()} width={'700px'} height={'500px'}>
+        <animated.div style={modalAnimation}>
+          <h2>Đổi mật khẩu</h2>
+          <div className={cx('header')}>Nhập mật khẩu cũ</div>
+          <div className={cx('input-field')}>
+            <InputForm
+              placeholder=""
+              type="text"
+              value={payload2.password}
+              setValue={setPayload2}
+              name={'password'}
+              className={cx('input')}
+            />
+            {errorMessages2.password && <div className={cx('error-message')}>{errorMessages2.password}</div>}
+          </div>
+          <div className={cx('header')}>Nhập mật khẩu mới</div>
+          <div className={cx('input-field')}>
+            <InputForm
+              placeholder=""
+              type="text"
+              value={payload2.newPassword}
+              setValue={setPayload2}
+              name={'newPassword'}
+              className={cx('input')}
+            />
+            {errorMessages2.newPassword && <div className={cx('error-message')}>{errorMessages2.newPassword}</div>}
+          </div>
+          <div className={cx('header')}>Nhập lại mật khẩu mới</div>
+          <div className={cx('input-field')}>
+            <InputForm
+              placeholder=""
+              type="text"
+              value={payload2.againPassword}
+              setValue={setPayload2}
+              name={'againPassword'}
+              className={cx('input')}
+            />
+            {errorMessages2.againPassword && <div className={cx('error-message')}>{errorMessages2.againPassword}</div>}
+          </div>
+
+          <div className={cx('options')}>
+            <Button
+              onClick={() => {
+                handleChangePassword(payload2.password, payload2.newPassword, payload2.againPassword);
+              }}
+              outline
+            >
+              Xác nhận
+            </Button>
+          </div>
+        </animated.div>
+      </Popup>
     </Profile>
   );
 }

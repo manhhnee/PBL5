@@ -20,6 +20,22 @@ function Cart() {
   const [payload, setPayload] = useState({
     address: '',
   });
+  const [errorMessages, setErrorMessages] = useState({
+    address: '',
+  });
+  const validateForm = () => {
+    let isValid = true;
+    const errors = {};
+
+    if (!payload.address.trim()) {
+      errors.address = 'Vui lòng nhập địa chỉ đặt hàng!';
+      isValid = false;
+    }
+
+    setErrorMessages(errors);
+
+    return isValid;
+  };
   const modalAnimation = useSpring({
     opacity: isModalOpen ? 1 : 0,
   });
@@ -58,35 +74,39 @@ function Cart() {
     if (orderItems.length === 0) {
       toast.error('Vui lòng chọn sản phẩm để thanh toán');
     } else {
-      const orderItemsPayload = orderItems.map((item) => ({
-        idCartItem: item.id,
-        id_BookSupplier: item.id_BookSupplier,
-        quantity: item.quantity,
-        Price: item.Price,
-        Amount: item.Amount,
-      }));
+      if (!validateForm()) {
+        return;
+      } else {
+        const orderItemsPayload = orderItems.map((item) => ({
+          idCartItem: item.id,
+          id_BookSupplier: item.id_BookSupplier,
+          quantity: item.quantity,
+          Price: item.Price,
+          Amount: item.Amount,
+        }));
 
-      await axios
-        .post(
-          'http://localhost:5000/api/order/add',
-          {
-            address: address,
-            OrderItems: orderItemsPayload,
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${getJwtFromCookie()}`,
+        await axios
+          .post(
+            'http://localhost:5000/api/order/add',
+            {
+              address: address,
+              OrderItems: orderItemsPayload,
             },
-          },
-        )
-        .then((res) => {
-          toast.success(res.data.message);
-          window.location.reload();
-        })
-        .catch((e) => {
-          alert(e);
-        });
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${getJwtFromCookie()}`,
+              },
+            },
+          )
+          .then((res) => {
+            toast.success(res.data.message);
+            window.location.reload();
+          })
+          .catch((e) => {
+            alert(e);
+          });
+      }
     }
   };
 
@@ -163,6 +183,7 @@ function Cart() {
               className={cx('input')}
               leftIcon={faLocationDot}
             />
+            {errorMessages.address && <div className={cx('error-message')}>{errorMessages.address}</div>}
           </div>
           <div className={cx('options')}>
             <Button onClick={() => handleOrderAll(payload.address)} outline>

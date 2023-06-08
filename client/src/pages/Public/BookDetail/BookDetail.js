@@ -293,7 +293,10 @@ function BookDetail () {
                 Xác nhận
               </Button>
             ) : (
-              <Paypal price={(book.Price / 24000) * count} />
+
+              
+              <Paypal price={((book.Price / 24000) * count).toFixed(2)} />
+
             )}
           </div>
         </animated.div>

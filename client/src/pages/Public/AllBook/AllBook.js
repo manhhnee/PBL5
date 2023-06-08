@@ -18,6 +18,7 @@ function AllBook() {
   const { id, search } = queryString.parse(location.search);
   const [books, setBooks] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [descPrice, setDescPrice] = useState(2);
   const [idCategory, setIDCategory] = useState(id || '');
   const [searchValue, setSearchValue] = useState(search ? search : '');
   const [activeButton, setActiveButton] = useState(1);
@@ -26,6 +27,8 @@ function AllBook() {
     return storedPage ? parseInt(storedPage) : 1;
   });
   let [totalPage, setTotalPage] = useState();
+
+  console.log(descPrice);
 
   const pages = Array.from({ length: totalPage }, (_, index) => index + 1);
 
@@ -51,7 +54,7 @@ function AllBook() {
   useEffect(() => {
     const fetchApiBooks = async () => {
       const response = await axios.get(
-        `http://localhost:5000/api/book?limit=100&category=${idCategory}&page=${page}&search=${searchValue}`,
+        `http://localhost:5000/api/book?limit=100&category=${idCategory}&page=${page}&search=${searchValue}&DESC_Price=${descPrice}`,
       );
       const booksData = await response.data.books;
       setBooks(booksData);
@@ -65,7 +68,7 @@ function AllBook() {
     };
     fetchApiCategories();
     fetchApiBooks();
-  }, [idCategory, totalPage, page, searchValue]);
+  }, [idCategory, totalPage, page, searchValue, descPrice]);
 
   return (
     <div className={cx('wrapper')}>
@@ -76,12 +79,12 @@ function AllBook() {
           <FontAwesomeIcon className={cx('select-input__icon')} icon={faChevronDown}></FontAwesomeIcon>
           <ul className={cx('select-input__list')}>
             <li className={cx('select-input__item')}>
-              <Link href="" className={cx('select-input__link')}>
+              <Link onClick={() => setDescPrice(2)} href="" className={cx('select-input__link')}>
                 Giá: Thấp đến cao
               </Link>
             </li>
             <li className={cx('select-input__item')}>
-              <Link href="" className={cx('select-input__link')}>
+              <Link onClick={() => setDescPrice(1)} href="" className={cx('select-input__link')}>
                 Giá: Cao đến thấp
               </Link>
             </li>
