@@ -25,7 +25,6 @@ function BookItemHistory() {
   const [idStatus, setIdStatus] = useState();
   const [idBook, setIdBook] = useState();
   const [idOrderItem, setIdOrderItem] = useState();
-  const [isRated, setIsRated] = useState(0);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [payload, setPayload] = useState({

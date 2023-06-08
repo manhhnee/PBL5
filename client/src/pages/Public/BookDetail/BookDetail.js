@@ -20,7 +20,7 @@ import Paypal from '~/components/Paypal';
 
 const cx = classNames.bind(styles);
 
-function BookDetail () {
+function BookDetail() {
   const [paymentMethod, setPaymentMethod] = useState('cash'); // Mặc định là tiền mặt khi nhận hàng
   const [count, setCount] = useState(1);
   const [isActive, setIsActive] = useState(false);
@@ -60,7 +60,7 @@ function BookDetail () {
     return isValid;
   };
 
-  function getJwtFromCookie () {
+  function getJwtFromCookie() {
     //lấy token được lưu trong cookie ra
     const name = 'token=';
     const decodedCookie = decodeURIComponent(document.cookie);
@@ -130,6 +130,7 @@ function BookDetail () {
           .post(
             'http://localhost:5000/api/order/addOneItem',
             {
+              payment: 1,
               id_BookSupplier: id_BookSupplier,
               quantity: quantity,
               Price: Price,
@@ -156,7 +157,7 @@ function BookDetail () {
     }
   };
 
-  function handleIncrement () {
+  function handleIncrement() {
     if (count >= book.Amount) {
       setCount(book.Amount);
     } else {
@@ -164,7 +165,7 @@ function BookDetail () {
     }
   }
 
-  function handleDecrement () {
+  function handleDecrement() {
     if (count > 1) {
       setCount(count - 1);
     }
@@ -293,10 +294,13 @@ function BookDetail () {
                 Xác nhận
               </Button>
             ) : (
-
-              
-              <Paypal price={((book.Price / 24000) * count).toFixed(2)} />
-
+              <Paypal
+                idBookSupplier={book.id_BookSupplier}
+                quantity={count}
+                price={((book.Price / 24000) * count).toFixed(2)}
+                amount={book.Amount}
+                address={payload.address}
+              />
             )}
           </div>
         </animated.div>

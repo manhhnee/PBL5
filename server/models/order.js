@@ -10,7 +10,13 @@ const order = function (order) {
 };
 
 // tao don hang cho toan bo cart
-order.CreateOrderAllCart = function (id_Account, orderItems, address, results) {
+order.CreateOrderAllCart = function (
+  id_Account,
+  orderItems,
+  address,
+  payment,
+  results
+) {
   var today = new Date();
   for (var i = 0; i < orderItems.length; i++) {
     if (orderItems[i].quantity > orderItems[i].Amount)
@@ -21,7 +27,7 @@ order.CreateOrderAllCart = function (id_Account, orderItems, address, results) {
   }
   db.query(
     "INSERT INTO make_order (id_Status,id_Account,id_Payment,OrderDate,OrderAddress) VALUES (?, ?, ?, ?, ?)",
-    [1, id_Account, 1, today, address],
+    [1, id_Account, payment, today, address],
     function (err, order) {
       if (err) return err;
       else {
@@ -86,7 +92,13 @@ order.CreateOrderAllCart = function (id_Account, orderItems, address, results) {
   );
 };
 // tạo don hang cho 1 item
-order.CreateOrder = function (id_Account, orderItem, address, results) {
+order.CreateOrder = function (
+  id_Account,
+  orderItem,
+  address,
+  payment,
+  results
+) {
   var today = new Date();
   if (orderItem.quantity > orderItem.Amount)
     return results({
@@ -96,7 +108,7 @@ order.CreateOrder = function (id_Account, orderItem, address, results) {
   else {
     db.query(
       "INSERT INTO make_order (id_Status,id_Account,id_Payment,OrderDate,OrderAddress) VALUES (?, ?, ?, ?, ?)",
-      [1, id_Account, 1, today, address],
+      [1, id_Account, payment, today, address],
       function (err, order) {
         if (err) return err;
         else {
@@ -170,7 +182,50 @@ order.cancelOrder = function (id_Order, results) {
               if (err) {
                 return results({ success: false, message: err.message });
               } else {
-                results({ success: true, message: "update status thành công" });
+                db.query(
+                  "SELECT * FROM order_item WHERE id_Order = ?",
+                  [id_Order],
+                  (err, orderItems) => {
+                    if (err) {
+                      return results({ success: false, message: err.message });
+                    } else {
+                      orderItems.forEach((orderItem) => {
+                        db.query(
+                          "SELECT * FROM book_supplier WHERE id = ?",
+                          [orderItem.id_BookSupplier],
+                          (err, booksuppliers) => {
+                            if (err) {
+                              return results({
+                                success: false,
+                                message: err.message,
+                              });
+                            } else {
+                              db.query(
+                                "UPDATE book_supplier SET Amount =? WHERE id =?",
+                                [
+                                  orderItem.quantity + booksuppliers[0].Amount,
+                                  orderItem.id_BookSupplier,
+                                ]
+                              ),
+                                (err, booksupplier) => {
+                                  if (err) {
+                                    return results({
+                                      success: false,
+                                      message: err.message,
+                                    });
+                                  }
+                                };
+                            }
+                          }
+                        );
+                      });
+                      results({
+                        success: true,
+                        message: "update status thành công",
+                      });
+                    }
+                  }
+                );
               }
             }
           );

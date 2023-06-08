@@ -5,21 +5,26 @@ import { useSpring, animated } from 'react-spring';
 import { Flip, ToastContainer, toast } from 'react-toastify';
 
 import BookItemCart from '~/components/BookItemCart';
-import Button from '~/components/Button/Button';
+import Button from '~/components/Button';
 import InputForm from '~/components/InputForm';
-import Popup from '~/components/Popup/Popup';
+import Popup from '~/components/Popup';
 import styles from './Cart.module.scss';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import PaypalAll from '~/components/PaypalAll/PaypalAll';
 
 const cx = classNames.bind(styles);
 
 function Cart() {
+  const [paymentMethod, setPaymentMethod] = useState('cash'); // Mặc định là tiền mặt khi nhận hàng
   const [cartItems, setCartItems] = useState([]);
   const [orderItems, setOrderItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [payload, setPayload] = useState({
     address: '',
   });
+  const handlePaymentMethodChange = (event) => {
+    setPaymentMethod(event.target.value);
+  };
   const [errorMessages, setErrorMessages] = useState({
     address: '',
   });
@@ -90,6 +95,7 @@ function Cart() {
             'http://localhost:5000/api/order/add',
             {
               address: address,
+              payment: 1,
               OrderItems: orderItemsPayload,
             },
             {
@@ -163,17 +169,17 @@ function Cart() {
       )}
       {cartItems.length > 0 && (
         <div className={cx('options')}>
-          <Button onClick={() => openModal()} primary>
+          <Button className={cx('btn')} onClick={() => openModal()} primary>
             Thanh toán
           </Button>
         </div>
       )}
       ,
-      <Popup isOpen={isModalOpen} onRequestClose={() => closeModal()} width={String('500px')} height={'300px'}>
+      <Popup isOpen={isModalOpen} onRequestClose={() => closeModal()} width={String('500px')} height={'350px'}>
         <animated.div style={modalAnimation}>
           <h2>Xác nhận thanh toán</h2>
           <div className={cx('input-field')}>
-            <div className={cx('header')}>Nhà sản xuất</div>
+            <div className={cx('header')}>Nhập địa chỉ giao hàng</div>
             <InputForm
               placeholder=""
               type="text"
@@ -186,9 +192,33 @@ function Cart() {
             {errorMessages.address && <div className={cx('error-message')}>{errorMessages.address}</div>}
           </div>
           <div className={cx('options')}>
-            <Button onClick={() => handleOrderAll(payload.address)} outline>
-              Xác nhận
-            </Button>
+            <div className={cx('payment-methods')}>
+              <label>
+                <input
+                  type="radio"
+                  value="cash"
+                  checked={paymentMethod === 'cash'}
+                  onChange={handlePaymentMethodChange}
+                />
+                Thanh toán bằng tiền mặt khi nhận hàng
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  value="paypal"
+                  checked={paymentMethod === 'paypal'}
+                  onChange={handlePaymentMethodChange}
+                />
+                Thanh toán bằng PayPal
+              </label>
+            </div>
+            {paymentMethod === 'cash' ? (
+              <Button onClick={() => handleOrderAll(payload.address)} outline>
+                Xác nhận
+              </Button>
+            ) : (
+              <PaypalAll address={payload.address} orderItems={orderItems} />
+            )}
           </div>
         </animated.div>
       </Popup>
