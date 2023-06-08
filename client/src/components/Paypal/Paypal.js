@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import { PayPalButton } from 'react-paypal-button-v2'
 import * as PaymentService from '../../services/PaymentService'
 
