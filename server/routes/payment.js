@@ -4,4 +4,5 @@ const paymentController = require('../controllers/payment')
 
 router.get('/config', paymentController.getConfig)
 
+
 module.exports = router;
