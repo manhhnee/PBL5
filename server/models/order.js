@@ -115,7 +115,25 @@ order.cancelOrder = function (id_Order, results) {
                     function (err, order) {
                         if (err) { return results({ success: false, message: err.message }) }
                         else {
-                            results({ success: true, message: "update status thành công" })
+                            db.query("SELECT * FROM order_item WHERE id_Order = ?",[id_Order],(err,orderItems)=>{
+                                if (err) { return results({ success: false, message: err.message }) }
+                                else {
+                                    orderItems.forEach(orderItem=>{
+                                        db.query("SELECT * FROM book_supplier WHERE id = ?",[orderItem.id_BookSupplier],(err,booksuppliers)=>{
+                                            if (err) { return results({ success: false, message: err.message }) }
+                                            else {
+                                                db.query("UPDATE book_supplier SET Amount =? WHERE id =?",
+                                                [orderItem.quantity+booksuppliers[0].Amount,orderItem.id_BookSupplier]),
+                                                (err,booksupplier)=>{
+                                                    if (err) { return results({ success: false, message: err.message }) }
+                                                }
+                                            }
+                                        })
+                                    })
+                                    results({ success: true, message: "update status thành công" })
+                                
+                                }
+                            })                           
                         }
                     })
             }
