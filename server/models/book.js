@@ -74,7 +74,6 @@ book.find = function (data, results) {
       else if (data.DESC_Price == 2)
         query += ` ORDER BY b.Price ASC LIMIT ${data.limit} OFFSET ${offset}`;
       else query += ` ORDER BY b.id DESC LIMIT ${data.limit} OFFSET ${offset}`;
-      console.log(query);
       db.query(query, function (err, books) {
         if (err) return { success: false, message: err.message };
         else {
