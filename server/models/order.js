@@ -10,7 +10,7 @@ const order = function (order) {
 };
 
 // tao don hang cho toan bo cart
-order.CreateOrderAllCart = function (id_Account, orderItems, address, results) {
+order.CreateOrderAllCart = function (id_Account, orderItems, address, payment, results) {
     var today = new Date()
     for (var i = 0; i < orderItems.length; i++) {
         if (orderItems[i].quantity > orderItems[i].Amount)
@@ -18,7 +18,7 @@ order.CreateOrderAllCart = function (id_Account, orderItems, address, results) {
     }
     db.query(
         "INSERT INTO make_order (id_Status,id_Account,id_Payment,OrderDate,OrderAddress) VALUES (?, ?, ?, ?, ?)",
-        [1, id_Account, 1, today, address],
+        [1, id_Account, payment, today, address],
         function (err, order) {
             if (err) return err
             else {
@@ -61,13 +61,13 @@ order.CreateOrderAllCart = function (id_Account, orderItems, address, results) {
     )
 }
 // tạo don hang cho 1 item
-order.CreateOrder = function (id_Account, orderItem, address, results) {
+order.CreateOrder = function (id_Account, orderItem, address, payment, results) {
     var today = new Date()
     if (orderItem.quantity > orderItem.Amount) return results({ success: false, message: "số lượng đặt vượt quá sản phẩm trong kho" })
     else {
         db.query(
             "INSERT INTO make_order (id_Status,id_Account,id_Payment,OrderDate,OrderAddress) VALUES (?, ?, ?, ?, ?)",
-            [1, id_Account, 1, today, address],
+            [1, id_Account, payment, today, address],
             function (err, order) {
                 if (err) return err
                 else {
@@ -115,25 +115,24 @@ order.cancelOrder = function (id_Order, results) {
                     function (err, order) {
                         if (err) { return results({ success: false, message: err.message }) }
                         else {
-                            db.query("SELECT * FROM order_item WHERE id_Order = ?",[id_Order],(err,orderItems)=>{
+                            db.query("SELECT * FROM order_item WHERE id_Order = ?", [id_Order], (err, orderItems) => {
                                 if (err) { return results({ success: false, message: err.message }) }
                                 else {
-                                    orderItems.forEach(orderItem=>{
-                                        db.query("SELECT * FROM book_supplier WHERE id = ?",[orderItem.id_BookSupplier],(err,booksuppliers)=>{
+                                    orderItems.forEach(orderItem => {
+                                        db.query("SELECT * FROM book_supplier WHERE id = ?", [orderItem.id_BookSupplier], (err, booksuppliers) => {
                                             if (err) { return results({ success: false, message: err.message }) }
                                             else {
                                                 db.query("UPDATE book_supplier SET Amount =? WHERE id =?",
-                                                [orderItem.quantity+booksuppliers[0].Amount,orderItem.id_BookSupplier]),
-                                                (err,booksupplier)=>{
-                                                    if (err) { return results({ success: false, message: err.message }) }
-                                                }
+                                                    [orderItem.quantity + booksuppliers[0].Amount, orderItem.id_BookSupplier]),
+                                                    (err, booksupplier) => {
+                                                        if (err) { return results({ success: false, message: err.message }) }
+                                                    }
                                             }
                                         })
                                     })
                                     results({ success: true, message: "update status thành công" })
-                                
                                 }
-                            })                           
+                            })
                         }
                     })
             }
@@ -247,22 +246,22 @@ order.Revenue = function (data, results) {
                 INNER JOIN inforuser i ON i.id_Account = mo.id_Account
                 WHERE mo.id_Status = 3 `
     var query2 = `SELECT DATE(OrderDate) AS revenue_date, SUM(totalPrice) AS revenue
-                FROM make_order WHERE id_Status = 3 ` 
-                
+                FROM make_order WHERE id_Status = 3 `
+
     if (data.dateMin && data.dateMax) {
         query += `AND DATE(mo.OrderDate) >= '${data.dateMin}'
                     AND DATE(mo.OrderDate) <= '${data.dateMax}' `
-        query2+= `AND DATE(OrderDate) >= '${data.dateMin}'
+        query2 += `AND DATE(OrderDate) >= '${data.dateMin}'
                     AND DATE(OrderDate) <= '${data.dateMax}' `
     }
     else {
         query += `AND DATE(mo.OrderDate) >= '${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}'
                     AND DATE(mo.OrderDate) <= '${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}'`
-        query2+= `AND DATE(OrderDate) >= '${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}'
+        query2 += `AND DATE(OrderDate) >= '${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}'
                     AND DATE(OrderDate) <= '${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}'`
     }
     query += `GROUP BY mo.id DESC`
-    query2+=`GROUP BY revenue_date
+    query2 += `GROUP BY revenue_date
              ORDER BY revenue_date ASC`
     db.query(query, [], (err, successOrder) => {
         if (err) return results({ success: false, message: err.message })
@@ -270,13 +269,13 @@ order.Revenue = function (data, results) {
         for (var i = 0; i < successOrder.length; i++) {
             totalRevenue += parseInt(successOrder[i].totalPrice)
         }
-        db.query(query2,[],(err,chartRevenue)=>{
+        db.query(query2, [], (err, chartRevenue) => {
             if (err) return results({ success: false, message: err.message })
-            else return results({ totalRevenue: totalRevenue, order: successOrder,chartRevenue: chartRevenue})
-        })             
+            else return results({ totalRevenue: totalRevenue, order: successOrder, chartRevenue: chartRevenue })
+        })
     })
 }
-order.RevenueOfYear = function(results) {
+order.RevenueOfYear = function (results) {
     // tổng sản phảm mua trong 1 năm 
     var query1 = `SELECT SUM(oi.quantity) AS total_books_sold
                     FROM order_item oi INNER JOIN make_order mo ON oi.id_Order = mo.id
@@ -308,21 +307,21 @@ order.RevenueOfYear = function(results) {
                     GROUP BY oi.id_BookSupplier
                     ORDER BY total_sold DESC
                     LIMIT 10;`
-    db.query(query1,(err,YearNumberOfProducts)=>{
-        if (err) return results({success:false,message:err.message})
+    db.query(query1, (err, YearNumberOfProducts) => {
+        if (err) return results({ success: false, message: err.message })
         else {
-            db.query(query2,(err,RevenueofYear)=>{
-                if (err) return results({success:false,message:err.message})
+            db.query(query2, (err, RevenueofYear) => {
+                if (err) return results({ success: false, message: err.message })
                 else {
-                    db.query(query3,(err,potentialCustomer)=>{
-                        if (err) return results({success:false,message:err.message})
+                    db.query(query3, (err, potentialCustomer) => {
+                        if (err) return results({ success: false, message: err.message })
                         else {
-                            db.query(query4,(err,TopProduct)=>{
-                                if (err) return results({success:false,message:err.message})
+                            db.query(query4, (err, TopProduct) => {
+                                if (err) return results({ success: false, message: err.message })
                                 else return results({
-                                    NumberOfProducts :YearNumberOfProducts[0].total_books_sold,
-                                    RevenueofYear : RevenueofYear[0].total_revenue,
-                                    potentialCustomer : potentialCustomer[0],
+                                    NumberOfProducts: YearNumberOfProducts[0].total_books_sold,
+                                    RevenueofYear: RevenueofYear[0].total_revenue,
+                                    potentialCustomer: potentialCustomer[0],
                                     TopProduct: TopProduct
                                 })
                             })
@@ -331,6 +330,6 @@ order.RevenueOfYear = function(results) {
                 }
             })
         }
-    })  
+    })
 }
 module.exports = order
