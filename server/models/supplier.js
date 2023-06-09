@@ -10,7 +10,7 @@ supplier.add = function (data, results) {
     function (err, suppliers) {
       if (err) return err;
       else {
-        results({ success: true, message: "thêm thành công" });
+        results({ success: true, message: "Thêm nhà cung cấp thành công" });
       }
     }
   );
@@ -43,7 +43,7 @@ supplier.delete = function (idSupplier, results) {
     function (err, suppliers) {
       if (err) return err;
       else {
-        results({ success: true, message: "xóa thành công" });
+        results({ success: true, message: "Xóa nhà cung cấp thành công" });
       }
     }
   );
@@ -55,7 +55,7 @@ supplier.update = function (idSupplier, data, results) {
     function (err, suppliers) {
       if (err) return err;
       else {
-        results({ success: true, message: "cập nhật thành công" });
+        results({ success: true, message: "Cập nhật thành công" });
       }
     }
   );

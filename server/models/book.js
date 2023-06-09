@@ -28,7 +28,7 @@ book.add = function (data, BookPath, results) {
       else if (BookPath == null)
         return results({
           success: true,
-          message: "thêm thành công(without Images)",
+          message: "Thêm thành công(without Images)",
         });
       else {
         db.query(
@@ -37,7 +37,7 @@ book.add = function (data, BookPath, results) {
           function (err, images) {
             if (err) return err;
             else {
-              return results({ success: true, message: "thêm thành công" });
+              return results({ success: true, message: "Thêm thành công" });
             }
           }
         );
@@ -133,7 +133,7 @@ book.delete = function (idBook, results) {
   db.query("DELETE FROM book WHERE id =?", idBook, function (err, books) {
     if (err) return err;
     else {
-      results({ success: true, message: "xóa thành công" });
+      results({ success: true, message: "Xóa thành công" });
     }
   });
 };
@@ -153,7 +153,7 @@ book.update = function (idBook, data, results) {
     function (err, books) {
       if (err) return err;
       else {
-        results({ success: true, message: "cập nhật thành công" });
+        results({ success: true, message: "Cập nhật thành công" });
       }
     }
   );

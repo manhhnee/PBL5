@@ -22,22 +22,35 @@ router.get(
   AuthController.verifyToken,
   OrderController.showHistoryStatusOrderList
 );
-router.get("/revenue", AuthController.verifyToken, OrderController.revenue);
+router.get(
+  "/revenue",
+  AuthController.verifyToken,
+  AuthController.isAdmin,
+  OrderController.revenue
+);
 router.get(
   "/revenueOfYear",
   AuthController.verifyToken,
+  AuthController.isAdmin,
   OrderController.revenueOfYear
 );
 
-router.get("/orderList", OrderController.showOrderList);
+router.get(
+  "/orderList",
+  AuthController.verifyToken,
+  AuthController.isAdminOrStaff,
+  OrderController.showOrderList
+);
 router.get(
   "/:id_status",
   AuthController.verifyToken,
+  AuthController.isAdminOrStaff,
   OrderController.showStatusOrders
 );
 router.put(
   "/changeStatus/:id",
   AuthController.verifyToken,
+  AuthController.isAdminOrStaff,
   OrderController.changeStatusOrders
 );
 router.put(

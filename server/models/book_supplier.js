@@ -27,7 +27,7 @@ book_supplier.add = function (data, results) {
             else
               return results({
                 success: true,
-                message: "update số lượng sản phẩm thành công",
+                message: "Update số lượng sản phẩm thành công",
               });
           }
         );
@@ -37,7 +37,11 @@ book_supplier.add = function (data, results) {
           [data.id_Book, data.id_Supplier, data.Import_Price, data.Amount],
           (err, book_Supplier) => {
             if (err) return results({ success: false, message: err.message });
-            else return results({ success: true, message: "thêm thành công" });
+            else
+              return results({
+                success: true,
+                message: "Thêm sản phẩm vào kho thành công",
+              });
           }
         );
       }
@@ -53,7 +57,7 @@ book_supplier.delete = function (id_BookSupplier, results) {
       else
         return results({
           success: true,
-          message: "xóa sản phẩm trong kho thành công",
+          message: "Xóa sản phẩm trong kho thành công",
         });
     }
   );
@@ -69,5 +73,4 @@ book_supplier.show = function (results) {
     else return results(bookSuppliers);
   });
 };
-
 module.exports = book_supplier;

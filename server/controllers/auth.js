@@ -9,13 +9,11 @@ class AuthController {
     if (tokenHeader) {
       // Tách header Authorization ra và lấy token
       const token = tokenHeader.split(" ")[1];
-      
       try {
         // Giải mã token
         const decoded = jwt.verify(token, "mk");
         // Lưu thông tin của người dùng vào request để sử dụng ở các middleware khác
         req.user = decoded;
-        
         // Chuyển tiếp request đến middleware tiếp theo
         next();
       } catch (err) {
@@ -52,6 +50,18 @@ class AuthController {
       return res
         .status(401)
         .json({ success: false, message: "yêu cầu đăng nhập là customer" });
+    }
+  }
+  isAdminOrStaff(req, res, next) {
+    if (req.user.role === "STAFF" || req.user.role === "ADMIN") {
+      next();
+    } else {
+      return res
+        .status(401)
+        .json({
+          success: false,
+          message: "yêu cầu đăng nhập là nhân viên hoặc Admin",
+        });
     }
   }
 }

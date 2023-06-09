@@ -20,7 +20,7 @@ rating.add = function (data, id_Account, results) {
           [data.idOrderItem],
           (err, order) => {
             if (err) return results({ success: false, message: err.message });
-            else results({ success: true, message: "thêm thành công" });
+            else results({ success: true, message: "Đã đánh giá sản phẩm" });
           }
         );
       }
@@ -59,7 +59,7 @@ rating.update = function (idRating, data, results) {
     function (err, rating) {
       if (err) return err;
       else {
-        results({ success: true, message: "cập nhật thành công" });
+        results({ success: true, message: "Cập nhật thành công" });
       }
     }
   );
@@ -69,7 +69,7 @@ rating.delete = function (idRating, results) {
   db.query("DELETE FROM rating WHERE id =?", idRating, function (err, images) {
     if (err) return err;
     else {
-      results({ success: true, message: "xóa thành công" });
+      results({ success: true, message: "Xóa đánh giá thành công" });
     }
   });
 };

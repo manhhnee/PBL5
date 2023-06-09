@@ -1,27 +1,33 @@
 const db = require("../config/db/index");
 
 const image_book = function (image_book) {
-        this.id = image_book.id,
-        this.id_Book = image_book.id_Book,
-        this.Image = image_book.Image
-
-}
-image_book.add = function (idBook,BookPath, results) {
-  db.query("SELECT * FROM image_book WHERE id_Book = ? ",[idBook],(err,images)=>{
-    if(err) return results({success: false,message:err.message})
-    else if(images.length  >= 3) return results({success: false,message:"số ảnh tối đa là 3 ảnh"})
-    else {
-        db.query("INSERT INTO image_book (id_Book, Image) VALUES (?, ?)",
-        [idBook,BookPath], function (err, images) {
-            if (err) return results({success: false,message:err.message})
+  (this.id = image_book.id),
+    (this.id_Book = image_book.id_Book),
+    (this.Image = image_book.Image);
+};
+image_book.add = function (idBook, BookPath, results) {
+  db.query(
+    "SELECT * FROM image_book WHERE id_Book = ? ",
+    [idBook],
+    (err, images) => {
+      if (err) return results({ success: false, message: err.message });
+      else if (images.length >= 3)
+        return results({ success: false, message: "Số ảnh tối đa là 3 ảnh" });
+      else {
+        db.query(
+          "INSERT INTO image_book (id_Book, Image) VALUES (?, ?)",
+          [idBook, BookPath],
+          function (err, images) {
+            if (err) return results({ success: false, message: err.message });
             else {
-                return results({ success: true, message: 'thêm ảnh thành công' })
+              return results({ success: true, message: "Thêm ảnh thành công" });
             }
-        })
+          }
+        );
+      }
     }
-  })
-    
-}
+  );
+};
 image_book.find = function (data, results) {
   db.query(
     "SELECT * FROM image_book WHERE id_Book = ?",
@@ -42,7 +48,7 @@ image_book.delete = function (idImage_book, results) {
     function (err, images) {
       if (err) return err;
       else {
-        results({ success: true, message: "xóa thành công" });
+        results({ success: true, message: "Xóa thành công" });
       }
     }
   );

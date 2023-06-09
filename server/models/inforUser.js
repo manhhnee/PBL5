@@ -2,22 +2,25 @@ const db = require("../config/db/index");
 const bcrypt = require("bcrypt");
 var salt = bcrypt.genSaltSync();
 
-const inforUser = function(inforUser){
-    this.id = inforUser.id,
-    this.id_Account = inforUser.id_Account,
-    this.FirstName = inforUser.FirstName, 
-    this.LastName = inforUser.LastName,
-    this.PhoneNumber = inforUser.PhoneNumber,
-    this.Address = inforUser.Address,
-    this.Avatar = inforUser.Avatar
-}
-inforUser.findWithAccountId = function(idAccount,results){
-    db.query(`SELECT inforuser.*, account.Username
+const inforUser = function (inforUser) {
+  (this.id = inforUser.id),
+    (this.id_Account = inforUser.id_Account),
+    (this.FirstName = inforUser.FirstName),
+    (this.LastName = inforUser.LastName),
+    (this.PhoneNumber = inforUser.PhoneNumber),
+    (this.Address = inforUser.Address),
+    (this.Avatar = inforUser.Avatar);
+};
+inforUser.findWithAccountId = function (idAccount, results) {
+  db.query(
+    `SELECT inforuser.*, account.Username
               FROM inforuser
               JOIN account ON inforuser.id_Account = account.id 
-              WHERE inforuser.id_Account = ?`,idAccount,(err,infor)=>{
-        if(err) throw err;
-        results(infor[0]);
+              WHERE inforuser.id_Account = ?`,
+    idAccount,
+    (err, infor) => {
+      if (err) throw err;
+      results(infor[0]);
     }
   );
 };
@@ -55,39 +58,51 @@ inforUser.update = function (idAccount, avatarPath, data, results) {
       ],
       (err, result) => {
         if (err) {
-          results({ success: false, message: "failed to update" });
+          results({
+            success: false,
+            message: "Cập nhập thông tin người dùng thất bại",
+          });
         } else {
-          results({ success: true, message: "updated successfully" });
+          results({ success: true, message: "Cập nhập thành công" });
         }
       }
     );
   }
 };
 
-inforUser.getListStaff = function(results){
-  db.query(`SELECT a.Username,i.* FROM account a
+inforUser.getListStaff = function (results) {
+  db.query(
+    `SELECT a.Username,i.* FROM account a
               INNER JOIN inforuser i on  a.id = i.id_Account
-              WHERE id_Role = 2`,[],function(err,staff){
-                if(err) return results({success:false,message:err.message})
-                else {
-                  results({success:true,staff:staff})
-                }
-  })
-}
-inforUser.deleteStaff = function(idAccount,results){
-  db.query("DELETE FROM account WHERE id = ? AND id_Role = 2",idAccount,(err,staff)=>{
-    if(err) return results({success:false,message:err.message})
-    else return results({success:true,message:"xóa thành công nhân viên"})
-  })
-}
-inforUser.addStaff = function(data,avatarPath,results){
+              WHERE id_Role = 2`,
+    [],
+    function (err, staff) {
+      if (err) return results({ success: false, message: err.message });
+      else {
+        results({ success: true, staff: staff });
+      }
+    }
+  );
+};
+inforUser.deleteStaff = function (idAccount, results) {
+  db.query(
+    "DELETE FROM account WHERE id = ? AND id_Role = 2",
+    idAccount,
+    (err, staff) => {
+      if (err) return results({ success: false, message: err.message });
+      else
+        return results({ success: true, message: "Xóa thành công nhân viên" });
+    }
+  );
+};
+inforUser.addStaff = function (data, avatarPath, results) {
   db.query(
     "SELECT * FROM account WHERE Username = ?",
     [data.Username],
     (err, users) => {
       if (err) return results({ success: false, message: err.message });
       else if (users.length > 0)
-        return results({ success: false, message: "username da duoc su dung" });
+        return results({ success: false, message: "Username đã được sử dụng" });
       else {
         bcrypt.hash(data.Password, salt, (err, hash) => {
           if (err) return results({ success: false, message: err.message });
@@ -96,8 +111,9 @@ inforUser.addStaff = function(data,avatarPath,results){
               "INSERT INTO account (Username, Password, id_Role) VALUES (?, ?, ?)",
               [data.Username, hash, 2],
               function (err, user) {
-                if (err) return results({ success: false, message: err.message });
-                else if(avatarPath) {
+                if (err)
+                  return results({ success: false, message: err.message });
+                else if (avatarPath) {
                   db.query(
                     "INSERT INTO inforuser (id_Account,FirstName,LastName,PhoneNumber,Address,Avatar) VALUES (?, ?, ?, ?, ?, ?)",
                     [
@@ -106,20 +122,23 @@ inforUser.addStaff = function(data,avatarPath,results){
                       data.LastName,
                       data.PhoneNumber,
                       data.Address,
-                      avatarPath
+                      avatarPath,
                     ],
                     function (err, users) {
-                      if (err) return results({ success: false, message: err.message });
+                      if (err)
+                        return results({
+                          success: false,
+                          message: err.message,
+                        });
                       else {
                         return results({
                           success: true,
-                          message: "tạo tài khoản nhân viên thành công",
+                          message: "Tạo tài khoản nhân viên thành công",
                         });
                       }
                     }
                   );
-                }
-                else {
+                } else {
                   db.query(
                     "INSERT INTO inforuser (id_Account,FirstName,LastName,PhoneNumber,Address) VALUES (?, ?, ?, ?, ?)",
                     [
@@ -127,14 +146,19 @@ inforUser.addStaff = function(data,avatarPath,results){
                       data.FirstName,
                       data.LastName,
                       data.PhoneNumber,
-                      data.Address
+                      data.Address,
                     ],
                     function (err, users) {
-                      if (err) return results({ success: false, message: err.message });
+                      if (err)
+                        return results({
+                          success: false,
+                          message: err.message,
+                        });
                       else {
                         return results({
                           success: true,
-                          message: "tạo tài khoản nhân viên thành công (without Avatar)",
+                          message:
+                            "Tạo tài khoản nhân viên thành công (không có Avatar)",
                         });
                       }
                     }
@@ -146,6 +170,6 @@ inforUser.addStaff = function(data,avatarPath,results){
         });
       }
     }
-  ); 
-}
-module.exports = inforUser
+  );
+};
+module.exports = inforUser;

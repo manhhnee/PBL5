@@ -41,7 +41,7 @@ cart.addItemIntoCart = function (id_Account, data, results) {
       if (err) return results({ message: err.message });
       else {
         if (data.id_BookSupplier == null)
-          return results({ success: false, message: "sản phẩm đã hết hàng" });
+          return results({ success: false, message: "Sản phẩm đã hết hàng" });
         db.query(
           "SELECT * FROM cart_item WHERE id_BookSupplier = ? AND id_cart = ?",
           [data.id_BookSupplier, cart[0].id],
@@ -61,7 +61,8 @@ cart.addItemIntoCart = function (id_Account, data, results) {
                   else
                     return results({
                       success: true,
-                      message: "update so luong thanh cong",
+                      message:
+                        "Update số lượng sản phẩm vào giỏ hàng thành công",
                     });
                 }
               );
@@ -77,7 +78,7 @@ cart.addItemIntoCart = function (id_Account, data, results) {
                   else
                     return results({
                       success: true,
-                      message: "thêm giỏ hàng thành công",
+                      message: "Thêm vào giỏ hàng thành công",
                     });
                 }
               );
@@ -103,7 +104,7 @@ cart.updateQuantityCartItems = function (
         else
           return results({
             success: true,
-            message: "da xoa san pham trong gio hang",
+            message: "Đã xóa sản phẩm khỏi giỏ hàng",
           });
       }
     );
@@ -116,7 +117,7 @@ cart.updateQuantityCartItems = function (
         else
           return results({
             success: true,
-            message: "update so luong thanh cong",
+            message: "Update số lượng sản phẩm thành công",
           });
       }
     );
@@ -128,7 +129,7 @@ cart.deleteCartItems = function (id_Account, idCartItem, results) {
     else
       return results({
         success: true,
-        message: "da xoa san pham trong gio hang",
+        message: "Đã xóa sản phẩm khỏi giỏ hàng",
       });
   });
 };

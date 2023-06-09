@@ -22,7 +22,7 @@ order.CreateOrderAllCart = function (
     if (orderItems[i].quantity > orderItems[i].Amount)
       return results({
         success: false,
-        message: "số lượng đặt vượt quá sản phẩm trong kho",
+        message: "Số lượng đặt vượt quá sản phẩm trong kho",
       });
   }
   db.query(
@@ -84,7 +84,11 @@ order.CreateOrderAllCart = function (
           [totalPrice, orderID],
           function (err, order) {
             if (err) return err;
-            else return results({ success: true, message: "thêm thành công" });
+            else
+              return results({
+                success: true,
+                message: "Mua đơn hàng thành công",
+              });
           }
         );
       }
@@ -103,7 +107,7 @@ order.CreateOrder = function (
   if (orderItem.quantity > orderItem.Amount)
     return results({
       success: false,
-      message: "số lượng đặt vượt quá sản phẩm trong kho",
+      message: "Số lượng đặt vượt quá sản phẩm trong kho",
     });
   else {
     db.query(
@@ -156,7 +160,10 @@ order.CreateOrder = function (
             function (err, order) {
               if (err) return err;
               else
-                return results({ success: true, message: "thêm thành công" });
+                return results({
+                  success: true,
+                  message: "Mua sản phẩm thành công",
+                });
             }
           );
         }
@@ -173,7 +180,11 @@ order.cancelOrder = function (id_Order, results) {
       if (err) throw err;
       else {
         if (orders[0].id_Status >= 2) {
-          return results({ message: "can not cancel order anymore" });
+          return results({
+            success: false,
+            message:
+              "Đơn hàng đang giao hoặc đã giao thành công (không thể hủy)",
+          });
         } else {
           db.query(
             "UPDATE make_order SET id_Status =? WHERE id =?",
@@ -221,7 +232,7 @@ order.cancelOrder = function (id_Order, results) {
                       });
                       results({
                         success: true,
-                        message: "update status thành công",
+                        message: "Hủy đơn hàng thành công",
                       });
                     }
                   }
@@ -320,7 +331,9 @@ order.changeStatus = function (id_Order, results) {
       if (err) throw err;
       else {
         if (orders[0].id_Status == 3 || orders[0].id_Status == 4) {
-          return results({ message: "can not change status anymore" });
+          return results({
+            message: "Không thể thay đổi trạng thái đơn hàng nữa",
+          });
         } else {
           db.query(
             "UPDATE make_order SET id_Status =? WHERE id =?",
@@ -329,7 +342,10 @@ order.changeStatus = function (id_Order, results) {
               if (err) {
                 return results({ message: err.message });
               } else {
-                results({ success: true, message: "update status thành công" });
+                results({
+                  success: true,
+                  message: "Duyệt đơn hàng thành công",
+                });
               }
             }
           );
