@@ -1,28 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { PayPalButton } from 'react-paypal-button-v2';
 import { Flip, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
-
-import * as PaymentService from '../../services/PaymentService';
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 
 const Paypal = ({ idBookSupplier, quantity, price, amount, address }) => {
-  const [sdkReady, setSdkReady] = useState(false);
-  const [clientId, setClientId] = useState('');
+  console.log(address);
   const [loggedIn, setLoggedIn] = useState(!!getJwtFromCookie());
-
-  const addPaypalScript = async () => {
-    const { data } = await PaymentService.getConfig();
-    const script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = `https://www.paypal.com/sdk/js?client-id=${data}`;
-    script.async = true;
-    script.onload = () => {
-      setSdkReady(true);
-    };
-    document.body.appendChild(script);
-    setClientId(data);
-  };
 
   function getJwtFromCookie() {
     const name = 'token=';
@@ -70,14 +54,6 @@ const Paypal = ({ idBookSupplier, quantity, price, amount, address }) => {
   };
 
   useEffect(() => {
-    if (!window.paypal) {
-      addPaypalScript();
-    } else {
-      setSdkReady(true);
-    }
-  }, []);
-
-  useEffect(() => {
     setLoggedIn(!!getJwtFromCookie());
   }, []);
 
@@ -96,20 +72,33 @@ const Paypal = ({ idBookSupplier, quantity, price, amount, address }) => {
         pauseOnHover
         theme="light"
       />
-      {address.trim() && loggedIn && sdkReady && (
-        <PayPalButton
-          amount={price}
-          onSuccess={(details, data) => {
-            handleCreateOneOrder(idBookSupplier, quantity, (price * 24000).toFixed(2), amount, address);
-            return fetch('/paypal-transaction-complete', {
-              method: 'post',
-              body: JSON.stringify({
-                orderID: data.orderID,
-              }),
-            });
+      {address.trim() && loggedIn && (
+        <PayPalScriptProvider
+          options={{
+            'client-id': 'AQ_w1dR_0xJj-tYWIXmCsLKulaYJlr3GvQk3zv88z1NkBbIXDnnYoXpQvw2NaBIRRZl9hi8-EmQsU4JN',
           }}
-          onError={() => alert('Error')}
-        />
+        >
+          <PayPalButtons
+            style={{ layout: 'horizontal' }}
+            createOrder={(data, actions) => {
+              return actions.order.create({
+                purchase_units: [
+                  {
+                    amount: {
+                      value: `${price}`,
+                    },
+                  },
+                ],
+              });
+            }}
+            onApprove={(data, actions) => {
+              return actions.order.capture().then(() => {
+                handleCreateOneOrder(idBookSupplier, quantity, (price * 24000).toFixed(2), amount, address);
+                alert(address);
+              });
+            }}
+          />
+        </PayPalScriptProvider>
       )}
     </div>
   );
