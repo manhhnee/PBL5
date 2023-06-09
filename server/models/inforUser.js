@@ -55,9 +55,9 @@ inforUser.update = function (idAccount, avatarPath, data, results) {
       ],
       (err, result) => {
         if (err) {
-          results({ success: false, message: "failed to update" });
+          results({ success: false, message: "cập nhập thông tin người dùng thất bại" });
         } else {
-          results({ success: true, message: "updated successfully" });
+          results({ success: true, message: "cập nhập thành công" });
         }
       }
     );
@@ -87,7 +87,7 @@ inforUser.addStaff = function(data,avatarPath,results){
     (err, users) => {
       if (err) return results({ success: false, message: err.message });
       else if (users.length > 0)
-        return results({ success: false, message: "username da duoc su dung" });
+        return results({ success: false, message: "username đã được sử dụng" });
       else {
         bcrypt.hash(data.Password, salt, (err, hash) => {
           if (err) return results({ success: false, message: err.message });

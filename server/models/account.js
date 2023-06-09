@@ -17,7 +17,7 @@ account.register = function (data, result) {
     function (err, users) {
       if (err) return err;
       else if (users.length > 0) {
-        result({ success: false, message: "username da duoc su dung" });
+        result({ success: false, message: "username đã được sử dụng" });
       } else {
         bcrypt.hash(data.Password, salt, (err, hash) => {
           if (err) return err;

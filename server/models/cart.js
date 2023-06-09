@@ -61,7 +61,7 @@ cart.addItemIntoCart = function (id_Account, data, results) {
                   else
                     return results({
                       success: true,
-                      message: "update so luong thanh cong",
+                      message: "update số lượng sản phẩm vào giỏ hàng thành công",
                     });
                 }
               );
@@ -77,7 +77,7 @@ cart.addItemIntoCart = function (id_Account, data, results) {
                   else
                     return results({
                       success: true,
-                      message: "thêm giỏ hàng thành công",
+                      message: "thêm vào giỏ hàng thành công",
                     });
                 }
               );

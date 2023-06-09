@@ -24,7 +24,7 @@ book_supplier.add = function(data,results){
             db.query("INSERT INTO book_supplier (id_Book, id_Supplier, Import_Price, Amount) VALUES (?, ?, ?, ?)",
             [data.id_Book,data.id_Supplier,data.Import_Price,data.Amount],(err,book_Supplier)=>{   
                 if(err) return results({success:false,message:err.message});
-                else return results({success:true,message:"thêm thành công"})
+                else return results({success:true,message:"thêm sản phẩm vào kho thành công"})
             })
         }
     })
