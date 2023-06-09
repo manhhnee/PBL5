@@ -1,4 +1,4 @@
-import { faLock, faPhone, faUser, faLocationDot, faSignature } from '@fortawesome/free-solid-svg-icons';
+import { faLock, faPhone, faUser, faSignature } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames/bind';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -9,10 +9,11 @@ import Button from '~/components/Button';
 import InputForm from '~/components/InputForm';
 import config from '~/config';
 import styles from './Login.module.scss';
+import AutoComplete from '~/components/AutoComplete/AutoComplete';
 
 const cx = classNames.bind(styles);
 
-function Login(props) {
+function Login() {
   const location = useLocation();
 
   const [isSignupMode, setIsSignupMode] = useState(location.state?.flag);
@@ -32,6 +33,8 @@ function Login(props) {
     phoneNumber: null,
     address: null,
   });
+
+  const [autocompleteInputValue, setAutocompleteInputValue] = useState('');
 
   const handleSignupClick = () => setIsSignupMode(true);
   const handleSigninClick = () => setIsSignupMode(false);
@@ -66,7 +69,7 @@ function Login(props) {
         isValid = false;
       }
 
-      if (!payload.address.trim()) {
+      if (!autocompleteInputValue.trim()) {
         errors.address = 'Vui lòng nhập địa chỉ';
         isValid = false;
       }
@@ -123,7 +126,7 @@ function Login(props) {
           FirstName: payload.firstName.trim(),
           LastName: payload.lastName.trim(),
           PhoneNumber: payload.phoneNumber.trim(),
-          Address: payload.address.trim(),
+          Address: autocompleteInputValue.trim(),
           id_Role: 3,
         }),
       });
@@ -138,6 +141,7 @@ function Login(props) {
       }
     }
   };
+
   return (
     <div className={cx('wrapper')}>
       <ToastContainer
@@ -210,14 +214,7 @@ function Login(props) {
                 name={'phoneNumber'}
               />
               {errorMessages.phoneNumber && <div className={cx('error-message')}>{errorMessages.phoneNumber}</div>}
-              <InputForm
-                placeholder="Address"
-                leftIcon={faLocationDot}
-                type="text"
-                value={payload.address}
-                setValue={setPayload}
-                name={'address'}
-              />
+              <AutoComplete setParentInputValue={setAutocompleteInputValue} />
               {errorMessages.address && <div className={cx('error-message')}>{errorMessages.address}</div>}
               <InputForm
                 placeholder="Username"

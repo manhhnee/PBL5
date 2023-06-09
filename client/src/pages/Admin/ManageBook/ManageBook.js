@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { faImage } from '@fortawesome/free-regular-svg-icons';
-import { faBook, faPlus, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faAudioDescription, faBook, faMoneyBill, faPlus, faUpload, faUser } from '@fortawesome/free-solid-svg-icons';
 import { useSpring, animated } from 'react-spring';
 import { Flip, ToastContainer, toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -391,7 +391,7 @@ function ManageBook() {
           <div className={cx('input-field')}>
             <div className={cx('header')}>Tên sách</div>
             <InputForm
-              placeholder=""
+              placeholder="Enter name book..."
               type="text"
               value={payload.name}
               setValue={setPayload}
@@ -404,52 +404,52 @@ function ManageBook() {
           <div className={cx('input-field')}>
             <div className={cx('header')}>Tác giả</div>
             <InputForm
-              placeholder=""
+              placeholder="Enter name author..."
               type="text"
               value={payload.author}
               setValue={setPayload}
               name={'author'}
               className={cx('input')}
-              leftIcon={faImage}
+              leftIcon={faUser}
             />
             {errorMessages.author && <div className={cx('error-message')}>{errorMessages.author}</div>}
           </div>
           <div className={cx('input-field')}>
             <div className={cx('header')}>Nhà sản xuất</div>
             <InputForm
-              placeholder=""
+              placeholder="Enter name publisher..."
               type="text"
               value={payload.publisher}
               setValue={setPayload}
               name={'publisher'}
               className={cx('input')}
-              leftIcon={faImage}
+              leftIcon={faUser}
             />
             {errorMessages.publisher && <div className={cx('error-message')}>{errorMessages.publisher}</div>}
           </div>
           <div className={cx('input-field')}>
             <div className={cx('header')}>Giá</div>
             <InputForm
-              placeholder=""
+              placeholder="Enter book price..."
               type="text"
               value={payload.price}
               setValue={setPayload}
               name={'price'}
               className={cx('input')}
-              leftIcon={faImage}
+              leftIcon={faMoneyBill}
             />
             {errorMessages.price && <div className={cx('error-message')}>{errorMessages.price}</div>}
           </div>
           <div className={cx('header')}>Mô tả</div>
           <div className={cx('input-field')}>
             <InputForm
-              placeholder=""
+              placeholder="Enter book description..."
               type="text"
               value={payload.description}
               setValue={setPayload}
               name={'description'}
               className={cx('input')}
-              leftIcon={faImage}
+              leftIcon={faAudioDescription}
             />
             {errorMessages.description && <div className={cx('error-message')}>{errorMessages.description}</div>}
           </div>
@@ -488,7 +488,7 @@ function ManageBook() {
           <div className={cx('input-field')}>
             <div className={cx('header')}>Tên sách</div>
             <InputForm
-              placeholder=""
+              placeholder="Enter name book..."
               type="text"
               value={payload2.name}
               setValue={setPayload2}
@@ -501,52 +501,52 @@ function ManageBook() {
           <div className={cx('input-field')}>
             <div className={cx('header')}>Tác giả</div>
             <InputForm
-              placeholder=""
+              placeholder="Enter name author..."
               type="text"
               value={payload2.author}
               setValue={setPayload2}
               name={'author'}
               className={cx('input')}
-              leftIcon={faImage}
+              leftIcon={faUser}
             />
             {errorMessages2.author && <div className={cx('error-message')}>{errorMessages2.author}</div>}
           </div>
           <div className={cx('input-field')}>
             <div className={cx('header')}>Nhà sản xuất</div>
             <InputForm
-              placeholder=""
+              placeholder="Enter name publisher..."
               type="text"
               value={payload2.publisher}
               setValue={setPayload2}
               name={'publisher'}
               className={cx('input')}
-              leftIcon={faImage}
+              leftIcon={faUser}
             />
             {errorMessages2.publisher && <div className={cx('error-message')}>{errorMessages2.publisher}</div>}
           </div>
           <div className={cx('input-field')}>
             <div className={cx('header')}>Giá</div>
             <InputForm
-              placeholder=""
+              placeholder="Enter book price..."
               type="text"
               value={payload2.price}
               setValue={setPayload2}
               name={'price'}
               className={cx('input')}
-              leftIcon={faImage}
+              leftIcon={faMoneyBill}
             />
             {errorMessages2.price && <div className={cx('error-message')}>{errorMessages2.price}</div>}
           </div>
           <div className={cx('header')}>Mô tả</div>
           <div className={cx('input-field')}>
             <InputForm
-              placeholder=""
+              placeholder="Enter book description..."
               type="text"
               value={payload2.description}
               setValue={setPayload2}
               name={'description'}
               className={cx('input')}
-              leftIcon={faImage}
+              leftIcon={faAudioDescription}
             />
             {errorMessages2.description && <div className={cx('error-message')}>{errorMessages2.description}</div>}
           </div>

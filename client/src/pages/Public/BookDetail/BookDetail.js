@@ -2,25 +2,26 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import { useSpring, animated } from 'react-spring';
 import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import { Flip, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import AutoComplete from '~/components/AutoComplete';
 import Image from '~/components/Image/Image';
 import Popup from '~/components/Popup';
 import Button from '~/components/Button/Button';
 import Rate from '~/components/Rate';
 import Star from '~/components/Star';
-import InputForm from '~/components/InputForm/InputForm';
 import styles from './BookDetail.module.scss';
 import Paypal from '~/components/Paypal';
 
 const cx = classNames.bind(styles);
 
 function BookDetail() {
+  const [autocompleteInputValue, setAutocompleteInputValue] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('cash'); // Mặc định là tiền mặt khi nhận hàng
   const [count, setCount] = useState(1);
   const [isActive, setIsActive] = useState(false);
@@ -30,9 +31,6 @@ function BookDetail() {
   const [mainImage, setMainImage] = useState();
   const [ratings, setRatings] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [payload, setPayload] = useState({
-    address: '',
-  });
 
   const handlePaymentMethodChange = (event) => {
     setPaymentMethod(event.target.value);
@@ -50,7 +48,7 @@ function BookDetail() {
     let isValid = true;
     const errors = {};
 
-    if (!payload.address.trim()) {
+    if (!autocompleteInputValue.trim()) {
       errors.address = 'Vui lòng nhập địa chỉ đặt hàng!';
       isValid = false;
     }
@@ -252,15 +250,7 @@ function BookDetail() {
           <h2>Xác nhận thanh toán</h2>
           <div className={cx('input-field')}>
             <div className={cx('header')}>Nhập địa chỉ</div>
-            <InputForm
-              placeholder=""
-              type="text"
-              value={payload.address}
-              setValue={setPayload}
-              name={'address'}
-              className={cx('input')}
-              leftIcon={faLocationDot}
-            />
+            <AutoComplete setParentInputValue={setAutocompleteInputValue} />
             {errorMessages.address && <div className={cx('error-message')}>{errorMessages.address}</div>}
           </div>
           <div className={cx('options')}>
@@ -287,7 +277,7 @@ function BookDetail() {
             {paymentMethod === 'cash' ? (
               <Button
                 onClick={() =>
-                  handleCreateOneOrder(book.id_BookSupplier, count, book.Price, book.Amount, payload.address)
+                  handleCreateOneOrder(book.id_BookSupplier, count, book.Price, book.Amount, autocompleteInputValue)
                 }
                 outline
               >
@@ -299,7 +289,7 @@ function BookDetail() {
                 quantity={count}
                 price={((book.Price / 24000) * count).toFixed(2)}
                 amount={book.Amount}
-                address={payload.address}
+                address={autocompleteInputValue}
               />
             )}
           </div>
