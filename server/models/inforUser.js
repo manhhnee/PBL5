@@ -55,9 +55,9 @@ inforUser.update = function (idAccount, avatarPath, data, results) {
       ],
       (err, result) => {
         if (err) {
-          results({ success: false, message: "cập nhập thông tin người dùng thất bại" });
+          results({ success: false, message: "Cập nhập thông tin người dùng thất bại" });
         } else {
-          results({ success: true, message: "cập nhập thành công" });
+          results({ success: true, message: "Cập nhập thành công" });
         }
       }
     );
@@ -77,7 +77,7 @@ inforUser.getListStaff = function(results){
 inforUser.deleteStaff = function(idAccount,results){
   db.query("DELETE FROM account WHERE id = ? AND id_Role = 2",idAccount,(err,staff)=>{
     if(err) return results({success:false,message:err.message})
-    else return results({success:true,message:"xóa thành công nhân viên"})
+    else return results({success:true,message:"Xóa thành công nhân viên"})
   })
 }
 inforUser.addStaff = function(data,avatarPath,results){
@@ -87,7 +87,7 @@ inforUser.addStaff = function(data,avatarPath,results){
     (err, users) => {
       if (err) return results({ success: false, message: err.message });
       else if (users.length > 0)
-        return results({ success: false, message: "username đã được sử dụng" });
+        return results({ success: false, message: "Username đã được sử dụng" });
       else {
         bcrypt.hash(data.Password, salt, (err, hash) => {
           if (err) return results({ success: false, message: err.message });
@@ -113,7 +113,7 @@ inforUser.addStaff = function(data,avatarPath,results){
                       else {
                         return results({
                           success: true,
-                          message: "tạo tài khoản nhân viên thành công",
+                          message: "Tạo tài khoản nhân viên thành công",
                         });
                       }
                     }
@@ -134,7 +134,7 @@ inforUser.addStaff = function(data,avatarPath,results){
                       else {
                         return results({
                           success: true,
-                          message: "tạo tài khoản nhân viên thành công (without Avatar)",
+                          message: "Tạo tài khoản nhân viên thành công (không có Avatar)",
                         });
                       }
                     }

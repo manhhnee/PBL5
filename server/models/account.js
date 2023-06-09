@@ -17,7 +17,7 @@ account.register = function (data, result) {
     function (err, users) {
       if (err) return err;
       else if (users.length > 0) {
-        result({ success: false, message: "username đã được sử dụng" });
+        result({ success: false, message: "Username đã được sử dụng" });
       } else {
         bcrypt.hash(data.Password, salt, (err, hash) => {
           if (err) return err;
@@ -48,7 +48,7 @@ account.register = function (data, result) {
                           else {
                             result({
                               success: true,
-                              message: "đăng ký thành công",
+                              message: "Đăng ký thành công",
                             });
                           }
                         })
@@ -75,7 +75,7 @@ account.login = function (data, result) {
         return err;
       }
       if (users.length === 0) {
-        return result({ success: false, message: "username not found" });
+        return result({ success: false, message: "Username not found" });
       }
 
       const user = users[0];
@@ -90,7 +90,7 @@ account.login = function (data, result) {
             // console.log(data.Password,"-",user.Password)
             // console.log(results)
             if (results === false) {
-              return result({ success: false, message: "wrong password" });
+              return result({ success: false, message: "Wrong password" });
             }
 
             const token = jwt.sign(
@@ -121,9 +121,9 @@ account.changePassWord = function (idAccount,data,results){
   db.query("SELECT * FROM account WHERE id = ?",idAccount,(err,user)=>{
     bcrypt.compare(data.Password, user[0].Password, function (err, result) {
       if (err) return err;
-      if (result === false) return results({ success: false, message: "mật khẩu cũ không đúng" });
-      else if (data.Password == data.NewPassword) return results({ success: false, message:"mật khẩu mới trùng mật khẩu cũ"})
-      else if (data.NewPassword != data.AgainPassword) return results({ success: false, message:"không khớp mật khẩu mới"})
+      if (result === false) return results({ success: false, message: "Mật khẩu cũ không đúng" });
+      else if (data.Password == data.NewPassword) return results({ success: false, message:"Mật khẩu mới trùng mật khẩu cũ"})
+      else if (data.NewPassword != data.AgainPassword) return results({ success: false, message:"Không khớp mật khẩu mới"})
       else {
         bcrypt.hash(data.NewPassword , salt, (err, hash) => {
           if (err) return err;
@@ -133,7 +133,7 @@ account.changePassWord = function (idAccount,data,results){
               [hash, idAccount],
               function (err, user) {
                 if (err) return err;
-                else return results({success: true, message:"đổi mật khẩu thành công"})
+                else return results({success: true, message:"Đổi mật khẩu thành công"})
               })
           }
         });

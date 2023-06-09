@@ -17,14 +17,14 @@ book_supplier.add = function(data,results){
             db.query("UPDATE book_supplier SET Amount = ? WHERE id = ?",
             [parseInt(book_suppliers[0].Amount)+parseInt(data.Amount),book_suppliers[0].id],(err,book_supplier)=>{
                 if(err) return results({success:false,message:err.message})
-                else return results({success:true,message:"update số lượng sản phẩm thành công"})
+                else return results({success:true,message:"Update số lượng sản phẩm thành công"})
             })
         }
         else {
             db.query("INSERT INTO book_supplier (id_Book, id_Supplier, Import_Price, Amount) VALUES (?, ?, ?, ?)",
             [data.id_Book,data.id_Supplier,data.Import_Price,data.Amount],(err,book_Supplier)=>{   
                 if(err) return results({success:false,message:err.message});
-                else return results({success:true,message:"thêm sản phẩm vào kho thành công"})
+                else return results({success:true,message:"Thêm sản phẩm vào kho thành công"})
             })
         }
     })
@@ -33,7 +33,7 @@ book_supplier.add = function(data,results){
 book_supplier.delete = function(id_BookSupplier,results){
     db.query("DELETE FROM book_supplier WHERE id = ?",id_BookSupplier,(err,book_supplier)=>{
         if(err) return results({success:false,message:err.message})
-        else return results({success:true,message:"xóa sản phẩm trong kho thành công"})
+        else return results({success:true,message:"Xóa sản phẩm trong kho thành công"})
     })
 }
 book_supplier.show = function(results){

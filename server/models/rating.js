@@ -17,7 +17,7 @@ rating.add = function (data,id_Account, results) {
       else {
         db.query("UPDATE order_item SET isRated = 1 WHERE id =?",[data.idOrderItem],(err,order)=>{
           if (err) return results({success:false,message:err.message})
-          else  results({ success: true, message: "thêm thành công" });
+          else  results({ success: true, message: "đã đánh giá sản phẩm" });
         })
       }
     }
@@ -65,7 +65,7 @@ rating.delete = function (idRating, results) {
   db.query("DELETE FROM rating WHERE id =?", idRating, function (err, images) {
     if (err) return err;
     else {
-      results({ success: true, message: "xóa thành công" });
+      results({ success: true, message: "xóa đánh giá thành công" });
     }
   });
 };

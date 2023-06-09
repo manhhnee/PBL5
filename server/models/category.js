@@ -12,7 +12,7 @@ category.add = function (data, results) {
     function (err, categories) {
       if (err) return err;
       else {
-        results({ success: true, message: "thêm thành công" });
+        results({ success: true, message: "Thêm thành công" });
       }
     }
   );
@@ -46,7 +46,7 @@ category.delete = function (idCategory, results) {
       if (err) return err;
       else {
         console.log(categories);
-        results({ success: true, message: "xóa thành công" });
+        results({ success: true, message: "Xóa thành công" });
       }
     }
   );
@@ -58,7 +58,7 @@ category.update = function (idCategory, data, results) {
     function (err, categories) {
       if (err) return err;
       else {
-        results({ success: true, message: "cập nhật thành công" });
+        results({ success: true, message: "Cập nhật thành công" });
       }
     }
   );

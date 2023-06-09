@@ -14,7 +14,7 @@ order.CreateOrderAllCart = function (id_Account, orderItems, address, payment, r
     var today = new Date()
     for (var i = 0; i < orderItems.length; i++) {
         if (orderItems[i].quantity > orderItems[i].Amount)
-            return results({ success: false, message: "số lượng đặt vượt quá sản phẩm trong kho" })
+            return results({ success: false, message: "Số lượng đặt vượt quá sản phẩm trong kho" })
     }
     db.query(
         "INSERT INTO make_order (id_Status,id_Account,id_Payment,OrderDate,OrderAddress) VALUES (?, ?, ?, ?, ?)",
@@ -54,7 +54,7 @@ order.CreateOrderAllCart = function (id_Account, orderItems, address, payment, r
                 db.query(`UPDATE make_order SET totalPrice =? WHERE id =?`, [totalPrice, orderID],
                     function (err, order) {
                         if (err) return err
-                        else return results({ success: true, message: "mua đơn hàng thành công" })
+                        else return results({ success: true, message: "Mua đơn hàng thành công" })
                     })
             }
         }
@@ -63,7 +63,7 @@ order.CreateOrderAllCart = function (id_Account, orderItems, address, payment, r
 // tạo don hang cho 1 item
 order.CreateOrder = function (id_Account, orderItem, address, payment, results) {
     var today = new Date()
-    if (orderItem.quantity > orderItem.Amount) return results({ success: false, message: "số lượng đặt vượt quá sản phẩm trong kho" })
+    if (orderItem.quantity > orderItem.Amount) return results({ success: false, message: "Số lượng đặt vượt quá sản phẩm trong kho" })
     else {
         db.query(
             "INSERT INTO make_order (id_Status,id_Account,id_Payment,OrderDate,OrderAddress) VALUES (?, ?, ?, ?, ?)",
@@ -95,7 +95,7 @@ order.CreateOrder = function (id_Account, orderItem, address, payment, results) 
                     db.query(`UPDATE make_order SET totalPrice =? WHERE id =?`, [totalPrice, orderID],
                         function (err, order) {
                             if (err) return err
-                            else return results({ success: true, message: "mua sản phẩm thành công" })
+                            else return results({ success: true, message: "Mua sản phẩm thành công" })
                         })
                 }
             }
@@ -108,7 +108,7 @@ order.cancelOrder = function (id_Order, results) {
         if (err) throw err
         else {
             if (orders[0].id_Status >= 2) {
-                return results({success:false, message: "đơn hàng đang giao hoặc đã giao thành công (không thể hủy)" })
+                return results({success:false, message: "Đơn hàng đang giao hoặc đã giao thành công (không thể hủy)" })
             }
             else {
                 db.query("UPDATE make_order SET id_Status =? WHERE id =?", [4, id_Order],
@@ -130,7 +130,7 @@ order.cancelOrder = function (id_Order, results) {
                                             }
                                         })
                                     })
-                                    results({ success: true, message: "hủy đơn hàng thành công" })
+                                    results({ success: true, message: "Hủy đơn hàng thành công" })
                                 }
                             })
                         }
@@ -223,14 +223,14 @@ order.changeStatus = function (id_Order, results) {
         if (err) throw err
         else {
             if (orders[0].id_Status == 3 || orders[0].id_Status == 4) {
-                return results({ message: "không thể thay đổi trạng thái đơn hàng nữa" })
+                return results({ message: "Không thể thay đổi trạng thái đơn hàng nữa" })
             }
             else {
                 db.query("UPDATE make_order SET id_Status =? WHERE id =?", [orders[0].id_Status + 1, id_Order],
                     function (err, order) {
                         if (err) { return results({ message: err.message }) }
                         else {
-                            results({ success: true, message: "duyệt đơn hàng thành công" })
+                            results({ success: true, message: "Duyệt đơn hàng thành công" })
                         }
                     })
             }
