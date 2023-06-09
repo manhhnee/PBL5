@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
-import { faBook, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faHashtag, faMoneyBill, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useSpring, animated } from 'react-spring';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Flip, ToastContainer, toast } from 'react-toastify';
@@ -28,8 +28,7 @@ function ManageStore() {
     price: '',
     amount: '',
   });
-  const [isModalOpen1, setIsModalOpen1] = useState(false);
-  const [isModalOpen2, setIsModalOpen2] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   function getJwtFromCookie() {
     //lấy token được lưu trong cookie ra
@@ -128,25 +127,17 @@ function ManageStore() {
     fetchApiSupplier();
   }, []);
 
-  const modalAnimation1 = useSpring({
-    opacity: isModalOpen1 ? 1 : 0,
+  const modalAnimation = useSpring({
+    opacity: isModalOpen ? 1 : 0,
   });
 
-  const modalAnimation2 = useSpring({
-    opacity: isModalOpen2 ? 1 : 0,
-  });
-
-  const closeModal1 = () => {
-    setIsModalOpen1(false);
-  };
-
-  const openModal2 = () => {
-    setIsModalOpen2(true);
+  const openModal = () => {
+    setIsModalOpen(true);
     setPayload({});
   };
 
-  const closeModal2 = () => {
-    setIsModalOpen2(false);
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   const columns = [
@@ -211,7 +202,7 @@ function ManageStore() {
         subHeader
         subHeaderComponent={
           <div className={cx('wrapper-header')}>
-            <Button onClick={openModal2} leftIcon={<FontAwesomeIcon icon={faPlus} />} blue>
+            <Button onClick={openModal} leftIcon={<FontAwesomeIcon icon={faPlus} />} blue>
               Thêm sách vào kho
             </Button>
             <input
@@ -225,30 +216,8 @@ function ManageStore() {
         }
       />
 
-      <Popup isOpen={isModalOpen1} onRequestClose={() => closeModal1()} width={'700px'} height={'640px'}>
-        <animated.div style={modalAnimation1}>
-          <h2>Thông tin sách</h2>
-          <div className={cx('header')}>Tên sách</div>
-          <div className={cx('input-field')}>
-            <InputForm
-              placeholder=""
-              type="text"
-              value={payload.name}
-              setValue={setPayload}
-              name={'name'}
-              className={cx('input')}
-              leftIcon={faBook}
-            />
-          </div>
-
-          <div className={cx('options')}>
-            <Button outline>Thay đổi thông tin</Button>
-            <Button primary>Xóa</Button>
-          </div>
-        </animated.div>
-      </Popup>
-      <Popup isOpen={isModalOpen2} onRequestClose={() => closeModal2()} width={'700px'} height={'640px'}>
-        <animated.div style={modalAnimation2}>
+      <Popup isOpen={isModalOpen} onRequestClose={() => closeModal()} width={'700px'} height={'640px'}>
+        <animated.div style={modalAnimation}>
           <h2>Thông tin sách</h2>
           <div className={cx('header')}>Chọn sách</div>
           <div className={cx('input-field')}>
@@ -262,25 +231,25 @@ function ManageStore() {
           <div className={cx('header')}>Giá bán</div>
           <div className={cx('input-field')}>
             <InputForm
-              placeholder=""
+              placeholder="Enter book price..."
               type="text"
               value={payload.importPrice}
               setValue={setPayload}
               name={'importPrice'}
               className={cx('input')}
-              leftIcon={faBook}
+              leftIcon={faMoneyBill}
             />
           </div>
           <div className={cx('header')}>Số lượng</div>
           <div className={cx('input-field')}>
             <InputForm
-              placeholder=""
+              placeholder="Enter book count..."
               type="text"
               value={payload.amount}
               setValue={setPayload}
               name={'amount'}
               className={cx('input')}
-              leftIcon={faBook}
+              leftIcon={faHashtag}
             />
           </div>
 

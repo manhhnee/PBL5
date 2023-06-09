@@ -2,23 +2,23 @@ import classNames from 'classnames/bind';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
-import { faImage } from '@fortawesome/free-regular-svg-icons';
 import { faBook } from '@fortawesome/free-solid-svg-icons';
 import { useSpring, animated } from 'react-spring';
 
 import Button from '~/components/Button/Button';
 import Popup from '~/components/Popup/Popup';
 import InputForm from '~/components/InputForm/InputForm';
+import AutoComplete from '~/components/AutoComplete';
 import styles from './ManageSupplier.module.scss';
 
 const cx = classNames.bind(styles);
 
 function ManageSupplier() {
+  const [autocompleteInputValue, setAutocompleteInputValue] = useState('');
   const [suppliers, setSuppliers] = useState([]);
   const [supplierID, setSupplierID] = useState();
   const [payload, setPayload] = useState({
     name: '',
-    address: '',
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const modalAnimation = useSpring({
@@ -159,13 +159,13 @@ function ManageSupplier() {
           highlightOnHover
           className={cx('fixed-header')}
         />
-        <Popup isOpen={isModalOpen} onRequestClose={() => closeModal()} width={'700px'} height={'400px'}>
+        <Popup isOpen={isModalOpen} onRequestClose={() => closeModal()} width={'700px'} height={'500px'}>
           <animated.div style={modalAnimation}>
             <h2>Thông tin sách</h2>
             <div className={cx('input-field')}>
               <div className={cx('header')}>Tên nhà xuất bản</div>
               <InputForm
-                placeholder=""
+                placeholder="Enter name author..."
                 type="text"
                 value={payload.name}
                 setValue={setPayload}
@@ -176,19 +176,11 @@ function ManageSupplier() {
             </div>
             <div className={cx('input-field')}>
               <div className={cx('header')}>Địa chỉ nhà xuất bản</div>
-              <InputForm
-                placeholder=""
-                type="text"
-                value={payload.address}
-                setValue={setPayload}
-                name={'address'}
-                className={cx('input')}
-                leftIcon={faImage}
-              />
+              <AutoComplete setParentInputValue={setAutocompleteInputValue} />
             </div>
 
             <div className={cx('options')}>
-              <Button onClick={() => handleUpdateSupplier(supplierID, payload.name, payload.address)} outline>
+              <Button onClick={() => handleUpdateSupplier(supplierID, payload.name, autocompleteInputValue)} outline>
                 Xác nhận
               </Button>
             </div>

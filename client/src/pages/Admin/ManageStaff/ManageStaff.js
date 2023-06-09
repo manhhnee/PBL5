@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useSpring, animated } from 'react-spring';
 import { Flip, ToastContainer, toast } from 'react-toastify';
 
+import AutoComplete from '~/components/AutoComplete';
 import Image from '~/components/Image';
 import Button from '~/components/Button';
 import InputForm from '~/components/InputForm';
@@ -15,6 +16,7 @@ import axios from 'axios';
 const cx = classNames.bind(styles);
 
 function ManageStaff() {
+  const [autocompleteInputValue, setAutocompleteInputValue] = useState('');
   const [listStaff, setListStaff] = useState([]);
   const [avatar, setAvatar] = useState([]);
   const [image, setImage] = useState([]);
@@ -35,7 +37,6 @@ function ManageStaff() {
     firstName: '',
     lastName: '',
     phoneNumber: '',
-    address: '',
     avatar: '',
   });
 
@@ -231,14 +232,14 @@ function ManageStaff() {
             );
           })}
       </div>
-      <Popup isOpen={isModalOpen1} onRequestClose={() => closeModal1()} width={String('600px')} height={'520px'}>
+      <Popup isOpen={isModalOpen1} onRequestClose={() => closeModal1()} width={String('700px')} height={'700px'}>
         <animated.div style={modalAnimation1}>
           <h2>Thông tin nhân viên</h2>
           <div className={cx('input-field')}>
             <div className={cx('header')}>Họ và tên</div>
             <div className={cx('fullname')}>
               <InputForm
-                placeholder=""
+                placeholder="Enter first name..."
                 type="text"
                 value={payload.firstName}
                 setValue={setPayload}
@@ -247,7 +248,7 @@ function ManageStaff() {
                 leftIcon={faSignature}
               />
               <InputForm
-                placeholder=""
+                placeholder="Enter last name..."
                 type="text"
                 value={payload.lastName}
                 setValue={setPayload}
@@ -259,20 +260,12 @@ function ManageStaff() {
           </div>
           <div className={cx('input-field')}>
             <div className={cx('header')}>Địa chỉ</div>
-            <InputForm
-              placeholder="Da Nang"
-              type="text"
-              value={payload.address}
-              setValue={setPayload}
-              name={'address'}
-              className={cx('input')}
-              leftIcon={faLocationDot}
-            />
+            <AutoComplete setParentInputValue={setAutocompleteInputValue} />
           </div>
           <div className={cx('header')}>Số điện thoại</div>
           <div className={cx('input-field')}>
             <InputForm
-              placeholder="0905111123"
+              placeholder="Enter phone number..."
               type="text"
               value={payload.phoneNumber}
               setValue={setPayload}
@@ -302,7 +295,7 @@ function ManageStaff() {
                   payload.firstName,
                   payload.lastName,
                   payload.phoneNumber,
-                  payload.address,
+                  autocompleteInputValue,
                   avatar,
                 )
               }
@@ -313,14 +306,14 @@ function ManageStaff() {
           </div>
         </animated.div>
       </Popup>
-      <Popup isOpen={isModalOpen2} onRequestClose={() => closeModal2()} width={String('600px')} height={'520px'}>
+      <Popup isOpen={isModalOpen2} onRequestClose={() => closeModal2()} width={String('700px')} height={'700px'}>
         <animated.div style={modalAnimation2}>
           <h2>Thêm nhân viên</h2>
           <div className={cx('input-field')}>
             <div className={cx('header')}>Tên đăng nhập</div>
             <div className={cx('fullname')}>
               <InputForm
-                placeholder=""
+                placeholder="Enter username..."
                 type="text"
                 value={payload.username}
                 setValue={setPayload}
@@ -334,7 +327,7 @@ function ManageStaff() {
             <div className={cx('header')}>Mật khẩu</div>
             <div className={cx('fullname')}>
               <InputForm
-                placeholder=""
+                placeholder="Enter password..."
                 type="text"
                 value={payload.password}
                 setValue={setPayload}
@@ -348,7 +341,7 @@ function ManageStaff() {
             <div className={cx('header')}>Họ và tên</div>
             <div className={cx('fullname')}>
               <InputForm
-                placeholder=""
+                placeholder="Enter first name..."
                 type="text"
                 value={payload.firstName}
                 setValue={setPayload}
@@ -357,7 +350,7 @@ function ManageStaff() {
                 leftIcon={faSignature}
               />
               <InputForm
-                placeholder=""
+                placeholder="Enter last name..."
                 type="text"
                 value={payload.lastName}
                 setValue={setPayload}
@@ -369,20 +362,12 @@ function ManageStaff() {
           </div>
           <div className={cx('input-field')}>
             <div className={cx('header')}>Địa chỉ</div>
-            <InputForm
-              placeholder=""
-              type="text"
-              value={payload.address}
-              setValue={setPayload}
-              name={'address'}
-              className={cx('input')}
-              leftIcon={faLocationDot}
-            />
+            <AutoComplete setParentInputValue={setAutocompleteInputValue} />
           </div>
           <div className={cx('header')}>Số điện thoại</div>
           <div className={cx('input-field')}>
             <InputForm
-              placeholder=""
+              placeholder="Enter phone number..."
               type="text"
               value={payload.phoneNumber}
               setValue={setPayload}
@@ -410,7 +395,7 @@ function ManageStaff() {
                   payload.firstName,
                   payload.lastName,
                   payload.phoneNumber,
-                  payload.address,
+                  autocompleteInputValue,
                   avatar,
                 )
               }

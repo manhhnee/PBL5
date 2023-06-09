@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faPhone, faSignature, faUpload } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { Flip, ToastContainer, toast } from 'react-toastify';
 import { useSpring, animated } from 'react-spring';
@@ -9,6 +9,7 @@ import { useSpring, animated } from 'react-spring';
 import InputForm from '~/components/InputForm';
 import Button from '~/components/Button';
 import Profile from '~/layouts/Profile';
+import AutoComplete from '~/components/AutoComplete';
 import Popup from '~/components/Popup';
 import styles from './Information.module.scss';
 
@@ -19,6 +20,7 @@ function Information() {
   const [avatar, setAvatar] = useState({});
   const [image, setImage] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [autocompleteInputValue, setAutocompleteInputValue] = useState('');
   const [payload1, setPayload1] = useState({
     username: '',
     firstName: '',
@@ -67,7 +69,7 @@ function Information() {
       isValid = false;
     }
 
-    if (!payload1.address.trim()) {
+    if (!autocompleteInputValue.trim()) {
       errors.address = 'Vui lòng nhập địa chỉ';
       isValid = false;
     }
@@ -152,7 +154,7 @@ function Information() {
       formData.append('FirstName', payload1.firstName);
       formData.append('LastName', payload1.lastName);
       formData.append('PhoneNumber', payload1.phoneNumber);
-      formData.append('Address', payload1.address);
+      formData.append('Address', autocompleteInputValue);
       formData.append('Avatar', avatar);
       const response = await fetch('http://localhost:5000/api/user/edit', {
         method: 'PUT',
@@ -271,6 +273,7 @@ function Information() {
                   setValue={setPayload1}
                   name={'firstName'}
                   className={cx('input')}
+                  leftIcon={faSignature}
                 />
                 {errorMessages1.firstName && <div className={cx('error-message')}>{errorMessages1.firstName}</div>}
               </div>
@@ -282,6 +285,7 @@ function Information() {
                   setValue={setPayload1}
                   name={'lastName'}
                   className={cx('input')}
+                  leftIcon={faSignature}
                 />
                 {errorMessages1.lastName && <div className={cx('error-message')}>{errorMessages1.lastName}</div>}
               </div>
@@ -291,14 +295,7 @@ function Information() {
             <div className={cx('header')}>Địa chỉ</div>
             <div className={cx('input-field')}>
               <div className={cx('input-wrapper')}>
-                <InputForm
-                  placeholder=""
-                  type="text"
-                  value={payload1.address}
-                  setValue={setPayload1}
-                  name={'address'}
-                  className={cx('input')}
-                />
+                <AutoComplete setParentInputValue={setAutocompleteInputValue} />
                 {errorMessages1.address && <div className={cx('error-message')}>{errorMessages1.address}</div>}
               </div>
             </div>
@@ -314,6 +311,7 @@ function Information() {
                   setValue={setPayload1}
                   name={'phoneNumber'}
                   className={cx('input')}
+                  leftIcon={faPhone}
                 />
                 {errorMessages1.phoneNumber && <div className={cx('error-message')}>{errorMessages1.phoneNumber}</div>}
               </div>

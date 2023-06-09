@@ -6,22 +6,19 @@ import { Flip, ToastContainer, toast } from 'react-toastify';
 
 import BookItemCart from '~/components/BookItemCart';
 import Button from '~/components/Button';
-import InputForm from '~/components/InputForm';
 import Popup from '~/components/Popup';
+import PaypalAll from '~/components/PaypalAll';
+import AutoComplete from '~/components/AutoComplete/AutoComplete';
 import styles from './Cart.module.scss';
-import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
-import PaypalAll from '~/components/PaypalAll/PaypalAll';
 
 const cx = classNames.bind(styles);
 
 function Cart() {
+  const [autocompleteInputValue, setAutocompleteInputValue] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('cash'); // Mặc định là tiền mặt khi nhận hàng
   const [cartItems, setCartItems] = useState([]);
   const [orderItems, setOrderItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [payload, setPayload] = useState({
-    address: '',
-  });
   const handlePaymentMethodChange = (event) => {
     setPaymentMethod(event.target.value);
   };
@@ -32,7 +29,7 @@ function Cart() {
     let isValid = true;
     const errors = {};
 
-    if (!payload.address.trim()) {
+    if (!autocompleteInputValue.trim()) {
       errors.address = 'Vui lòng nhập địa chỉ đặt hàng!';
       isValid = false;
     }
@@ -180,15 +177,8 @@ function Cart() {
           <h2>Xác nhận thanh toán</h2>
           <div className={cx('input-field')}>
             <div className={cx('header')}>Nhập địa chỉ giao hàng</div>
-            <InputForm
-              placeholder=""
-              type="text"
-              value={payload.address}
-              setValue={setPayload}
-              name={'address'}
-              className={cx('input')}
-              leftIcon={faLocationDot}
-            />
+            <AutoComplete setParentInputValue={setAutocompleteInputValue} />
+
             {errorMessages.address && <div className={cx('error-message')}>{errorMessages.address}</div>}
           </div>
           <div className={cx('options')}>
@@ -213,11 +203,11 @@ function Cart() {
               </label>
             </div>
             {paymentMethod === 'cash' ? (
-              <Button onClick={() => handleOrderAll(payload.address)} outline>
+              <Button onClick={() => handleOrderAll(autocompleteInputValue)} outline>
                 Xác nhận
               </Button>
             ) : (
-              <PaypalAll address={payload.address} orderItems={orderItems} />
+              <PaypalAll address={autocompleteInputValue} orderItems={orderItems} />
             )}
           </div>
         </animated.div>

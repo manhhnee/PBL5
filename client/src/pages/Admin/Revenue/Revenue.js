@@ -52,7 +52,7 @@ function Revenue() {
         },
       });
       const formattedData = response.data.chartRevenue.map((item) => ({
-        revenue_date: moment(item.revenue_date).format('YYYY-MM-DD'),
+        revenue_date: moment(item.revenue_date).format('DD-MM-YYYY'),
         revenue: item.revenue.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', ''),
       }));
       setData(formattedData);
