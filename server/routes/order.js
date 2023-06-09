@@ -10,12 +10,12 @@ router.post("/addOneItem", AuthController.verifyToken, OrderController.Order);
 router.get("/detail/:id", AuthController.verifyToken, OrderController.showDetail);
 router.get("/history", AuthController.verifyToken, OrderController.showHistoryOrderList);
 router.get("/history/:id_status", AuthController.verifyToken, OrderController.showHistoryStatusOrderList);
-router.get("/revenue", AuthController.verifyToken, OrderController.revenue);
-router.get("/revenueOfYear", AuthController.verifyToken, OrderController.revenueOfYear);
+router.get("/revenue", AuthController.verifyToken, AuthController.isAdmin, OrderController.revenue);
+router.get("/revenueOfYear", AuthController.verifyToken, AuthController.isAdmin, OrderController.revenueOfYear);
 
-router.get("/orderList", OrderController.showOrderList);
-router.get("/:id_status", AuthController.verifyToken, OrderController.showStatusOrders);
-router.put("/changeStatus/:id", AuthController.verifyToken, OrderController.changeStatusOrders);
+router.get("/orderList",AuthController.verifyToken,AuthController.isAdminOrStaff, OrderController.showOrderList);
+router.get("/:id_status", AuthController.verifyToken,AuthController.isAdminOrStaff, OrderController.showStatusOrders);
+router.put("/changeStatus/:id", AuthController.verifyToken,AuthController.isAdminOrStaff, OrderController.changeStatusOrders);
 router.put("/cancel/:id", AuthController.verifyToken, OrderController.cancelOrder);
 
 module.exports = router;

@@ -52,6 +52,16 @@ class AuthController {
         .json({ success: false, message: "yêu cầu đăng nhập là customer" });
     }
   }
+  isAdminOrStaff(req,res,next) {
+    if (req.user.role === "STAFF" || req.user.role === "ADMIN") {
+      next();
+    }
+    else {
+      return res
+      .status(401)
+      .json({ success: false, message: "yêu cầu đăng nhập là nhân viên hoặc Admin" });
+    }
+  }
 }
 
 module.exports = new AuthController();
