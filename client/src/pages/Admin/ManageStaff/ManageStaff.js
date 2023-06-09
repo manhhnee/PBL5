@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot, faMobileScreenButton, faPlus, faSignature, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faMobileScreenButton, faPlus, faSignature, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { useSpring, animated } from 'react-spring';
 import { Flip, ToastContainer, toast } from 'react-toastify';

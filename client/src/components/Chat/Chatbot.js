@@ -9,7 +9,6 @@ const cx = classNames.bind(styles);
 const Chatbot = () => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
-  const [id, setId] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(true);
 
   const socketRef = useRef();
@@ -17,9 +16,7 @@ const Chatbot = () => {
   useEffect(() => {
     socketRef.current = io('http://localhost:5000');
 
-    socketRef.current.on('getId', (data) => {
-      setId(data);
-    });
+    socketRef.current.on('getId', (data) => {});
 
     socketRef.current.on('message', (message) => {
       setMessages((prevMessages) => [...prevMessages, message]);

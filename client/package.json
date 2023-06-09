@@ -72,8 +72,9 @@
   },
   "devDependencies": {
     "@react-spring/web": "^9.7.2",
-    "@testing-library/react": "^12.1.5",
+    "@testing-library/react": "^14.0.0",
     "babel-plugin-module-resolver": "^5.0.0",
+    "@babel/plugin-proposal-private-property-in-object": "^7.16.0",
     "customize-cra": "^1.0.0",
     "mdb-react-ui-kit": "^6.1.0",
     "react-app-rewired": "^2.2.1",

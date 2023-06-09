@@ -2,7 +2,6 @@ import classNames from 'classnames/bind';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
-import { faImage } from '@fortawesome/free-regular-svg-icons';
 import { faAudioDescription, faBook, faMoneyBill, faPlus, faUpload, faUser } from '@fortawesome/free-solid-svg-icons';
 import { useSpring, animated } from 'react-spring';
 import { Flip, ToastContainer, toast } from 'react-toastify';
