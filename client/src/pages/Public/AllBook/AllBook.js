@@ -19,8 +19,8 @@ function AllBook() {
   const [books, setBooks] = useState([]);
   const [categories, setCategories] = useState([]);
   const [descPrice, setDescPrice] = useState(2);
-  const [idCategory, setIDCategory] = useState(id || '');
-  const [searchValue, setSearchValue] = useState(search ? search : '');
+  const idCategory = id || '';
+  const searchValue = search || '';
   const [activeButton, setActiveButton] = useState(1);
   const [page, setPage] = useState(() => {
     const storedPage = localStorage.getItem('page');

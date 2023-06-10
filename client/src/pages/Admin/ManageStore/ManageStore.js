@@ -125,7 +125,7 @@ function ManageStore() {
     fetchApiBookSupplier();
     fetchApiBook();
     fetchApiSupplier();
-  }, []);
+  });
 
   const modalAnimation = useSpring({
     opacity: isModalOpen ? 1 : 0,

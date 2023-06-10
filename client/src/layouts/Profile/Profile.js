@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock, faMessage, faUser } from '@fortawesome/free-regular-svg-icons';
+import { faClock, faUser } from '@fortawesome/free-regular-svg-icons';
 
 import Sidebar from '~/components/Sidebar';
 import Button from '~/components/Button';
@@ -38,14 +38,6 @@ function Profile({ children }) {
           onClick={() => handleClick(2)}
         >
           Lịch sử đơn hàng
-        </Button>
-        <Button
-          to={config.routes.information}
-          leftIcon={<FontAwesomeIcon icon={faMessage}></FontAwesomeIcon>}
-          className={cx('btn', `${activeButton === 3 ? 'active' : ''}`)}
-          onClick={() => handleClick(3)}
-        >
-          Phản hồi
         </Button>
       </Sidebar>
       {children}

@@ -1,30 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { PayPalButton } from 'react-paypal-button-v2';
 import { Flip, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
-
-import * as PaymentService from '../../services/PaymentService';
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 
 const PaypalAll = ({ address, orderItems }) => {
-  console.log(address, orderItems);
-  const [sdkReady, setSdkReady] = useState(false);
-  const [clientId, setClientId] = useState('');
+  console.log(address);
   const [loggedIn, setLoggedIn] = useState(!!getJwtFromCookie());
   const [totalPrice, setTotalPrice] = useState(null);
-
-  const addPaypalScript = async () => {
-    const { data } = await PaymentService.getConfig();
-    const script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = `https://www.paypal.com/sdk/js?client-id=${data}`;
-    script.async = true;
-    script.onload = () => {
-      setSdkReady(true);
-    };
-    document.body.appendChild(script);
-    setClientId(data);
-  };
 
   function getJwtFromCookie() {
     const name = 'token=';
@@ -78,14 +61,6 @@ const PaypalAll = ({ address, orderItems }) => {
   };
 
   useEffect(() => {
-    if (!window.paypal) {
-      addPaypalScript();
-    } else {
-      setSdkReady(true);
-    }
-  }, []);
-
-  useEffect(() => {
     setLoggedIn(!!getJwtFromCookie());
     const totalPrice = orderItems.reduce((total, item) => total + item.Price, 0);
     setTotalPrice(totalPrice);
@@ -106,20 +81,33 @@ const PaypalAll = ({ address, orderItems }) => {
         pauseOnHover
         theme="light"
       />
-      {address.trim() && loggedIn && sdkReady && orderItems.length > 0 && (
-        <PayPalButton
-          amount={(totalPrice / 24000).toFixed(2)}
-          onSuccess={(details, data) => {
-            handleOrderAll(address);
-            return fetch('/paypal-transaction-complete', {
-              method: 'post',
-              body: JSON.stringify({
-                orderID: data.orderID,
-              }),
-            });
+      {address.trim() && loggedIn && orderItems.length > 0 && (
+        <PayPalScriptProvider
+          options={{
+            'client-id': 'AQ_w1dR_0xJj-tYWIXmCsLKulaYJlr3GvQk3zv88z1NkBbIXDnnYoXpQvw2NaBIRRZl9hi8-EmQsU4JN',
           }}
-          onError={() => alert('Error')}
-        />
+        >
+          <PayPalButtons
+            style={{ layout: 'horizontal' }}
+            createOrder={(data, actions) => {
+              return actions.order.create({
+                purchase_units: [
+                  {
+                    amount: {
+                      value: `${(totalPrice / 24000).toFixed(2)}`,
+                    },
+                  },
+                ],
+              });
+            }}
+            onApprove={(data, actions) => {
+              return actions.order.capture().then(() => {
+                handleOrderAll(address);
+                alert(address);
+              });
+            }}
+          />
+        </PayPalScriptProvider>
       )}
     </div>
   );
