@@ -6,11 +6,10 @@ import classNames from 'classnames/bind';
 import { useState, useEffect } from 'react';
 
 import styles from './Search.module.scss';
-import { useDebounce } from '~/hooks';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
-import * as searchServices from '~/services/searchServices';
 
 import BookItemSearch from '~/components/BookItemSearch';
+import axios from 'axios';
 
 const cx = classNames.bind(styles);
 
@@ -20,22 +19,21 @@ function Search() {
   const [showResult, setShowResult] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const debounced = useDebounce(searchValue, 500);
-
   useEffect(() => {
-    if (!debounced.trim()) {
+    if (!searchValue.trim()) {
       setSearchResult([]);
       return;
     }
     const fetchApi = async () => {
       setLoading(true);
-      const results = await searchServices.search(debounced);
+      const response = await axios.get(`http://localhost:5000/api/book?search=${searchValue}&limit=5`);
+      const results = await response.data;
       setSearchResult(results.books);
       setLoading(false);
     };
 
     fetchApi();
-  }, [debounced]);
+  }, [searchValue]);
 
   const handleClear = () => {
     setSearchValue('');
@@ -67,21 +65,22 @@ function Search() {
     <div>
       <HeadlessTippy
         interactive
-        visible={showResult && searchResult.length > 0}
+        visible={showResult && searchResult && searchResult.length > 0}
         render={(attrs) => (
           <div className={cx('search-result')} tabIndex="-1" {...attrs}>
             <PopperWrapper>
               <h4 className={cx('search-title')}>Book</h4>
-              {searchResult.map((result) => {
-                return (
-                  <BookItemSearch
-                    data={result}
-                    key={result.id}
-                    to={`/bookdetail?id=${result.id}`}
-                    onClick={() => window.location.replace()}
-                  />
-                );
-              })}
+              {searchResult &&
+                searchResult.map((result) => {
+                  return (
+                    <BookItemSearch
+                      data={result}
+                      key={result.id}
+                      to={`/bookdetail?id=${result.id}`}
+                      onClick={() => window.location.replace()}
+                    />
+                  );
+                })}
             </PopperWrapper>
           </div>
         )}
