@@ -1,7 +1,6 @@
 .order {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   background-color: var(--white);
   border-radius: 10px;
   margin: 20px 0;
@@ -17,12 +16,19 @@
 
 .icon {
   color: var(--primary);
+  margin-left: 20px;
 }
 
 .name-order,
 .day-order,
-.time-order {
+.address,
+.price-order {
   color: var(--text-color);
+  margin-left: auto;
+}
+
+.address {
+  max-width: 300px;
 }
 
 .price-order {

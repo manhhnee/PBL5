@@ -1,15 +1,18 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
+import { Flip, ToastContainer, toast } from 'react-toastify';
 
 import Image from '~/components/Image';
 import styles from './Order.module.scss';
 import Button from '../Button/Button';
 import axios from 'axios';
+import { faX } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 
 function Order({ data, icon }) {
+  console.log(data.Address);
   if (!data) {
     return null;
   }
@@ -42,11 +45,13 @@ function Order({ data, icon }) {
         },
       )
       .then((res) => {
-        alert(res.data.message);
-        window.location.reload();
+        toast.success(res.data.message);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       })
       .catch((e) => {
-        alert(e);
+        toast.success(e);
       });
   };
 
@@ -72,19 +77,34 @@ function Order({ data, icon }) {
     );
   } else if (data.id_Status === 3) {
     iconComponent = <FontAwesomeIcon className={cx('icon')} icon={icon} beat />;
+  } else if (data.id_Status === 4) {
+    iconComponent = <FontAwesomeIcon className={cx('icon')} icon={faX} beat />;
   } else {
     iconComponent = null;
     buttonComponent = null;
   }
   return (
     <div className={cx('order')}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        transition={Flip}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <Image className={cx('order-image')} src={data.Avatar} alt="avatar"></Image>
       {iconComponent}
 
       <div className={cx('name-order')}>{data.FirstName + ' ' + data.LastName}</div>
 
       <div className={cx('day-order')}>{formattedDate}</div>
-      <div className={cx('time-order')}>{formattedTime}</div>
+      <div className={cx('address')}>{data.OrderAddress}</div>
       <div className={cx('price-order')}>
         {data.totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '')}
       </div>

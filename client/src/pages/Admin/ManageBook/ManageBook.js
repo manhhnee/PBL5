@@ -254,8 +254,10 @@ function ManageBook() {
   const handleDeleteBook = async (id) => {
     await axios
       .delete(`http://localhost:5000/api/book/delete/${id}`, {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${getJwtFromCookie()}`,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${getJwtFromCookie()}`,
+        },
       })
       .then((res) => {
         toast.success(res.data.message);

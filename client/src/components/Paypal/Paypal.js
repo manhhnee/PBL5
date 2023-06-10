@@ -94,7 +94,6 @@ const Paypal = ({ idBookSupplier, quantity, price, amount, address }) => {
             onApprove={(data, actions) => {
               return actions.order.capture().then(() => {
                 handleCreateOneOrder(idBookSupplier, quantity, (price * 24000).toFixed(2), amount, address);
-                alert(address);
               });
             }}
           />

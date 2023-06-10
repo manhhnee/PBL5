@@ -89,7 +89,7 @@ function Header() {
           Authorization: `Bearer ${getJwtFromCookie()}`,
         },
       });
-      setCountCart(response.data.cartItem.length);
+      setCountCart(0 || response.data.cartItem.length);
     };
     getApiCountCart();
     getApiProfileCustomer();
@@ -129,7 +129,7 @@ function Header() {
               <div className={cx('action-box')}>
                 <Link to="/cart" className={cx('action-btn')}>
                   <FontAwesomeIcon icon={faCartShopping} />
-                  <span className={cx('notice')}>{countCart}</span>
+                  <span className={cx('notice')}>{countCart || 0}</span>
                 </Link>
                 <span className={cx('action-note')}>Giỏ hàng</span>
               </div>

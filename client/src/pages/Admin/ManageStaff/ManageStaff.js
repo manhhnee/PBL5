@@ -172,10 +172,12 @@ function ManageStaff() {
       ...prevState,
       firstName: firstName,
       lastName: lastName,
-      address: address,
       phoneNumber: phone,
     }));
+    setAutocompleteInputValue(address);
   };
+
+  console.log(autocompleteInputValue);
 
   const closeModal1 = () => {
     setIsModalOpen1(false);
@@ -218,6 +220,7 @@ function ManageStaff() {
       <div className={cx('staff-list')}>
         {listStaff &&
           listStaff.map((staff) => {
+            console.log(staff);
             return (
               <div
                 className={cx('staff')}

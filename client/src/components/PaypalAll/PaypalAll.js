@@ -103,7 +103,6 @@ const PaypalAll = ({ address, orderItems }) => {
             onApprove={(data, actions) => {
               return actions.order.capture().then(() => {
                 handleOrderAll(address);
-                alert(address);
               });
             }}
           />

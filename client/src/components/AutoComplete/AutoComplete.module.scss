@@ -37,6 +37,8 @@
     z-index: 999;
     left: 0;
     top: 55px;
+    max-height: 220px;
+    overflow: auto;
   }
 
   li {

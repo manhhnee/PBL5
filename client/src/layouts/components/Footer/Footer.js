@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faInstagram, faPinterest, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
+import { Flip, ToastContainer, toast } from 'react-toastify';
 
 import images from '~/assets/images';
 import config from '~/config';
@@ -13,6 +14,19 @@ const cx = classNames.bind(styles);
 function Footer() {
   return (
     <div className={cx('wrapper')}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        transition={Flip}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className={cx('container')}>
         <aside className={cx('sidebar')}>
           <div className={cx('sidebar-logo')}>
@@ -56,10 +70,38 @@ function Footer() {
               <h3>HỖ TRỢ</h3>
             </div>
             <div className={cx('contents')}>
-              <Link className={cx('content-item')}>Chính sách đổi trả</Link>
-              <Link className={cx('content-item')}>Chính sách bảo hành</Link>
-              <Link className={cx('content-item')}>Chính sách vận chuyển</Link>
-              <Link className={cx('content-item')}>Phương thức thanh toán và xuất HĐ</Link>
+              <Link
+                onClick={() => {
+                  toast.warning('Chức năng đang được hoàn thiện !');
+                }}
+                className={cx('content-item')}
+              >
+                Chính sách đổi trả
+              </Link>
+              <Link
+                onClick={() => {
+                  toast.warning('Chức năng đang được hoàn thiện !');
+                }}
+                className={cx('content-item')}
+              >
+                Chính sách bảo hành
+              </Link>
+              <Link
+                onClick={() => {
+                  toast.warning('Chức năng đang được hoàn thiện !');
+                }}
+                className={cx('content-item')}
+              >
+                Chính sách vận chuyển
+              </Link>
+              <Link
+                onClick={() => {
+                  toast.warning('Chức năng đang được hoàn thiện !');
+                }}
+                className={cx('content-item')}
+              >
+                Phương thức thanh toán và xuất HĐ
+              </Link>
             </div>
           </div>
           <div className={cx('static')}>
@@ -67,10 +109,20 @@ function Footer() {
               <h3>Liên hệ</h3>
             </div>
             <div className={cx('contents')}>
-              <Link className={cx('content-item')}>
+              <Link
+                onClick={() => {
+                  toast.warning('Chức năng đang được hoàn thiện !');
+                }}
+                className={cx('content-item')}
+              >
                 <FontAwesomeIcon icon={faPhone} className={cx('icon')}></FontAwesomeIcon>123-456-7890
               </Link>
-              <Link className={cx('content-item')}>
+              <Link
+                onClick={() => {
+                  toast.warning('Chức năng đang được hoàn thiện !');
+                }}
+                className={cx('content-item')}
+              >
                 <FontAwesomeIcon icon={faEnvelope} className={cx('icon')}></FontAwesomeIcon>abc@gmail.com
               </Link>
             </div>
