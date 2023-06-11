@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot, faMobileScreenButton, faPlus, faSignature, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faMobileScreenButton, faPlus, faSignature, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { useSpring, animated } from 'react-spring';
 import { Flip, ToastContainer, toast } from 'react-toastify';
@@ -172,10 +172,12 @@ function ManageStaff() {
       ...prevState,
       firstName: firstName,
       lastName: lastName,
-      address: address,
       phoneNumber: phone,
     }));
+    setAutocompleteInputValue(address);
   };
+
+  console.log(autocompleteInputValue);
 
   const closeModal1 = () => {
     setIsModalOpen1(false);
@@ -218,6 +220,7 @@ function ManageStaff() {
       <div className={cx('staff-list')}>
         {listStaff &&
           listStaff.map((staff) => {
+            console.log(staff);
             return (
               <div
                 className={cx('staff')}

@@ -66,6 +66,7 @@
   padding: 12px;
   margin: 12px;
   cursor: default;
+  background-color: #f79327;
 }
 
 .header {
@@ -80,10 +81,11 @@
 .number {
   padding: 14px;
   margin: 12px;
-  background-color: transparent;
-  color: #ff577f;
+  background-color: var(--gray);
+  color: var(--black);
   border-radius: 12px;
   border: 2px solid var(--black);
+  font-weight: 600;
 }
 
 .Top10 {
@@ -92,6 +94,7 @@
   margin: 12px;
   padding: 12px;
   cursor: default;
+  background-color: #88c6ed;
 }
 
 .product-item {

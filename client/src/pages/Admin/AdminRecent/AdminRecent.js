@@ -48,6 +48,7 @@ function AdminRecent() {
     };
     getApiOrderList();
   }, []);
+
   return (
     <div className={cx('content')}>
       <Menu />
@@ -56,6 +57,7 @@ function AdminRecent() {
       </div>
       <div className={cx('order-list')}>
         {orderList.map((order) => {
+          console.log(order);
           return <Order data={order} icon={getIcon(order.id_Status)}></Order>;
         })}
       </div>

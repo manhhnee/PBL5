@@ -2,6 +2,7 @@ import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook, faBookmark } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect, useState } from 'react';
+import MessengerPopup from '~/components/Chat/MessengerPopup';
 
 import styles from './Home.module.scss';
 import CrossBar from '~/components/CrossBar';
@@ -9,7 +10,6 @@ import BookItem from '~/components/BookItem';
 import Button from '~/components/Button';
 import Image from '~/components/Image';
 import images from '~/assets/images';
-import MessengerPopup from '~/components/Chat/MessengerPopup';
 import axios from 'axios';
 import config from '~/config';
 
