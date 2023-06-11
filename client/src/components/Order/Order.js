@@ -57,7 +57,6 @@ function Order({ data, icon }) {
 
   const orderDate = data.OrderDate;
   const formattedDate = moment(orderDate).format('YYYY-MM-DD');
-  const formattedTime = moment(orderDate, 'HH:mm').format('hh:mm A');
 
   let iconComponent;
   let buttonComponent;
