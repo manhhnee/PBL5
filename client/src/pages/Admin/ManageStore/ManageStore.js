@@ -48,17 +48,17 @@ function ManageStore() {
   }
 
   const fetchApiBook = async () => {
-    const response = await axios.get('http://localhost:5000/api/book?limit=10000');
+    const response = await axios.get('https://pbl5-server-shpk.onrender.com/api/book?limit=10000');
     setBooks(response.data.books);
   };
 
   const fetchApiSupplier = async () => {
-    const response = await axios.get('http://localhost:5000/api/supplier/show');
+    const response = await axios.get('https://pbl5-server-shpk.onrender.com/api/supplier/show');
     setSuppliers(response.data);
   };
 
   const fetchApiBookSupplier = async () => {
-    const response = await axios.get('http://localhost:5000/api/bookSupplier/show', {
+    const response = await axios.get('https://pbl5-server-shpk.onrender.com/api/bookSupplier/show', {
       headers: {
         Authorization: `Bearer ${getJwtFromCookie()}`,
       },
@@ -71,7 +71,7 @@ function ManageStore() {
     console.log(selectBookId, selectsupplierID, importPrice, amount);
     await axios
       .post(
-        'http://localhost:5000/api/bookSupplier/add',
+        'https://pbl5-server-shpk.onrender.com/api/bookSupplier/add',
         {
           id_Book: selectBookId,
           id_Supplier: selectsupplierID,
@@ -97,7 +97,7 @@ function ManageStore() {
 
   const handleDeleteBookSupplier = (id) => {
     axios
-      .delete(`http://localhost:5000/api/bookSupplier/delete/${id}`, {
+      .delete(`https://pbl5-server-shpk.onrender.com/api/bookSupplier/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${getJwtFromCookie()}`,
         },

@@ -36,7 +36,7 @@ function History() {
 
   useEffect(() => {
     const getApiHistoryOrder = async () => {
-      const response = await axios.get('http://localhost:5000/api/order/history', {
+      const response = await axios.get('https://pbl5-server-shpk.onrender.com/api/order/history', {
         headers: {
           Authorization: `Bearer ${getJwtFromCookie()}`,
         },
@@ -49,7 +49,7 @@ function History() {
   const handleCancelOrder = async (id) => {
     await axios
       .put(
-        `http://localhost:5000/api/order/cancel/${id}`,
+        `https://pbl5-server-shpk.onrender.com/api/order/cancel/${id}`,
         {},
         {
           headers: {
@@ -68,6 +68,14 @@ function History() {
         toast.error(err);
       });
   };
+
+  function formatCurrency(number) {
+    const formatter = new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    });
+    return formatter.format(number);
+  }
 
   return (
     <Profile>
@@ -123,9 +131,7 @@ function History() {
             return (
               <div className={cx('wrapper')}>
                 <div className={cx('content-center')}>
-                  <span className={cx('book-price')}>
-                    {order.totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
-                  </span>
+                  <span className={cx('book-price')}>{order.totalPrice && formatCurrency(order.totalPrice)}</span>
                   <span className={cx('book-date')}>Ngày đặt hàng: {formattedDate}</span>
                   <span className={cx('book-address')}>Địa chỉ nhận hàng: {order.OrderAddress}</span>
                   <span className={cx('book-paymethod')}>Phương thức thanh toán: {order.Payment_Method}</span>

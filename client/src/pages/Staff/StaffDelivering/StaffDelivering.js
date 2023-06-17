@@ -1,5 +1,4 @@
 import classNames from 'classnames/bind';
-import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
@@ -30,7 +29,7 @@ function StaffDelivering() {
   }
   useEffect(() => {
     const getApiOrderPending = async () => {
-      const response = await axios.get('http://localhost:5000/api/order/2', {
+      const response = await axios.get('https://pbl5-server-shpk.onrender.com/api/order/2', {
         headers: { Authorization: `Bearer ${getJwtFromCookie()}` },
       });
       setOrderList(response.data);
@@ -42,7 +41,6 @@ function StaffDelivering() {
       <Menu />
       <div className={cx('header-content')}>
         <span className={cx('title-content')}>Đơn hàng đang giao</span>
-        <Link className={cx('all-order')}>Xem toàn bộ đơn hàng</Link>
       </div>
       <div className={cx('order-list')}>
         {orderList.map((order) => {

@@ -30,7 +30,7 @@ function StaffSuccess() {
   }
   useEffect(() => {
     const getApiOrderPending = async () => {
-      const response = await axios.get('http://localhost:5000/api/order/3', {
+      const response = await axios.get('https://pbl5-server-shpk.onrender.com/api/order/3', {
         headers: { Authorization: `Bearer ${getJwtFromCookie()}` },
       });
       setOrderList(response.data);
@@ -42,7 +42,6 @@ function StaffSuccess() {
       <Menu />
       <div className={cx('header-content')}>
         <span className={cx('title-content')}>Đơn hàng giao thành công</span>
-        <Link className={cx('all-order')}>Xem toàn bộ đơn hàng</Link>
       </div>
       <div className={cx('order-list')}>
         {orderList.map((order) => {

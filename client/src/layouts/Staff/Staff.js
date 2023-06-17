@@ -47,7 +47,7 @@ function Staff({ children }) {
   }
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/user/profile/staff', {
+    fetch('https://pbl5-server-shpk.onrender.com/api/user/profile/staff', {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${getJwtFromCookie()}`, // trả token về server để xử lí

@@ -26,7 +26,7 @@ function Search() {
     }
     const fetchApi = async () => {
       setLoading(true);
-      const response = await axios.get(`http://localhost:5000/api/book?search=${searchValue}&limit=5`);
+      const response = await axios.get(`https://pbl5-server-shpk.onrender.com/api/book?search=${searchValue}&limit=5`);
       const results = await response.data;
       setSearchResult(results.books);
       setLoading(false);

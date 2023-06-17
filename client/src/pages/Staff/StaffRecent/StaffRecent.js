@@ -42,7 +42,7 @@ function StaffRecent() {
   };
   useEffect(() => {
     const getApiOrderList = async () => {
-      const response = await axios.get('http://localhost:5000/api/order/orderList', {
+      const response = await axios.get('https://pbl5-server-shpk.onrender.com/api/order/orderList', {
         headers: { Authorization: `Bearer ${getJwtFromCookie()}` },
       });
       setOrderList(response.data);

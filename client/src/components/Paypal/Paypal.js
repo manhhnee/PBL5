@@ -27,7 +27,7 @@ const Paypal = ({ idBookSupplier, quantity, price, amount, address }) => {
   const handleCreateOneOrder = async (id_BookSupplier, quantity, Price, Amount, address) => {
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/order/addOneItem',
+        'https://pbl5-server-shpk.onrender.com/api/order/addOneItem',
         {
           payment: 2,
           id_BookSupplier: id_BookSupplier,

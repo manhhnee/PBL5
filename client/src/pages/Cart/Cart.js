@@ -89,7 +89,7 @@ function Cart() {
 
         await axios
           .post(
-            'http://localhost:5000/api/order/add',
+            'https://pbl5-server-shpk.onrender.com/api/order/add',
             {
               address: address,
               payment: 1,
@@ -115,7 +115,7 @@ function Cart() {
 
   useEffect(() => {
     const fetchApiCarts = async () => {
-      const response = await axios.get(`http://localhost:5000/api/cart/items`, {
+      const response = await axios.get(`https://pbl5-server-shpk.onrender.com/api/cart/items`, {
         headers: {
           Authorization: `Bearer ${getJwtFromCookie()}`,
         },

@@ -54,7 +54,7 @@ function Admin({ children }) {
   }
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/user/profile/admin', {
+    fetch('https://pbl5-server-shpk.onrender.com/api/user/profile/admin', {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${getJwtFromCookie()}`, // trả token về server để xử lí

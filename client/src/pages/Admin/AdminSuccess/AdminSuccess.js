@@ -29,7 +29,7 @@ function AdminSuccess() {
   }
   useEffect(() => {
     const getApiOrderPending = async () => {
-      const response = await axios.get('http://localhost:5000/api/order/3', {
+      const response = await axios.get('https://pbl5-server-shpk.onrender.com/api/order/3', {
         headers: { Authorization: `Bearer ${getJwtFromCookie()}` },
       });
       setOrderList(response.data);

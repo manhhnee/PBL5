@@ -84,7 +84,7 @@ function Login() {
     if (!validateForm()) {
       return;
     } else {
-      const response = await fetch('http://localhost:5000/api/account/login', {
+      const response = await fetch('https://pbl5-server-shpk.onrender.com/api/account/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -115,7 +115,7 @@ function Login() {
     if (!validateForm()) {
       return;
     } else {
-      const response = await fetch('http://localhost:5000/api/account/register', {
+      const response = await fetch('https://pbl5-server-shpk.onrender.com/api/account/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

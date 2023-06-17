@@ -121,7 +121,7 @@ function Information() {
 
   useEffect(() => {
     const fetchAPIProfile = async () => {
-      const response = await axios.get('http://localhost:5000/api/user/profile/customer', {
+      const response = await axios.get('https://pbl5-server-shpk.onrender.com/api/user/profile/customer', {
         headers: {
           Authorization: `Bearer ${getJwtFromCookie()}`,
         },
@@ -156,7 +156,7 @@ function Information() {
       formData.append('PhoneNumber', payload1.phoneNumber);
       formData.append('Address', autocompleteInputValue);
       formData.append('Avatar', avatar);
-      const response = await fetch('http://localhost:5000/api/user/edit', {
+      const response = await fetch('https://pbl5-server-shpk.onrender.com/api/user/edit', {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${getJwtFromCookie()}`, // trả token về server để xử lí
@@ -183,7 +183,7 @@ function Information() {
     } else {
       await axios
         .put(
-          'http://localhost:5000/api/account/changePass',
+          'https://pbl5-server-shpk.onrender.com/api/account/changePass',
           {
             Password: oldPass,
             NewPassword: newPass,

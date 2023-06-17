@@ -149,7 +149,7 @@ function ManageBook() {
 
   const getBooks = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/book?limit=10000');
+      const response = await axios.get('https://pbl5-server-shpk.onrender.com/api/book?limit=10000');
       setBooks(response.data.books);
       setFilteredBooks(response.data.books);
     } catch (e) {
@@ -159,7 +159,7 @@ function ManageBook() {
   const fetchApiDetailBook = async (id) => {
     try {
       setIsModalOpen1(true);
-      const response = await axios.get(`http://localhost:5000/api/book/detail/${id}`);
+      const response = await axios.get(`https://pbl5-server-shpk.onrender.com/api/book/detail/${id}`);
 
       const { book } = response.data;
 
@@ -178,7 +178,7 @@ function ManageBook() {
   };
 
   const fetchApiCategories = async () => {
-    const response = await axios.get('http://localhost:5000/api/category');
+    const response = await axios.get('https://pbl5-server-shpk.onrender.com/api/category');
     const categoriesData = await response.data;
     setCategories(categoriesData);
   };
@@ -189,7 +189,7 @@ function ManageBook() {
     } else {
       await axios
         .post(
-          'http://localhost:5000/api/book/add',
+          'https://pbl5-server-shpk.onrender.com/api/book/add',
           {
             id_Category: idCategory,
             Name: name,
@@ -224,7 +224,7 @@ function ManageBook() {
     } else {
       await axios
         .put(
-          `http://localhost:5000/api/book/update/${id}`,
+          `https://pbl5-server-shpk.onrender.com/api/book/update/${id}`,
           {
             id_Category: idCategory,
             Name: name,
@@ -253,7 +253,7 @@ function ManageBook() {
   };
   const handleDeleteBook = async (id) => {
     await axios
-      .delete(`http://localhost:5000/api/book/delete/${id}`, {
+      .delete(`https://pbl5-server-shpk.onrender.com/api/book/delete/${id}`, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${getJwtFromCookie()}`,

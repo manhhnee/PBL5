@@ -14,7 +14,7 @@ const Chatbot = () => {
   const socketRef = useRef();
 
   useEffect(() => {
-    socketRef.current = io('http://localhost:5000');
+    socketRef.current = io('https://pbl5-server-shpk.onrender.com');
 
     socketRef.current.on('getId', (data) => {});
 

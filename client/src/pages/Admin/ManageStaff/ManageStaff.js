@@ -60,7 +60,7 @@ function ManageStaff() {
   const handleAddStaff = async (username, password, fisrtname, lastname, phone, address, image) => {
     await axios
       .post(
-        'http://localhost:5000/api/user/addStaff',
+        'https://pbl5-server-shpk.onrender.com/api/user/addStaff',
         {
           Username: username,
           Password: password,
@@ -91,7 +91,7 @@ function ManageStaff() {
   const handleUpdateStaff = async (id, fisrtname, lastname, phone, address, image) => {
     await axios
       .put(
-        `http://localhost:5000/api/user/updateStaff/${id}`,
+        `https://pbl5-server-shpk.onrender.com/api/user/updateStaff/${id}`,
         {
           FirstName: fisrtname,
           LastName: lastname,
@@ -119,7 +119,7 @@ function ManageStaff() {
 
   const handleDeleteStaff = async (id) => {
     await axios
-      .delete(`http://localhost:5000/api/user/deleteStaff/${id}`, {
+      .delete(`https://pbl5-server-shpk.onrender.com/api/user/deleteStaff/${id}`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getJwtFromCookie()}`,
@@ -140,7 +140,7 @@ function ManageStaff() {
   useEffect(() => {
     const getApiStaffs = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/user/staffList', {
+        const response = await axios.get('https://pbl5-server-shpk.onrender.com/api/user/staffList', {
           headers: {
             Authorization: `Bearer ${getJwtFromCookie()}`,
           },

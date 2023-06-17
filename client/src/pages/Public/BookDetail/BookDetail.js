@@ -77,7 +77,7 @@ function BookDetail() {
 
   useEffect(() => {
     const fetchAPIBooks = async () => {
-      const response = await axios.get(`http://localhost:5000/api/book/detail/${id}`);
+      const response = await axios.get(`https://pbl5-server-shpk.onrender.com/api/book/detail/${id}`);
       const booksData = await response.data;
       setBook(booksData.book);
       setTotalRating(booksData.book.stars);
@@ -95,7 +95,7 @@ function BookDetail() {
     } else {
       await axios
         .post(
-          'http://localhost:5000/api/cart/add',
+          'https://pbl5-server-shpk.onrender.com/api/cart/add',
           {
             id_BookSupplier: id_BookSupplier,
             quantity: quantity,
@@ -126,7 +126,7 @@ function BookDetail() {
       } else {
         await axios
           .post(
-            'http://localhost:5000/api/order/addOneItem',
+            'https://pbl5-server-shpk.onrender.com/api/order/addOneItem',
             {
               payment: 1,
               id_BookSupplier: id_BookSupplier,
@@ -181,6 +181,13 @@ function BookDetail() {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+  function formatCurrency(number) {
+    const formatter = new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    });
+    return formatter.format(number);
+  }
   return (
     <>
       <ToastContainer
@@ -218,11 +225,7 @@ function BookDetail() {
           <div className={cx('star')}>
             <Star rating={totalRating} setRating={setTotalRating}></Star>
           </div>
-          <span className={cx('price')}>
-            {book.Price === undefined
-              ? 0
-              : book.Price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '')}
-          </span>
+          <span className={cx('price')}>{book.Price === undefined ? 0 : book.Price && formatCurrency(book.Price)}</span>
           <span className={cx('supplier')}>Nhà cung cấp: {book.Supplier ? book.Supplier : ' '}</span>
           <span className={cx('publisher')}>Nhà xuất bản: {book.Publisher}</span>
           <span className={cx('author')}>Tác giả: {book.Author}</span>

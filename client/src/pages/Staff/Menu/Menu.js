@@ -32,7 +32,7 @@ function Menu() {
   }
   useEffect(() => {
     const getApiOrderPending = async () => {
-      const response = await axios.get('http://localhost:5000/api/order/1', {
+      const response = await axios.get('https://pbl5-server-shpk.onrender.com/api/order/1', {
         headers: {
           Authorization: `Bearer ${getJwtFromCookie()}`,
         },
@@ -40,7 +40,7 @@ function Menu() {
       setCountPending(response.data.length);
     };
     const getApiOrderDelivering = async () => {
-      const response = await axios.get('http://localhost:5000/api/order/2', {
+      const response = await axios.get('https://pbl5-server-shpk.onrender.com/api/order/2', {
         headers: {
           Authorization: `Bearer ${getJwtFromCookie()}`,
         },
@@ -48,7 +48,7 @@ function Menu() {
       setCountDelivering(response.data.length);
     };
     const getApiOrderSuccess = async () => {
-      const response = await axios.get('http://localhost:5000/api/order/3', {
+      const response = await axios.get('https://pbl5-server-shpk.onrender.com/api/order/3', {
         headers: {
           Authorization: `Bearer ${getJwtFromCookie()}`,
         },

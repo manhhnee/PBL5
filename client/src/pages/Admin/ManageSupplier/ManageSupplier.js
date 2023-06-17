@@ -43,7 +43,7 @@ function ManageSupplier() {
   }
   const getSupplier = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/supplier/show');
+      const response = await axios.get('https://pbl5-server-shpk.onrender.com/api/supplier/show');
       setSuppliers(response.data);
     } catch (e) {
       console.log(e);
@@ -53,7 +53,7 @@ function ManageSupplier() {
   const getDetailSupplier = async (id) => {
     try {
       setIsModalOpen(true);
-      const response = await axios.get(`http://localhost:5000/api/supplier/detail/${id}`);
+      const response = await axios.get(`https://pbl5-server-shpk.onrender.com/api/supplier/detail/${id}`);
 
       const supplier = response.data;
       setPayload((prevPayload) => ({
@@ -69,7 +69,7 @@ function ManageSupplier() {
   const handleUpdateSupplier = async (id, name, address) => {
     await axios
       .put(
-        `http://localhost:5000/api/supplier/update/${id}`,
+        `https://pbl5-server-shpk.onrender.com/api/supplier/update/${id}`,
         {
           Name: name,
           Address: address,
@@ -91,7 +91,7 @@ function ManageSupplier() {
   };
   const handleDeleteSupplier = async (id) => {
     await axios
-      .delete(`http://localhost:5000/api/book/delete/${id}`, {
+      .delete(`https://pbl5-server-shpk.onrender.com/api/book/delete/${id}`, {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${getJwtFromCookie()}`,
       })

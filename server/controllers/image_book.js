@@ -1,7 +1,9 @@
 const imageBookModel = require("../models/image_book");
 class imageBookController {
   add(req, res, next) {
-    const BookPath = req.file ? `http://localhost:5000/${req.file.path}` : null;
+    const BookPath = req.file
+      ? `https://pbl5-server-shpk.onrender.com/${req.file.path}`
+      : null;
     imageBookModel.add(req.params.idBook, BookPath, function (data) {
       res.json(data);
     });

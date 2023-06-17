@@ -63,7 +63,7 @@ function BookItemHistory() {
 
   useEffect(() => {
     const getApiHistoryDetail = async () => {
-      const response = await axios.get(`http://localhost:5000/api/order/detail/${id}`, {
+      const response = await axios.get(`https://pbl5-server-shpk.onrender.com/api/order/detail/${id}`, {
         headers: {
           Authorization: `Bearer ${getJwtFromCookie()}`,
         },
@@ -77,7 +77,7 @@ function BookItemHistory() {
   const handleRating = async (idBook, star, comment, idOrderItem) => {
     await axios
       .post(
-        'http://localhost:5000/api/rating/add',
+        'https://pbl5-server-shpk.onrender.com/api/rating/add',
         {
           id_Book: idBook,
           star: star,
@@ -116,6 +116,14 @@ function BookItemHistory() {
   } else if (historyDetails.orderInfor && historyDetails.orderInfor.id_Status === 4) {
     iconComponent = <FontAwesomeIcon icon={faX} className={cx('icon1')} beatFade />;
     statusComponent = <span className={cx('status-name1')}>Đơn hàng đã được hủy</span>;
+  }
+
+  function formatCurrency(number) {
+    const formatter = new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    });
+    return formatter.format(number);
   }
 
   return (
@@ -173,9 +181,7 @@ function BookItemHistory() {
                 <div className={cx('content-center')}>
                   <span className={cx('book-name')}>{order.Name}</span>
                   <span className={cx('book-category')}>Tác giả: {order.Author}</span>
-                  <span className={cx('book-price')}>
-                    {order.Fixed_Price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
-                  </span>
+                  <span className={cx('book-price')}>{order.Fixed_Price && formatCurrency(order.Fixed_Price)}</span>
                   <span className={cx('book-quantity')}>x{order.quantity}</span>
                 </div>
                 <div className={cx('content-right')}>

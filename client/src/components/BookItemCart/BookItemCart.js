@@ -32,7 +32,7 @@ function BookItemCart({ data, onSelect }) {
 
   const handleDeleteCart = async () => {
     await axios
-      .delete(`http://localhost:5000/api/cart/delete/${data.id}`, {
+      .delete(`https://pbl5-server-shpk.onrender.com/api/cart/delete/${data.id}`, {
         headers: { Authorization: `Bearer ${getJwtFromCookie()}` },
       })
       .then((response) => {
@@ -51,6 +51,14 @@ function BookItemCart({ data, onSelect }) {
     setIsChecked(!isChecked);
     onSelect(data, !isChecked);
   };
+
+  function formatCurrency(number) {
+    const formatter = new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    });
+    return formatter.format(number);
+  }
 
   return (
     <div className={cx('wrapper')}>
@@ -74,9 +82,7 @@ function BookItemCart({ data, onSelect }) {
       <div className={cx('content-center')}>
         <span className={cx('book-name')}>{data.Name}</span>
         <span className={cx('book-category')}>Thể loại: {data.Category}</span>
-        <span className={cx('book-price')}>
-          {data.Price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '')}
-        </span>
+        <span className={cx('book-price')}>{data.Price && formatCurrency(data.Price)}</span>
         <span className={cx('book-quantity')}>x{data.quantity}</span>
       </div>
       <div className={cx('content-right')}>

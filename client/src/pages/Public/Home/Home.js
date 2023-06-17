@@ -21,11 +21,11 @@ function Home() {
 
   useEffect(() => {
     const fetchApiBooks = async () => {
-      const response = await axios.get('http://localhost:5000/api/book');
+      const response = await axios.get('https://pbl5-server-shpk.onrender.com/api/book');
       setBooks(response.data.books);
     };
     const fetchAPICategories = async () => {
-      const response = await axios.get('http://localhost:5000/api/category');
+      const response = await axios.get('https://pbl5-server-shpk.onrender.com/api/category');
       setCategories(response.data);
     };
 

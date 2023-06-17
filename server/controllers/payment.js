@@ -16,8 +16,8 @@ class paymentController {
         payment_method: "paypal",
       },
       redirect_urls: {
-        return_url: "http://localhost:5000/api/order/success",
-        cancel_url: "http://localhost:5000/api/order/canceled",
+        return_url: "https://pbl5-server-shpk.onrender.com/api/order/success",
+        cancel_url: "https://pbl5-server-shpk.onrender.com/api/order/canceled",
       },
       transactions: [
         {

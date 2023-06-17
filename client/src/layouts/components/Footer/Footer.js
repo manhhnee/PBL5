@@ -70,38 +70,38 @@ function Footer() {
               <h3>HỖ TRỢ</h3>
             </div>
             <div className={cx('contents')}>
-              <Link
+              <div
                 onClick={() => {
                   toast.warning('Chức năng đang được hoàn thiện !');
                 }}
                 className={cx('content-item')}
               >
                 Chính sách đổi trả
-              </Link>
-              <Link
+              </div>
+              <div
                 onClick={() => {
                   toast.warning('Chức năng đang được hoàn thiện !');
                 }}
                 className={cx('content-item')}
               >
                 Chính sách bảo hành
-              </Link>
-              <Link
+              </div>
+              <div
                 onClick={() => {
                   toast.warning('Chức năng đang được hoàn thiện !');
                 }}
                 className={cx('content-item')}
               >
                 Chính sách vận chuyển
-              </Link>
-              <Link
+              </div>
+              <div
                 onClick={() => {
                   toast.warning('Chức năng đang được hoàn thiện !');
                 }}
                 className={cx('content-item')}
               >
                 Phương thức thanh toán và xuất HĐ
-              </Link>
+              </div>
             </div>
           </div>
           <div className={cx('static')}>
@@ -109,22 +109,22 @@ function Footer() {
               <h3>Liên hệ</h3>
             </div>
             <div className={cx('contents')}>
-              <Link
+              <div
                 onClick={() => {
                   toast.warning('Chức năng đang được hoàn thiện !');
                 }}
                 className={cx('content-item')}
               >
                 <FontAwesomeIcon icon={faPhone} className={cx('icon')}></FontAwesomeIcon>123-456-7890
-              </Link>
-              <Link
+              </div>
+              <div
                 onClick={() => {
                   toast.warning('Chức năng đang được hoàn thiện !');
                 }}
                 className={cx('content-item')}
               >
                 <FontAwesomeIcon icon={faEnvelope} className={cx('icon')}></FontAwesomeIcon>abc@gmail.com
-              </Link>
+              </div>
             </div>
           </div>
         </div>

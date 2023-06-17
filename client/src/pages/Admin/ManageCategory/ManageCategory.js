@@ -44,7 +44,7 @@ function ManageCategory() {
 
   useEffect(() => {
     const fetchApiCategory = async () => {
-      const response = await axios.get(`http://localhost:5000/api/category`, {
+      const response = await axios.get(`https://pbl5-server-shpk.onrender.com/api/category`, {
         headers: {
           Authorization: `Bearer ${getJwtFromCookie()}`,
         },
@@ -58,7 +58,7 @@ function ManageCategory() {
   const handleAddCategory = async (name, image) => {
     await axios
       .post(
-        'http://localhost:5000/api/category/add',
+        'https://pbl5-server-shpk.onrender.com/api/category/add',
         {
           Name: name,
           Image: image,
@@ -84,14 +84,15 @@ function ManageCategory() {
   const handleUpdateCategory = async (name, image) => {
     axios
       .put(
-        `http://localhost:5000/api/category/update/${selectedCategoryId}`,
+        `https://pbl5-server-shpk.onrender.com/api/category/update/${selectedCategoryId}`,
         {
           Name: name,
           Image: image,
         },
         {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${getJwtFromCookie}`,
+          headers: {
+            Authorization: `Bearer ${getJwtFromCookie()}`,
+          },
         },
       )
       .then((res) => {
@@ -107,7 +108,12 @@ function ManageCategory() {
 
   const handleDeleteCategory = async () => {
     await axios
-      .delete(`http://localhost:5000/api/category/delete/${selectedCategoryId}`)
+      .delete(`https://pbl5-server-shpk.onrender.com/api/category/delete/${selectedCategoryId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getJwtFromCookie()}`,
+        },
+      })
       .then((res) => {
         toast.success(res.data.message);
         setTimeout(() => {

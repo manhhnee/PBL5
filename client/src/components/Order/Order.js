@@ -35,7 +35,7 @@ function Order({ data, icon }) {
   const handleChangeStatus = async (id) => {
     await axios
       .put(
-        `http://localhost:5000/api/order/changeStatus/${id}`,
+        `https://pbl5-server-shpk.onrender.com/api/order/changeStatus/${id}`,
         {},
         {
           headers: {
@@ -82,6 +82,14 @@ function Order({ data, icon }) {
     iconComponent = null;
     buttonComponent = null;
   }
+
+  function formatCurrency(number) {
+    const formatter = new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    });
+    return formatter.format(number);
+  }
   return (
     <div className={cx('order')}>
       <ToastContainer
@@ -104,9 +112,7 @@ function Order({ data, icon }) {
 
       <div className={cx('day-order')}>{formattedDate}</div>
       <div className={cx('address')}>{data.OrderAddress}</div>
-      <div className={cx('price-order')}>
-        {data.totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '')}
-      </div>
+      <div className={cx('price-order')}>{data.totalPrice && formatCurrency(data.totalPrice)}</div>
       {buttonComponent}
     </div>
   );

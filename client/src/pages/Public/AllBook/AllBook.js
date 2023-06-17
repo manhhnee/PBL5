@@ -54,7 +54,7 @@ function AllBook() {
   useEffect(() => {
     const fetchApiBooks = async () => {
       const response = await axios.get(
-        `http://localhost:5000/api/book?limit=100&category=${idCategory}&page=${page}&search=${searchValue}&DESC_Price=${descPrice}`,
+        `https://pbl5-server-shpk.onrender.com/api/book?limit=100&category=${idCategory}&page=${page}&search=${searchValue}&DESC_Price=${descPrice}`,
       );
       const booksData = await response.data.books;
       setBooks(booksData);
@@ -62,7 +62,7 @@ function AllBook() {
     };
 
     const fetchApiCategories = async () => {
-      const response = await axios.get('http://localhost:5000/api/category');
+      const response = await axios.get('https://pbl5-server-shpk.onrender.com/api/category');
       const categoriesData = await response.data;
       setCategories(categoriesData);
     };
